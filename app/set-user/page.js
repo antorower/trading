@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useUserContext } from "@/context/UserContext";
 import { toast } from "react-toastify";
-import Loading from "@/components/Loading";
+import { SaveError } from "@/library/functions";
+import { useRouter } from "next/navigation";
 
 const SetUser = () => {
-  const { userData } = useUserContext();
+  const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -18,22 +18,6 @@ const SetUser = () => {
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
-
-  useEffect(() => {
-    /*if (userData?.username) {
-      setUsernameValidation(true);
-    }
-    if (userData?.firstName) {
-      setFirstNameValidation(true);
-    }
-    if (userData?.lastName) {
-      setLastNameValidation(true);
-    }*/
-  }, [userData]);
-
-  if (!userData) {
-    return <Loading />;
-  }
 
   const UsernameValidation = (event) => {
     event.preventDefault();
@@ -65,6 +49,10 @@ const SetUser = () => {
 
   const SaveDetails = async (event) => {
     event.preventDefault();
+    if (!localStorage.getItem("mentor")) {
+      errorNotification("Sorry, you don't have the necessary permissions to access our platform.");
+      return;
+    }
     let status = 0;
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/set-user`, {
@@ -72,7 +60,7 @@ const SetUser = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: username, firstName: firstName, lastName: lastName, mentor: "nothing" }),
+        body: JSON.stringify({ username: username, firstName: firstName, lastName: lastName, mentor: localStorage.getItem("mentor") }),
       });
 
       if (!response.ok) {
@@ -83,10 +71,10 @@ const SetUser = () => {
         const data = await response.json();
         throw new Error(data.error);
       }
-
       successNotification("Your account is now set up. Our team will activate it shortly.");
+      router.push("/activation");
     } catch (error) {
-      errorNotification(data.error);
+      errorNotification(error.message);
       await SaveError(error.message, "File: /set-user | Function: SaveDetails", status);
     }
   };
@@ -99,69 +87,66 @@ const SetUser = () => {
           <div className="text-md font-nova">Provide your details</div>
         </div>
         <form onSubmit={(e) => SaveDetails(e)} className="flex flex-col gap-4">
-          {userData && userData.username && (
-            <div className="relative">
-              <input
-                type="text"
-                className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
-                placeholder="Username"
-                maxLength={12}
-                minLength={3}
-                onChange={(e) => UsernameValidation(e)}
-                value={username}
-                autoComplete="off"
-              />
-              {usernameValidation && (
-                <div className="absolute right-4 top-4">
-                  <div className="relative w-4 h-4 right-0">
-                    <Image src="/tick.svg" fill="true" alt="tick" />
-                  </div>
+          <div className="relative">
+            <input
+              type="text"
+              className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
+              placeholder="Username"
+              maxLength={12}
+              minLength={3}
+              onChange={(e) => UsernameValidation(e)}
+              value={username}
+              autoComplete="off"
+            />
+            {usernameValidation && (
+              <div className="absolute right-4 top-4">
+                <div className="relative w-4 h-4 right-0">
+                  <Image src="/tick.svg" fill="true" alt="tick" />
                 </div>
-              )}
-            </div>
-          )}
-          {userData && userData.firstName && (
-            <div className="relative">
-              <input
-                type="text"
-                className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
-                placeholder="First Name"
-                maxLength={15}
-                minLength={3}
-                onChange={(e) => FirstNameValidation(e)}
-                value={firstName}
-                autoComplete="off"
-              />
-              {firstNameValidation && (
-                <div className="absolute right-4 top-4">
-                  <div className="relative w-4 h-4 right-0">
-                    <Image src="/tick.svg" fill="true" alt="tick" />
-                  </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <input
+              type="text"
+              className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
+              placeholder="First Name"
+              maxLength={15}
+              minLength={3}
+              onChange={(e) => FirstNameValidation(e)}
+              value={firstName}
+              autoComplete="off"
+            />
+            {firstNameValidation && (
+              <div className="absolute right-4 top-4">
+                <div className="relative w-4 h-4 right-0">
+                  <Image src="/tick.svg" fill="true" alt="tick" />
                 </div>
-              )}
-            </div>
-          )}
-          {userData && userData.lastName && (
-            <div className="relative">
-              <input
-                type="text"
-                className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
-                placeholder="Last Name"
-                maxLength={15}
-                minLength={3}
-                onChange={(e) => LastNameValidation(e)}
-                value={lastName}
-                autoComplete="off"
-              />
-              {lastNameValidation && (
-                <div className="absolute right-4 top-4">
-                  <div className="relative w-4 h-4 right-0">
-                    <Image src="/tick.svg" fill="true" alt="tick" />
-                  </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative">
+            <input
+              type="text"
+              className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
+              placeholder="Last Name"
+              maxLength={15}
+              minLength={3}
+              onChange={(e) => LastNameValidation(e)}
+              value={lastName}
+              autoComplete="off"
+            />
+            {lastNameValidation && (
+              <div className="absolute right-4 top-4">
+                <div className="relative w-4 h-4 right-0">
+                  <Image src="/tick.svg" fill="true" alt="tick" />
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+
           {usernameValidation && firstNameValidation && lastNameValidation && (
             <button className="flex items-center justify-center btn-primary gap-3">
               <Image src="/plus.svg" width={13} height={13} alt="plus" />

@@ -1,13 +1,19 @@
 import React from "react";
 import Image from "next/image";
 import { useInterfaceContext } from "@/context/InterfaceContext";
+import { useRouter } from "next/navigation";
 
 const MenuItem = (props) => {
-  const { menu, icon } = props;
+  const router = useRouter();
+  const { menu, icon, destination } = props;
   const { expandedSidebar, activeMenu, setActiveMenu } = useInterfaceContext();
+  const clickHandler = () => {
+    setActiveMenu(menu);
+    router.push(destination);
+  };
   return (
     <div
-      onClick={() => setActiveMenu(menu)}
+      onClick={clickHandler}
       className={`${activeMenu === menu && "bg-violet-800"} transition-all duration-500 ${expandedSidebar && "rounded-lg"} ${
         expandedSidebar ? "p-4" : "py-4"
       } text-white flex items-center cursor-pointer gap-4 ${activeMenu != menu && "hover:bg-theme3"}`}

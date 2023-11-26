@@ -20,8 +20,7 @@ const SideBar = () => {
     >
       <div className="flex flex-col gap-8">
         <div
-          onClick={() => router.push("/dashboard")}
-          className={`${expandedSidebar ? "p-4" : "py-4"} text-gray-400 flex flex-col justify-center cursor-pointer gap-2 h-48 border-b-[1px] ${
+          className={`${expandedSidebar ? "p-4" : "py-4"} text-gray-400 flex flex-col justify-center gap-2 h-48 border-b-[1px] ${
             expandedSidebar ? "border-[#7a7979]" : "border-[#1F2128]"
           } transition-all duration-500`}
         >
@@ -33,12 +32,12 @@ const SideBar = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4">
-          {user?.publicMetadata.role === "admin" && <MenuItem menu="Admin" icon="admin" />}
-          {user?.publicMetadata.role === "leader" && <MenuItem menu="Team" icon="admin" />}
-          <MenuItem menu="Accounts" icon="accounts" />
-          <MenuItem menu="Wallet" icon="dollar" />
-          <MenuItem menu="Calendar" icon="calendar" />
-          <MenuItem menu="Settings" icon="settings" />
+          {user?.publicMetadata.role === "admin" && <MenuItem menu="Admin" icon="admin" destination="/dashboard/admin" />}
+          {user?.publicMetadata.role === "leader" && <MenuItem menu="Team" icon="admin" destination="/dashboard/admin" />}
+          <MenuItem menu="Accounts" icon="accounts" destination="/dashboard/admin" />
+          <MenuItem menu="Wallet" icon="dollar" destination="/dashboard/admin" />
+          <MenuItem menu="Calendar" icon="calendar" destination="/dashboard/admin" />
+          <MenuItem menu="Settings" icon="settings" destination="/dashboard/admin" />
         </div>
       </div>
 
