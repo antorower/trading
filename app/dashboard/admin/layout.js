@@ -23,7 +23,7 @@ export default function AdminLayout({ children }) {
       setUsers(data.users);
     } catch (error) {
       errorNotification(error.message);
-      await SaveError(error.message, "File: /dashboard/admin/layout | Function: layout", status);
+      await SaveError(error.message, "File: /dashboard/admin/layout | Function: GetUsers", status);
     }
   };
 
@@ -42,10 +42,3 @@ export default function AdminLayout({ children }) {
     </AdminContextProvider>
   );
 }
-/*
-
-{users.map((user) => (
-            <UserButton key={user.id} imageUrl={user.imageUrl} id={user.id} username={user.username} firstName={user.firstName} lastName={user.lastName} />
-          ))}
-
-          */

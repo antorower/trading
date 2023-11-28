@@ -5,10 +5,22 @@ const AccountSchema = new mongoose.Schema(
     user: {
       type: String,
       required: true,
+      trim: true,
     },
     username: {
       type: String,
       required: true,
+      trim: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+      trim: true,
     },
     company: {
       type: String,
@@ -19,6 +31,7 @@ const AccountSchema = new mongoose.Schema(
       type: String,
       trim: true,
       unique: true,
+      default: () => (Math.floor(Math.random() * (999999999 - 111111111 + 1)) + 111111111).toString(),
     },
     phase: {
       type: Number,
@@ -31,11 +44,9 @@ const AccountSchema = new mongoose.Schema(
       type: Number,
       min: 5000,
       max: 300000,
-      default: 5000,
     },
     balance: {
       type: Number,
-      default: 5000,
     },
     status: {
       type: String,

@@ -36,7 +36,6 @@ export async function POST(req) {
       return NextResponse.json({ error: "The provided data does not adhere to the expected format." }, { status: 422 });
     }
 
-    const mentorObj = await clerkClient.users.getUser(mentor);
     const updatedFristName = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
     const updatedLastName = lastName.charAt(0).toUpperCase() + lastName.slice(1).toLowerCase();
 
@@ -48,6 +47,7 @@ export async function POST(req) {
         active: false,
         registered: true,
         mentor: mentor,
+        banned: false,
       },
     });
     return NextResponse.json({ success: true });

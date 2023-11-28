@@ -12,6 +12,10 @@ export default authMiddleware({
       user = await clerkClient.users?.getUser(auth.userId);
     }
 
+    if (user && user.publicMetadata.banned && pathname != "/not-allowed") {
+      return NextResponse.redirect(new URL("/not-allowed", req.url));
+    }
+
     // ++++++++++++++++++++ Αν το request είναι στο api ++++++++++++++++++++
     if (pathname.includes("api")) {
       if (pathname.includes("/api/user") && !user) {
@@ -55,6 +59,18 @@ export default authMiddleware({
     }
     if (pathname === "/activation" && user.publicMetadata.registered && user.publicMetadata.active) {
       return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+
+    // Προστασία των user paths
+
+    // Προστασία των leader paths
+    if (pathname.includes("/leader") && user.publicMetadata.role !== "leader" && user.publicMetadata.role !== "admin") {
+      return NextResponse.redirect(new URL("/not-allowed", req.url));
+    }
+
+    // Προστασία των admin paths
+    if (pathname.includes("/admin") && user.publicMetadata.role !== "admin") {
+      return NextResponse.redirect(new URL("/not-allowed", req.url));
     }
   },
 });

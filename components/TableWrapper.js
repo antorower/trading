@@ -1,0 +1,26 @@
+"use client";
+import React, { useState } from "react";
+import Image from "next/image";
+const TableWrapper = ({ children, title, refresh, refreshFunction }) => {
+  const [panelExpanded, setPanelExpanded] = useState(true);
+  return (
+    <div className={`flex flex-col bg-light rounded-${panelExpanded ? "xl" : "full"} px-8 ${panelExpanded && "pb-8"} gap-4`}>
+      <div className="flex justify-between items-center border-b border-gray-800 py-4 px-2">
+        <div className="font-roboto font-weight-500 text-lg">{title}</div>
+        <div className="flex gap-4">
+          {panelExpanded && refresh && (
+            <button onClick={refreshFunction} className="w-[14px] h-[14px] relative">
+              <Image src="/refresh.svg" fill="true" alt="refresh-icon" />
+            </button>
+          )}
+          <button onClick={() => setPanelExpanded(!panelExpanded)} className="w-[14px] h-[14px] relative">
+            <Image src={`/${panelExpanded ? "minus" : "plus"}.svg`} fill="true" alt="expand-icon" />
+          </button>
+        </div>
+      </div>
+      {panelExpanded && <div className="px-2 mt-4">{children}</div>}
+    </div>
+  );
+};
+
+export default TableWrapper;

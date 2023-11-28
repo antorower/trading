@@ -36,12 +36,12 @@ const UserBar = (props) => {
       onMouseEnter={() => setExpandedRightSidebar(true)}
       onMouseLeave={() => setExpandedRightSidebar(false)}
       className={`flex flex-col gap-4 h-full relative justify-center p-4 ${
-        expandedRightSidebar ? "w-[250px]" : "w-[20px]"
+        expandedRightSidebar ? "w-[250px]" : "w-[0px]"
       } transition-all duration-500 border-l border-gray-900`}
     >
       <div
         onClick={() => setExpandedRightSidebar(!expandedRightSidebar)}
-        className="cursor-pointer absolute flex justify-center items-center text-white bg-dark  -left-[20px] rounded-full border border-gray-700 w-[40px] h-[40px]"
+        className="cursor-pointer absolute flex justify-center items-center text-white bg-dark  -left-[20px] rounded-full border border-gray-900 w-[40px] h-[40px]"
       >
         <Image src={`/${expandedRightSidebar ? "left" : "right"}-arrow.svg`} width={10} height={10} alt="left-arrow" />
       </div>

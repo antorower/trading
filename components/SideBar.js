@@ -36,8 +36,9 @@ const SideBar = () => {
         </div>
         <div className="flex flex-col gap-4">
           {user?.publicMetadata.role === "admin" && <MenuItem menu="Admin" icon="admin" destination="/dashboard/admin" />}
-          {user?.publicMetadata.role === "leader" && <MenuItem menu="Team" icon="admin" destination="/dashboard/admin" />}
-          <MenuItem menu="Accounts" icon="accounts" destination="/dashboard/admin" />
+          {user?.publicMetadata.role === "leader" ||
+            (user?.publicMetadata.role === "admin" && <MenuItem menu="Team" icon="admin" destination="/dashboard/admin" />)}
+          <MenuItem menu="Accounts" icon="accounts" destination="/dashboard/accounts" />
           <MenuItem menu="Wallet" icon="dollar" destination="/dashboard/admin" />
           <MenuItem menu="Calendar" icon="calendar" destination="/dashboard/admin" />
           <MenuItem menu="Settings" icon="settings" destination="/dashboard/admin" />

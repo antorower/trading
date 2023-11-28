@@ -82,7 +82,7 @@ const SetUser = () => {
   return (
     <div className="text-white flex h-screen justify-center items-center">
       <div className="w-[300px] bg-theme2 rounded-lg p-4 flex flex-col gap-2 shadow-black shadow-lg">
-        <div className="border-b border-gray-800 p-2 flex gap-2 justify-start items-center mb-2">
+        <div className="border-b border-gray-700 p-2 flex gap-2 justify-start items-center mb-2">
           <Image src="/new-user.svg" width={15} height={15} alt="new-user" />
           <div className="text-md font-nova">Provide your details</div>
         </div>
