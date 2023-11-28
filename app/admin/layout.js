@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { AdminContextProvider } from "@/context/AdminContext";
+import { toast } from "react-toastify";
+import { SaveError } from "@/library/functions";
 import UserBar from "@/components/UserBar";
 
 export default function AdminLayout({ children }) {
@@ -34,9 +36,9 @@ export default function AdminLayout({ children }) {
   return (
     <AdminContextProvider>
       <div className="flex h-full">
-        <div className="h-full flex-1">{children}</div>
-        <div className="h-full">
-          <UserBar users={users} />
+        <div className="flex-1">{children}</div>
+        <div className="bg-red-500 h-full">
+          <UserBar />
         </div>
       </div>
     </AdminContextProvider>

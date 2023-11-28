@@ -7,18 +7,20 @@ import { useInterfaceContext } from "@/context/InterfaceContext";
 
 const TopBar = () => {
   const { user } = useUser();
+  const { expandedLeftSidebar, setExpandedLeftSidebar, setActiveMenu } = useInterfaceContext();
 
-  const { expandedSidebar, ToggleMenu } = useInterfaceContext();
   return (
-    <div className="flex justify-between bg-light h-[60px] border-l-[1px] border-gray-700 px-8 relative">
+    <div className="flex justify-between items-center bg-light border-l-[1px] border-gray-700 px-8 relative p-4">
       <div
-        onClick={ToggleMenu}
+        onClick={() => setExpandedLeftSidebar(!expandedLeftSidebar)}
         className="cursor-pointer absolute flex justify-center items-center text-white bg-light top-[15px] -left-[15px] rounded-full border border-gray-700 w-[30px] h-[30px]"
       >
-        <Image src={`/${expandedSidebar ? "left" : "right"}-arrow.svg`} width={10} height={10} alt="left-arrow" />
+        <Image src={`/${expandedLeftSidebar ? "left" : "right"}-arrow.svg`} width={10} height={10} alt="left-arrow" />
       </div>
       <div className="flex items-center text-gray-400 pt-1">
-        <Link href="/dashboard">Dashboard</Link>
+        <Link onClick={() => setActiveMenu("Dashboard")} href="/dashboard">
+          Dashboard
+        </Link>
       </div>
       <div className="text-gray-400 font-teko flex items-center text-3xl">$1400</div>
       <div className="flex items-center gap-8">

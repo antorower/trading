@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
       <html className="bg-theme1" lang="en">
         <InterfaceContextProvider>
           <UserContextProvider>
-            <body className="w-full h-screen overflow-y-hidden">
+            <body className="h-screen w-screen overflow-x-hidden">
               {children}
               <ToastContainer
                 position="bottom-right"

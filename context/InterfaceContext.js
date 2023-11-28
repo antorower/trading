@@ -8,14 +8,15 @@ export const useInterfaceContext = () => {
 };
 
 export const InterfaceContextProvider = ({ children }) => {
-  const [expandedSidebar, setExpandedSidebar] = useState(true);
+  const [expandedLeftSidebar, setExpandedLeftSidebar] = useState(false);
+  const [expandedRightSidebar, setExpandedRightSidebar] = useState(false);
   const [activeMenu, setActiveMenu] = useState("");
 
-  const ToggleMenu = () => {
-    setExpandedSidebar(!expandedSidebar);
-  };
-
   return (
-    <InterfaceContext.Provider value={{ expandedSidebar, setExpandedSidebar, ToggleMenu, activeMenu, setActiveMenu }}>{children}</InterfaceContext.Provider>
+    <InterfaceContext.Provider
+      value={{ expandedLeftSidebar, setExpandedLeftSidebar, activeMenu, setActiveMenu, expandedRightSidebar, setExpandedRightSidebar }}
+    >
+      {children}
+    </InterfaceContext.Provider>
   );
 };

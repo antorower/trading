@@ -10,6 +10,7 @@ export const useUserContext = () => {
 
 export const UserContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("");
   const { user } = useUser();
 
   useEffect(() => {
@@ -18,9 +19,5 @@ export const UserContextProvider = ({ children }) => {
     }
   }, [user]);
 
-  const ToggleMenu = () => {
-    setExpandedSidebar(!expandedSidebar);
-  };
-
-  return <UserContext.Provider value={{ userData }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ userData, selectedUser, setSelectedUser }}>{children}</UserContext.Provider>;
 };
