@@ -27,9 +27,11 @@ export const AdminContextProvider = ({ children }) => {
       }
       const data = await response.json();
       setUsers(data.users);
+      return true;
     } catch (error) {
       errorNotification(error.message);
       await SaveError(error.message, "File: /AdminContext | Function: GetUsers", status);
+      return false;
     }
   };
 

@@ -1,72 +1,149 @@
 import mongoose from "mongoose";
 
-const AccountSchema = new mongoose.Schema(
-  {
-    user: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    username: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    firstName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    company: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    number: {
-      type: String,
-      trim: true,
-      unique: true,
-      default: () => (Math.floor(Math.random() * (999999999 - 111111111 + 1)) + 111111111).toString(),
-    },
-    phase: {
-      type: Number,
-      min: 1,
-      max: 3,
-      required: true,
-      default: 1,
-    },
-    capital: {
-      type: Number,
-      min: 5000,
-      max: 300000,
-    },
-    balance: {
-      type: Number,
-    },
-    status: {
-      type: String,
-      enum: ["Live", "Lost", "Review", "Upgrade", "Payout", "Payment", "Requested"],
-      default: "Requested",
-    },
-    moneyTransfered: {
-      type: Boolean,
-      default: false,
-    },
-    moneyTransferDetails: {
-      transferDate: Date,
-      transferWallet: String,
-      transferAmount: Number,
-    },
-    lastActivity: Date,
+const AccountSchema = new mongoose.Schema({
+  user: {
+    type: String,
+    required: true,
   },
-  { timestamps: true }
-);
+  username: {
+    type: String,
+    required: true,
+  },
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  image: String,
+  comment: {
+    type: String,
+    default: "Await the completion of the funds transfer to your wallet.",
+  },
+  company: String,
+  target: {
+    percentage: Number,
+    amount: Number,
+  },
+  dailyDrawdown: {
+    percentage: Number,
+    amount: Number,
+  },
+  overallDrawdown: {
+    percentage: Number,
+    amount: Number,
+  },
+  number: {
+    type: String,
+    trim: true,
+    unique: true,
+  },
+  phase: {
+    type: Number,
+    required: true,
+    default: 1,
+  },
+  capital: Number,
+  balance: Number,
+  status: {
+    type: String,
+    enum: ["Live", "Lost", "Review", "Upgrade", "Payout", "Payment", "Requested", "Registration"],
+    default: "Requested",
+  },
+  moneyTransfered: {
+    type: Boolean,
+    default: false,
+  },
+  moneyTransferDetails: {
+    transferDate: Date,
+    transferWallet: String,
+    transferAmount: Number,
+  },
+  userActionRequired: {
+    type: Boolean,
+    default: false,
+  },
+  adminActionRequired: {
+    type: Boolean,
+    default: true,
+  },
+  action: String,
+  activity: [
+    {
+      activityDate: {
+        type: Date,
+        default: Date.now,
+      },
+      title: String,
+      description: String,
+    },
+  ],
+  createdDate: {
+    type: Date,
+    default: Date.now,
+  },
+  lastTrade: Date,
+  phase1Account: {
+    number: String,
+    createdDate: Date,
+    passDate: Date,
+  },
+  phase2Account: {
+    number: String,
+    createdDate: Date,
+    passDate: Date,
+  },
+});
 
-const Account = mongoose.models.Account || mongoose.model("Account", AccountSchema);
+AccountSchema.pre("save", function (next) {
+  if (this.isNew) {
+    const newActivity = {
+      title: "Account Requested",
+      description: `Account requested by ${this.username}`,
+    };
+    this.activity.push(newActivity);
+    this.number = (Math.floor(Math.random() * (999999999 - 111111111 + 1)) + 111111111).toString();
+  }
 
-export default Account;
+  if (this.isModified("company")) {
+    if (this.company === "Funding Pips") {
+      this.image = "fundingpips";
+    }
+  }
+
+  next();
+});
+
+AccountSchema.FundsTransfered = async (data) => {
+  this.company = data.company;
+  this.comment = "";
+  this.action = `The essential funds have been successfully transferred to your wallet. Proceed with the account acquisition from ${this.company} with an amount of $${this.capital}, and upon completion, return to declare the account number.`;
+  this.capital = data.capital;
+  this.balance = data.capital;
+  this.status = "Registration";
+  this.moneyTransfered = true;
+  this.moneyTransferDetails.transferDate = Date.now();
+  this.moneyTransferDetails.transferWallet = data.wallet;
+  this.moneyTransferDetails.transferAmount = data.amount;
+  this.userActionRequired = true;
+  this.adminActionRequired = false;
+
+  if (this.company === "Funding Pips") {
+    this.target.percentage = 0.04;
+    this.target.amount = this.capital + this.capital * this.target.percentage;
+    this.dailyDrawdown.percentage = 0.04;
+    this.dailyDrawdown.amount = this.capital - this.capital * this.dailyDrawdown.percentage;
+    this.overallDrawdown.percentage = 0.1;
+    this.overallDrawdown.amount = this.capital - this.capital * this.overallDrawdown.percentage;
+  }
+
+  const newActivity = {
+    title: "Funds Transferred",
+    description: `The administrator has transferred $${amount} to ${wallet} for the acquisition of a ${company} account with a capital of $${capital}.`,
+  };
+  this.activity.push(newActivity);
+};
+
+export default mongoose.models.Account || mongoose.model("Account", AccountSchema);

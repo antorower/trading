@@ -2,8 +2,10 @@ import mongoose from "mongoose";
 
 const AppErrorSchema = new mongoose.Schema(
   {
-    user: String,
-    error: String,
+    user: {},
+    errorMessage: String,
+    errorsObject: {},
+    file: String,
     location: String,
     solved: {
       type: Boolean,

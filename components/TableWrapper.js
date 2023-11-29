@@ -7,7 +7,7 @@ const TableWrapper = ({ children, title, refresh, refreshFunction }) => {
     <div className={`flex flex-col bg-light rounded-${panelExpanded ? "xl" : "full"} px-8 ${panelExpanded && "pb-8"} gap-4`}>
       <div className="flex justify-between items-center border-b border-gray-800 py-4 px-2">
         <div className="font-roboto font-weight-500 text-lg">{title}</div>
-        <div className="flex gap-4">
+        <div className="flex gap-8">
           {panelExpanded && refresh && (
             <button onClick={refreshFunction} className="w-[14px] h-[14px] relative">
               <Image src="/refresh.svg" fill="true" alt="refresh-icon" />
@@ -18,7 +18,7 @@ const TableWrapper = ({ children, title, refresh, refreshFunction }) => {
           </button>
         </div>
       </div>
-      {panelExpanded && <div className="px-2 mt-4">{children}</div>}
+      {panelExpanded && <div className="flex flex-col gap-4 px-2 mt-4">{children}</div>}
     </div>
   );
 };
