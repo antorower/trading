@@ -1,7 +1,7 @@
 export const ErrorHandler = async (user, error, defaultMessage, file) => {  
   try {
     let message = defaultMessage;
-    let status = 400;
+    let status = 500;
     if (error?.name === "ValidationError") {
       message = "It seems there's a validation issue. Please refresh the page and try again.";
       status = 400;

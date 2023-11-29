@@ -10,6 +10,12 @@ export async function POST(req) {
     await dbConnect();
     const { company } = await req.json();
 
+    if(!company) {
+      const error = new Error("Company is required"); 
+      error.status = 400; 
+      throw error;
+    }
+
     const requestedAccount = {
       user: user.id,
       username: user.username,
@@ -27,6 +33,3 @@ export async function POST(req) {
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }
- /*    const error = new Error("Company is required."); // Your custom message
-      error.status = 400; // Your desired HTTP status code
-      throw error;*/

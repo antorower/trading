@@ -22,7 +22,10 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     default: "Await the completion of the funds transfer to your wallet.",
   },
-  company: String,
+  company: {
+    type: String,
+    enum: ["Funding Pips"]
+  },
   target: {
     percentage: Number,
     amount: Number,
@@ -145,5 +148,25 @@ AccountSchema.FundsTransfered = async (data) => {
   };
   this.activity.push(newActivity);
 };
+
+AccountSchema.RegisterAccount = async (data) => {
+  this.number = data.number;
+  this.status = "Live";
+  const newActivity = {
+    title: "Account number has been updated",
+    description: `Account number has been update to ${data.number}.`,
+  };
+  this.activity.push(newActivity);
+}
+
+AccountSchema.UpdateBalance = async (data) => {
+  if(data.balance >= this.target.amount) {
+    //Perase sthn epomeni fasi  h plhrwnetai
+  } else if(data.balance <= this.overallDrawdown.amount) {
+    //Exase
+  } else {
+    this.balance = data.balance;
+  }
+}
 
 export default mongoose.models.Account || mongoose.model("Account", AccountSchema);

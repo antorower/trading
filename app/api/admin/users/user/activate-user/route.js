@@ -13,6 +13,8 @@ export async function POST(req) {
     });
     return NextResponse.json({ sucess: true });
   } catch (error) {
-    return NextResponse.json({ error: error.message });
+    console.log("Error from /api/admin/users/user/activate-user", error);
+    const response = await ErrorHandler(user, error, "Something went wrong. Please try again.", "/api/admin/users/user/activate-user");
+    return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }

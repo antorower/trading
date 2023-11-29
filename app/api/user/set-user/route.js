@@ -52,9 +52,8 @@ export async function POST(req) {
     });
     return NextResponse.json({ success: true });
   } catch (error) {
-    if (error.clerkError) {
-      return NextResponse.json({ error: "The provided data does not meet the required criteria." }, { status: error.status });
-    }
-    return NextResponse.json({ error: error.message });
+    console.log("Error from /api/user/set-user", error);
+    const response = await ErrorHandler(user, error, "Something went wrong. Please try again.", "/api/user/set-user");
+    return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }
