@@ -17,13 +17,16 @@ export async function POST(req) {
       lastName: user.lastName,
       company: company,
       activity: [],
-      phase: "d",
     };
+ 
     await Account.create(requestedAccount);
     return NextResponse.json({ success: true });
   } catch (error) {
-    //console.log("Error from /api/users/request-new-account", error);
+    console.log("Error from /api/users/request-new-account", error);
     const response = await ErrorHandler(user, error, "Something went wrong while processing your request for a new account.", "/api/user/request-new-account");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }
+ /*    const error = new Error("Company is required."); // Your custom message
+      error.status = 400; // Your desired HTTP status code
+      throw error;*/

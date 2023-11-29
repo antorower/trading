@@ -1,28 +1,28 @@
-export const ErrorHandler = async (user, error, defaultMessage, file) => {
+export const ErrorHandler = async (user, error, defaultMessage, file) => {  
   try {
-    let message;
-    let status;
-    if (error.name === "ValidationError") {
+    let message = defaultMessage;
+    let status = 400;
+    if (error?.name === "ValidationError") {
       message = "It seems there's a validation issue. Please refresh the page and try again.";
       status = 400;
       await SaveValidationError(user, error, file, status);
-    } else if (error.name === "CastError") {
+    } else if (error?.name === "CastError") {
       message = "It seems there's a cast issue. Please refresh the page and try again.";
       status = 400;
       await SaveCastError(user, error, file, status);
-    } else if (error.name === "MongoError") {
+    } else if (error?.name === "MongoServerError") {      
       message = "It seems there's a duplication error. Please refresh the page and try again.";
       status = 409;
       await SaveMongoError(user, error, file, status);
-    } else if (error.clerkError) {
+    } else if (error?.clerkError) {
       console.log("Clerk Erorr General Error", error);
       console.log("Clerk Error", error.clerkError);
       message = "An authentication error occurred during your request.";
       status = error.status;
       await SaveError(user, "Clerk authentication issue", {}, file, "ErrorHandler -> Clerk Authentication Error", status);
-    } else {
-      if (error.status != 500) {
-        message = error.message;
+    } else {      
+      if (error.status != 500) {        
+        message = error.message;        
         status = error.status;
       } else {
         message = defaultMessage;
@@ -40,8 +40,7 @@ export const ErrorHandler = async (user, error, defaultMessage, file) => {
 
 export const SaveValidationError = async (user, error, file, statusCode) => {
   try {
-    const resp = await SaveError(user, "Mongoose validation error", error.errors, file, "SaveValidationError", statusCode);
-    console.log("Allg ood", resp);
+    await SaveError(user, error.message, error.errors, file, "SaveValidationError", statusCode);    
     return;
   } catch (error) {
     console.log("Error during SaveValidationError in api/user/request-new-account: ", error);
@@ -56,7 +55,7 @@ export const SaveCastError = async (user, error, file, statusCode) => {
       kind: error.kind,
       message: error.message,
     };
-    await SaveError(user, "Mongoose cast error", errorDetails, file, "SaveCastError", statusCode);
+    await SaveError(user, error.message, errorDetails, file, "SaveCastError", statusCode);
   } catch (error) {
     console.error("Error during SaveCastError in api/user/request-new-account: ", error);
   }
@@ -69,7 +68,7 @@ export const SaveMongoError = async (user, error, file, statusCode) => {
       keyValue: error.keyValue,
       message: error.message,
     };
-    await SaveError(user, "Mongoose duplicate error", errorDetails, file, "SaveMongoError", statusCode);
+    await SaveError(user, error.message, errorDetails, file, "SaveMongoError", statusCode);
   } catch (error) {
     console.error("Error during SaveMongoErrorDetails in api/user/request-new-account: ", error);
   }
