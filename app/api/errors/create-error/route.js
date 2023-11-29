@@ -11,6 +11,7 @@ export async function POST(req) {
     await doc.save();
     return NextResponse.json(doc);
   } catch (error) {
+    console.log("Error from /api/errors/create-error", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

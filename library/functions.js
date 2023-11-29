@@ -84,8 +84,9 @@ export const SaveError = async (user, errorMessage, errorsObject, file, location
       },
       body: JSON.stringify({ user: user, errorMessage: errorMessage, errorsObject: errorsObject, file: file, location: location, statusCode: statusCode }),
     });
-    return;
+    return true;
   } catch (error) {
     console.log("Error inside Save Error", error);
+    return false;
   }
 };

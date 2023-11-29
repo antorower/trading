@@ -22,7 +22,7 @@ export async function POST(req) {
     await Account.create(requestedAccount);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/users/request-new-user", error);
+    //console.log("Error from /api/users/request-new-account", error);
     const response = await ErrorHandler(user, error, "Something went wrong while processing your request for a new account.", "/api/user/request-new-account");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
