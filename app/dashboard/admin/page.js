@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import TableWrapper from "@/components/TableWrapper";
 import Title from "@/components/Title";
 import TableRow from "@/components/TableRow";
+import NewUsersTable from "@/components/Admin/NewUsersTable";
 
 const Admin = () => {
   const { selectedUser } = useUserContext();
@@ -77,6 +78,7 @@ const Admin = () => {
   return (
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="Admin Dashboard" subtitle="Team Management" />
+      <NewUsersTable users={users}/>
       {newUsers && newUsers.length > 0 && (
         <TableWrapper
           title="New Users"
@@ -150,12 +152,45 @@ const Admin = () => {
                       </div>
                     </div>
 
-                    <div className="flex">context</div>
+                   {account.status === "Requested" && 
+                    <form className="flex items-center space-x-4">
+                      <select className="bg-gray-700 text-white rounded-lg p-2">
+                        <option value="">Funding Pips</option>
+                        <option value="">Fundex Next</option>
+                        <option value="">FTMO</option>
+                        <option value="">The Funded Trader</option>
+                        <option value="">True Forex Funds</option>
+                        <option value="">My Forex Funds</option>
+                      </select>
 
-                    <div className="flex gap-8 justify-between items-center">
-                      {account.status === "Requested" && <button className="btn-primary">Transfer Money</button>}
-                      <div className={`relative w-[22px] h-[22px] ${account.status === "Registration" && "animate-spin"}`}>
-                        <Image src={`/${account.status === "Requested" ? "tick" : "spinner"}.svg`} fill="true" alt="spinner" />
+                      <input 
+                        type="number" 
+                        step="1000" 
+                        className="bg-gray-700 text-white rounded-lg p-2" 
+                        placeholder="Capital" 
+                      />
+
+                      <input 
+                        type="text" 
+                        className="bg-gray-700 text-white rounded-lg p-2" 
+                        placeholder="Wallet" 
+                      />
+
+                      <input 
+                        type="number" 
+                        className="bg-gray-700 text-white rounded-lg p-2" 
+                        placeholder="Cost" 
+                      />
+
+                      <button type="submit" className="btn-primary">
+                        Transfer Money
+                      </button>
+                    </form>}
+    
+
+                    <div className="flex gap-8 justify-between items-center">                      
+                      <div className={`relative w-[22px] h-[22px] ${account.status === "Requested" && "animate-spin"}`}>
+                        <Image src={`/${account.status === "Requested" ? "spinner" : "tick"}.svg`} fill="true" alt="spinner" />
                       </div>
                     </div>
                   </div>

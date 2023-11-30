@@ -7,11 +7,14 @@ import TableWrapper from "@/components/TableWrapper";
 import Title from "@/components/Title";
 import TableRow from "@/components/TableRow";
 import { useUserContext } from "@/context/UserContext";
+import FirmsCheckbox from "@/components/FirmsCheckbox";
 
 const Accounts = () => {
   const { activeAccounts, UpdateActiveAccounts } = useUserContext();
   console.log("From Page", activeAccounts);
   const [requestedCompany, setRequestedCompany] = useState("Funding Pips");
+  const [requestedAccountsPanelExpanded, setRequestedAccountsPanelExpanded] = useState(true);
+  const [newUsersPanelExpanded, setNewUsersPanelExpanded] = useState(true);
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
@@ -41,70 +44,16 @@ const Accounts = () => {
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="Account Control Center" subtitle="Manage your accounts" />
 
-      <TableWrapper title="Action Required" refresh={true} refreshFunction={() => console.log("shit")}></TableWrapper>
+      <TableWrapper title="Action Required" refresh={true} refreshFunction={() => console.log("shit")} panelExpanded={newUsersPanelExpanded} setPanelExpanded={setNewUsersPanelExpanded}></TableWrapper>
 
-      <TableWrapper title="Requested Accounts" refresh={true} refreshFunction={() => console.log("shit")}>
+      <TableWrapper title="Requested Accounts" refresh={true} refreshFunction={() => console.log("shit")} panelExpanded={requestedAccountsPanelExpanded} setPanelExpanded={setRequestedAccountsPanelExpanded}>
         <div className="flex justify-between items-center px-2">
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              onChange={() => setRequestedCompany("Funding Pips")}
-              checked={requestedCompany === "Funding Pips"}
-              className="h-4 w-4 appearance-none checked:bg-violet-600 bg-gray-500  rounded-full border-[3px] border-white cursor-pointer"
-            />
-            <div className="font-weight-500 text-lg">Funding Pips</div>
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              disabled
-              onChange={() => setRequestedCompany("Funded Next")}
-              checked={requestedCompany === "Funded Next"}
-              className="h-4 w-4 appearance-none checked:bg-violet-600 bg-gray-500  rounded-full border-[3px] border-white cursor-pointer"
-            />
-            <div className="font-weight-500 text-lg">Funded Next</div>
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              onChange={() => setRequestedCompany("FTMO")}
-              checked={requestedCompany === "FTMO"}
-              className="h-4 w-4 appearance-none checked:bg-violet-600 bg-gray-500  rounded-full border-[3px] border-white cursor-pointer"
-            />
-            <div className="font-weight-500 text-lg">FTMO</div>
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              onChange={() => setRequestedCompany("The Funded Trader")}
-              checked={requestedCompany === "The Funded Trader"}
-              className="h-4 w-4 appearance-none checked:bg-violet-600 bg-gray-500  rounded-full border-[3px] border-white cursor-pointer"
-            />
-            <div className="font-weight-500 text-lg">The Funded Trader</div>
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              onChange={() => setRequestedCompany("True Forex Funds")}
-              checked={requestedCompany === "True Forex Funds"}
-              className="h-4 w-4 appearance-none checked:bg-violet-600 bg-gray-500  rounded-full border-[3px] border-white cursor-pointer"
-            />
-            <div className="font-weight-500 text-lg">True Forex Funds</div>
-          </div>
-
-          <div className="flex gap-2 items-center">
-            <input
-              type="checkbox"
-              onChange={() => setRequestedCompany("My Forex Funds")}
-              checked={requestedCompany === "My Forex Funds"}
-              className="h-4 w-4 appearance-none checked:bg-violet-600 bg-gray-500  rounded-full border-[3px] border-white cursor-pointer"
-            />
-            <div className="font-weight-500 text-lg">My Forex Funds</div>
-          </div>
+          <FirmsCheckbox propFirm="Funding Pips" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={false} />
+          <FirmsCheckbox propFirm="Funded Next" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={true} />
+          <FirmsCheckbox propFirm="FTMO" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={true} />
+          <FirmsCheckbox propFirm="The Funded Trader" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={true} />
+          <FirmsCheckbox propFirm="True Forex Funds" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={true} />
+          <FirmsCheckbox propFirm="My Forex Funds" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={true} />
           <button onClick={(e) => RequestNewAccount(e)} className="btn-primary">
             New Account
           </button>
