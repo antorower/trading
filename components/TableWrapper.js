@@ -1,8 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-const TableWrapper = ({ children, title, refresh, refreshFunction }) => {
-  const [panelExpanded, setPanelExpanded] = useState(true);
+const TableWrapper = ({ children, title, refresh, refreshFunction, panelExpanded, setPanelExpanded }) => {
   return (
     <div className={`flex flex-col bg-light rounded-${panelExpanded ? "xl" : "full"} px-8 ${panelExpanded && "pb-8"} gap-4`}>
       <div className="flex justify-between items-center border-b border-gray-800 py-4 px-2">

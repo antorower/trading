@@ -10,16 +10,26 @@ import TableRow from "@/components/TableRow";
 
 const Admin = () => {
   const { selectedUser } = useUserContext();
-  const { users, UpdateUsers } = useAdminContext();
-  const [newUsers, setNewUsers] = useState([]);
+  const { users, UpdateUsers, activeAccounts, UpdateActiveAccounts } = useAdminContext();
+
+  const [newUsers, setNewUsers] = useState(null);
   const [newUsersPanelExpanded, setNewUsersPanelExpanded] = useState(true);
+
+  const [requestedAccounts, setRequestedAccounts] = useState(null);
+  const [requestedAccountsPanelExpanded, setRequestedAccountsPanelExpanded] = useState(true);
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
 
   useEffect(() => {
+    if (!users) return;
     setNewUsers(users.filter((user) => user.publicMetadata.registered && user.publicMetadata.active && !user.publicMetadata.banned));
   }, [users]);
+
+  useEffect(() => {
+    if (!activeAccounts) return;
+    setRequestedAccounts(activeAccounts.filter((account) => account.status === "Requested" || account.status === "Registration"));
+  }, [activeAccounts]);
 
   const NewUserResponse = async (event, accepted, userId) => {
     event.preventDefault();
@@ -60,11 +70,21 @@ const Admin = () => {
     }
   };
 
+  const GetUser = (username) => {
+    return users.find((user) => user.username === username);
+  };
+
   return (
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="Admin Dashboard" subtitle="Team Management" />
-      {newUsers.length > 0 && (
-        <TableWrapper title="New Users" refresh={true} refreshFunction={RefreshUsers}>
+      {newUsers && newUsers.length > 0 && (
+        <TableWrapper
+          title="New Users"
+          refresh={true}
+          refreshFunction={RefreshUsers}
+          panelExpanded={newUsersPanelExpanded}
+          setPanelExpanded={setNewUsersPanelExpanded}
+        >
           {newUsersPanelExpanded &&
             newUsers.map((user) => (
               <TableRow>
@@ -79,22 +99,69 @@ const Admin = () => {
                     <div className="text-gray-500">{user.username}</div>
                   </div>
                 </div>
+
+                <div className="flex flex-col justify-between items-center">
+                  <div className="font-weight-700">Mentor</div>
+                  <div className="text-gray-500">{user.publicMetadata.mentor}</div>
+                </div>
+
                 <div className="flex gap-6 justify-end">
-                  <button
-                    onClick={(e) => NewUserResponse(e, true, user.id)}
-                    className="px-8 bg-green-700 rounded hover:bg-green-800 transition-all duration-500 font-weight-500"
-                  >
+                  <button onClick={(e) => NewUserResponse(e, true, user.id)} className="btn-accept">
                     Accept
                   </button>
-                  <button
-                    onClick={(e) => NewUserResponse(e, false, user.id)}
-                    className="px-6 p-2 bg-red-700 rounded hover:bg-red-800 transition-all duration-500 font-weight-500"
-                  >
+                  <button onClick={(e) => NewUserResponse(e, false, user.id)} className="btn-decline">
                     Decline
                   </button>
                 </div>
               </TableRow>
             ))}
+        </TableWrapper>
+      )}
+
+      {requestedAccounts && requestedAccounts.length > 0 && users && (
+        <TableWrapper
+          title="Requested Accounts"
+          refresh={true}
+          refreshFunction={UpdateActiveAccounts}
+          panelExpanded={requestedAccountsPanelExpanded}
+          setPanelExpanded={setRequestedAccountsPanelExpanded}
+        >
+          <div className="flex flex-col gap-4 overflow-y-auto scrollable max-h-[400px]">
+            {requestedAccountsPanelExpanded &&
+              requestedAccounts.map((account) => (
+                <TableRow>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex gap-4 items-center">
+                      <div className="w-[50px] h-[50px] text-lg font-weight-700 flex items-center relative">
+                        <Image src={GetUser(account.username).imageUrl} fill="true" className="rounded-full" />
+                      </div>
+                      <div className="flex flex-col justify-between">
+                        <div className="text-lg font-weight-700">{account.username}</div>
+                        <div className="text-sm text-gray-500">
+                          {account.lastName} {account.firstName}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-between items-center">
+                      <div className="text-gray-500 text-sm">{account.status === "Requested" ? "Requested Date" : "Money Transfered Date"}</div>
+                      <div className="font-weight-700">
+                        {new Date(account.createdDate).toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}
+                      </div>
+                    </div>
+
+                    <div className="flex">context</div>
+
+                    <div className="flex gap-8 justify-between items-center">
+                      {account.status === "Requested" && <button className="btn-primary">Transfer Money</button>}
+                      <div className={`relative w-[22px] h-[22px] ${account.status === "Registration" && "animate-spin"}`}>
+                        <Image src={`/${account.status === "Requested" ? "tick" : "spinner"}.svg`} fill="true" alt="spinner" />
+                      </div>
+                    </div>
+                  </div>
+                </TableRow>
+              ))}
+          </div>
         </TableWrapper>
       )}
     </div>

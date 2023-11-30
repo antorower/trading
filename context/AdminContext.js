@@ -10,8 +10,8 @@ export const useAdminContext = () => {
 };
 
 export const AdminContextProvider = ({ children }) => {
-  const [selectedUser, setSelectedUser] = useState("");
-  const [users, setUsers] = useState([]);
+  const [activeAccounts, setActiveAccounts] = useState(null);
+  const [users, setUsers] = useState(null);
 
   const UpdateUsers = async () => {
     let status = 0;
@@ -35,9 +35,24 @@ export const AdminContextProvider = ({ children }) => {
     }
   };
 
+  const UpdateActiveAccounts = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/accounts/get-active-accounts`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+      setActiveAccounts(data);
+    } catch (error) {
+      console.log(error);
+      errorNotification(error.message);
+    }
+  };
+
   useEffect(() => {
     UpdateUsers();
+    UpdateActiveAccounts();
   }, []);
 
-  return <AdminContext.Provider value={{ selectedUser, setSelectedUser, users, setUsers, UpdateUsers }}>{children}</AdminContext.Provider>;
+  return <AdminContext.Provider value={{ users, setUsers, UpdateUsers, activeAccounts, UpdateActiveAccounts }}>{children}</AdminContext.Provider>;
 };

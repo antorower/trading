@@ -20,11 +20,11 @@ const AccountSchema = new mongoose.Schema({
   image: String,
   comment: {
     type: String,
-    default: "Await the completion of the funds transfer to your wallet.",
+    default: "Await the completion of the funds transfer to your wallet",
   },
   company: {
     type: String,
-    enum: ["Funding Pips"]
+    enum: ["Funding Pips"],
   },
   target: {
     percentage: Number,
@@ -52,7 +52,7 @@ const AccountSchema = new mongoose.Schema({
   balance: Number,
   status: {
     type: String,
-    enum: ["Live", "Lost", "Review", "Upgrade", "Payout", "Payment", "Requested", "Registration"],
+    enum: ["Live", "Lost", "Review", "Upgrade", "Payout", "Payment", "Requested", "Registration", "Rejected"],
     default: "Requested",
   },
   moneyTransfered: {
@@ -157,16 +157,16 @@ AccountSchema.RegisterAccount = async (data) => {
     description: `Account number has been update to ${data.number}.`,
   };
   this.activity.push(newActivity);
-}
+};
 
 AccountSchema.UpdateBalance = async (data) => {
-  if(data.balance >= this.target.amount) {
+  if (data.balance >= this.target.amount) {
     //Perase sthn epomeni fasi  h plhrwnetai
-  } else if(data.balance <= this.overallDrawdown.amount) {
+  } else if (data.balance <= this.overallDrawdown.amount) {
     //Exase
   } else {
     this.balance = data.balance;
   }
-}
+};
 
 export default mongoose.models.Account || mongoose.model("Account", AccountSchema);

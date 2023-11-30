@@ -46,6 +46,14 @@ html {
   @apply bg-violet-700 hover:bg-violet-800 px-4 py-3 rounded transition-all duration-500 font-weight-500;
 }
 
+.btn-accept {
+  @apply px-6 p-2 bg-green-700 rounded hover:bg-green-800 transition-all duration-500 font-weight-500;
+}
+
+.btn-decline {
+  @apply px-6 p-2 bg-red-700 rounded hover:bg-red-800 transition-all duration-500 font-weight-500;
+}
+
 .bg-dark {
   @apply bg-theme1;
 }
