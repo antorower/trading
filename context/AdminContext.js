@@ -31,7 +31,7 @@ export const AdminContextProvider = ({ children }) => {
     } catch (error) {
       errorNotification(error.message);
       await SaveError(error.message, "File: /AdminContext | Function: GetUsers", status);
-      return false;
+      return null;
     }
   };
 
@@ -43,9 +43,11 @@ export const AdminContextProvider = ({ children }) => {
         throw new Error(data.error);
       }
       setActiveAccounts(data);
+      return true;
     } catch (error) {
       console.log(error);
       errorNotification(error.message);
+      return null;
     }
   };
 
