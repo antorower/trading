@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/dbConnect";
 import { currentUser } from "@clerk/nextjs";
-import Account from "@/models/Account";
 import { ErrorHandler } from "@/library/functions";
+import Account from "@/models/Account";
 
 export async function POST(req) {
   const user = await currentUser();
@@ -10,9 +10,9 @@ export async function POST(req) {
     await dbConnect();
     const { company } = await req.json();
 
-    if(!company) {
-      const error = new Error("Company is required"); 
-      error.status = 400; 
+    if (!company) {
+      const error = new Error("Company is required");
+      error.status = 400;
       throw error;
     }
 
@@ -24,7 +24,7 @@ export async function POST(req) {
       company: company,
       activity: [],
     };
- 
+
     await Account.create(requestedAccount);
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -24,7 +24,7 @@ const AccountSchema = new mongoose.Schema({
   },
   company: {
     type: String,
-    enum: ["Funding Pips"],
+    enum: ["Funding Pips", "FTMO", "Funded Next", "The Funded Trader", "True Forex Funds", "My Forex Funds"],
   },
   target: {
     percentage: Number,
@@ -98,6 +98,8 @@ const AccountSchema = new mongoose.Schema({
     createdDate: Date,
     passDate: Date,
   },
+  deletedFromUser: Boolean,
+  deletedFromAdmin: Boolean,
 });
 
 AccountSchema.pre("save", function (next) {
@@ -123,7 +125,7 @@ AccountSchema.methods.FundsTransferred = async function (data) {
   try {
     this.company = data.company;
     this.comment = "";
-    this.action = `The essential funds have been successfully transferred to your wallet. Proceed with the account acquisition from ${this.company} with an amount of $${data.capital}, and upon completion, return to declare the account number.`;
+    this.action = `The amount of $${data.amount} have been successfully transferred to your wallet. Proceed with the account acquisition from ${this.company} with an amount of $${data.capital}, and upon completion, return to declare the account number.`;
     this.capital = data.capital;
     this.balance = data.capital;
     this.status = "Registration";

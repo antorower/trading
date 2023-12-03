@@ -1,19 +1,22 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/dbConnect";
 import { currentUser } from "@clerk/nextjs";
-import Account from "@/models/Model";
+import { ErrorHandler } from "@/library/functions";
+import Account from "@/models/Account";
 
 export async function POST(req) {
   try {
+    console.log("Good");
     await dbConnect();
     const user = await currentUser();
-    const { id, company, capital, wallet, amount } = await req.json();
+    const { accountId, company, capital, wallet, amount } = await req.json();
 
-    let doc = await Account.findById(id);
+    let doc = await Account.findById(accountId);
     if (!doc || user.username != doc.username) {
       return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
-    await doc.FundsTransfered(company, capital, wallet, amount);
+    const data = { company: company, capital: capital, wallet: wallet, amount: amount };
+    await doc.FundsTransferred(data);
     return NextResponse.json(doc);
   } catch (error) {
     console.log("Error from /api/admin/accounts/account/send-money", error);

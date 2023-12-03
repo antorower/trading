@@ -7,7 +7,7 @@ export async function GET(req, context) {
     await dbConnect();
     let docs = await Account.find({ status: { $nin: ["Lost", "Rejected"] } });
     if (!docs || !docs.length) {
-      return NextResponse.json({ error: "You have not active accounts" });
+      return NextResponse.json({ error: "There is not active accounts" });
     } else {
       return NextResponse.json(docs);
     }

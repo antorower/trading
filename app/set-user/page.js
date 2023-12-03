@@ -88,60 +88,33 @@ const SetUser = () => {
         </div>
         <form onSubmit={(e) => SaveDetails(e)} className="flex flex-col gap-4">
           <div className="relative">
-            <input
-              type="text"
-              className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
-              placeholder="Username"
-              maxLength={12}
-              minLength={3}
-              onChange={(e) => UsernameValidation(e)}
-              value={username}
-              autoComplete="off"
-            />
+            <input type="text" className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full" placeholder="Username" maxLength={12} minLength={3} onChange={(e) => UsernameValidation(e)} value={username} autoComplete="off" />
             {usernameValidation && (
               <div className="absolute right-4 top-4">
                 <div className="relative w-4 h-4 right-0">
-                  <Image src="/tick.svg" fill="true" alt="tick" />
+                  <Image src="/tick.svg" fill="true" alt="tick" sizes="32x32" />
                 </div>
               </div>
             )}
           </div>
 
           <div className="relative">
-            <input
-              type="text"
-              className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
-              placeholder="First Name"
-              maxLength={15}
-              minLength={3}
-              onChange={(e) => FirstNameValidation(e)}
-              value={firstName}
-              autoComplete="off"
-            />
+            <input type="text" className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full" placeholder="First Name" maxLength={15} minLength={3} onChange={(e) => FirstNameValidation(e)} value={firstName} autoComplete="off" />
             {firstNameValidation && (
               <div className="absolute right-4 top-4">
                 <div className="relative w-4 h-4 right-0">
-                  <Image src="/tick.svg" fill="true" alt="tick" />
+                  <Image src="/tick.svg" fill="true" alt="tick" sizes="32x32" />
                 </div>
               </div>
             )}
           </div>
 
           <div className="relative">
-            <input
-              type="text"
-              className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full"
-              placeholder="Last Name"
-              maxLength={15}
-              minLength={3}
-              onChange={(e) => LastNameValidation(e)}
-              value={lastName}
-              autoComplete="off"
-            />
+            <input type="text" className="h-12 px-4 bg-theme3 rounded-md font-roboto text-theme7 placeholder-theme5 outline-none border-[#7747CA] focus:border w-full" placeholder="Last Name" maxLength={15} minLength={3} onChange={(e) => LastNameValidation(e)} value={lastName} autoComplete="off" />
             {lastNameValidation && (
               <div className="absolute right-4 top-4">
                 <div className="relative w-4 h-4 right-0">
-                  <Image src="/tick.svg" fill="true" alt="tick" />
+                  <Image src="/tick.svg" fill="true" alt="tick" sizes="32x32" />
                 </div>
               </div>
             )}

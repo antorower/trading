@@ -9,11 +9,11 @@ const TableWrapper = ({ children, title, refresh, refreshFunction, panelExpanded
         <div className="flex gap-8">
           {panelExpanded && refresh && (
             <button onClick={refreshFunction} className="w-[14px] h-[14px] relative">
-              <Image src="/refresh.svg" fill="true" alt="refresh-icon" />
+              <Image src="/refresh.svg" fill="true" alt="refresh-icon" sizes="32x32" />
             </button>
           )}
           <button onClick={() => setPanelExpanded(!panelExpanded)} className="w-[14px] h-[14px] relative">
-            <Image src={`/${panelExpanded ? "minus" : "plus"}.svg`} fill="true" alt="expand-icon" />
+            <Image src={`/${panelExpanded ? "minus" : "plus"}.svg`} fill="true" sizes="32x32" alt="expand-icon" />
           </button>
         </div>
       </div>

@@ -65,10 +65,10 @@ const NewUsersTable = () => {
         <TableWrapper title="New Users" refresh={true} refreshFunction={RefreshUsers} panelExpanded={newUsersPanelExpanded} setPanelExpanded={setNewUsersPanelExpanded}>
           {newUsersPanelExpanded &&
             newUsers.map((user) => (
-              <TableRow>
+              <TableRow key={user.id}>
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="w-[50px] h-[50px] text-lg font-weight-700 flex items-center relative">
-                    <Image src={user.imageUrl} fill="true" className="rounded-full" />
+                    <Image src={user.imageUrl} fill="true" sizes="32x32" className="rounded-full" alt="user" />
                   </div>
                   <div className="flex flex-col justify-between">
                     <div className="font-weight-700">
@@ -103,7 +103,7 @@ const NewUsersTable = () => {
               <TableRow>
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="w-[50px] h-[50px] text-lg font-weight-700 flex items-center relative">
-                    <Image src={user.imageUrl} fill="true" className="rounded-full" />
+                    <Image src={user.imageUrl} fill="true" sizes="32x32" className="rounded-full" />
                   </div>
                   <div className="flex flex-col justify-between">
                     <div className="font-weight-700">
@@ -137,7 +137,3 @@ const NewUsersTable = () => {
 };
 
 export default NewUsersTable;
-
-/*return<div className="flex justify-center items-center relative w-[22px] h-[22px] animate-spin">
-        <Image src="/spinner.svg" fill="true" alt="spinner" />
-      </div>;*/
