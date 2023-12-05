@@ -55,7 +55,7 @@ const SetUser = () => {
     }
     let status = 0;
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/set-user`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/set-user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

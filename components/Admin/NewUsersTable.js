@@ -1,14 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "@/context/UserContext";
-import { useAdminContext } from "@/context/AdminContext";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import TableWrapper from "@/components/TableWrapper";
 import TableRow from "@/components/TableRow";
 
 const NewUsersTable = () => {
-  const { users, UpdateUsers } = useAdminContext();
   const [newUsers, setNewUsers] = useState(null);
   const [newUsersPanelExpanded, setNewUsersPanelExpanded] = useState(true);
 

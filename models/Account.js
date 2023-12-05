@@ -1,31 +1,20 @@
 import mongoose from "mongoose";
 
 const AccountSchema = new mongoose.Schema({
-  user: {
+  userId: {
     type: String,
     required: true,
   },
-  username: {
-    type: String,
-    required: true,
-  },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  image: String,
   comment: {
     type: String,
     default: "Await the completion of the funds transfer to your wallet",
   },
+  action: String,
   company: {
     type: String,
     enum: ["Funding Pips", "FTMO", "Funded Next", "The Funded Trader", "True Forex Funds", "My Forex Funds"],
   },
+  image: String,
   target: {
     percentage: Number,
     amount: Number,
@@ -72,7 +61,6 @@ const AccountSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  action: String,
   activity: [
     {
       activityDate: {
@@ -99,17 +87,17 @@ const AccountSchema = new mongoose.Schema({
     passDate: Date,
   },
   deletedFromUser: Boolean,
-  deletedFromAdmin: Boolean,
 });
 
 AccountSchema.pre("save", function (next) {
   if (this.isNew) {
     const newActivity = {
       title: "Account Requested",
-      description: `Account requested by ${this.username}`,
+      description: "Account requested",
     };
     this.activity.push(newActivity);
     this.number = (Math.floor(Math.random() * (999999999 - 111111111 + 1)) + 111111111).toString();
+    this.image = GetImage(this.company);
   }
 
   if (this.isModified("company")) {
@@ -124,6 +112,7 @@ AccountSchema.pre("save", function (next) {
 AccountSchema.methods.FundsTransferred = async function (data) {
   try {
     this.company = data.company;
+    this.image = GetImage(this.company);
     this.comment = "";
     this.action = `The amount of $${data.amount} have been successfully transferred to your wallet. Proceed with the account acquisition from ${this.company} with an amount of $${data.capital}, and upon completion, return to declare the account number.`;
     this.capital = data.capital;
@@ -159,14 +148,16 @@ AccountSchema.methods.FundsTransferred = async function (data) {
   }
 };
 
-AccountSchema.methods.RegisterAccount = async function (data) {
+AccountSchema.methods.RegisterAccount = async function (number) {
   try {
-    this.number = data.number;
+    this.number = number;
     this.status = "Live";
+    this.comment = "";
+    this.action = "You are now ready to execute your first transaction";
 
     const newActivity = {
       title: "Account Number Updated",
-      description: `Account number has been updated to ${data.number}.`,
+      description: `Account number has been updated to ${number}.`,
     };
 
     this.activity.push(newActivity);
@@ -191,5 +182,31 @@ AccountSchema.methods.UpdateBalance = async function (data) {
     throw error;
   }
 };
+
+AccountSchema.methods.RejectAccount = async function (comment) {
+  try {
+    this.comment = comment;
+    this.status = "Rejected";
+    this.userActionRequired = true;
+    this.adminActionRequired = false;
+    const newActivity = {
+      title: "Account Rejected",
+      description: `Account rejected: ${comment}`,
+    };
+    this.activity.push(newActivity);
+    await this.save();
+  } catch (error) {
+    console.error("Error in RejectAccount method:", error);
+    throw error;
+  }
+};
+
+function GetImage(company) {
+  if (company === "Funding Pips") {
+    return "fundingpips";
+  } else {
+    return "placeholder";
+  }
+}
 
 export default mongoose.models.Account || mongoose.model("Account", AccountSchema);

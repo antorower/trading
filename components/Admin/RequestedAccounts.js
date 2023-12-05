@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "@/context/UserContext";
-import { useAdminContext } from "@/context/AdminContext";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import TableWrapper from "@/components/TableWrapper";
@@ -9,7 +8,7 @@ import TableRow from "@/components/TableRow";
 import CopyWallet from "../CopyWallet";
 
 const RequestedAccountsTable = () => {
-  const { users, activeAccounts, UpdateActiveAccounts } = useAdminContext();
+  const { users, adminAccounts, UpdateAccounts } = useUserContext();
   const [requestedAccounts, setRequestedAccounts] = useState(null);
   const [requestedAccountsPanelExpanded, setRequestedAccountsPanelExpanded] = useState(true);
   const [company, setCompany] = useState("Funding Pips");
@@ -86,10 +85,17 @@ const RequestedAccountsTable = () => {
                   </div>
 
                   {account.status === "Registration" && (
-                    <div className="flex flex-col items-center">
-                      <div className="text-gray-500">Mentor</div>
-                      <div className="font-weight-500 text-lg"> {GetUserById(account.user.publicMetadata.mentor).username}</div>
-                    </div>
+                    <>
+                      <div className="flex flex-col items-center">
+                        <div className="text-gray-500">Mentor</div>
+                        <div className="font-weight-500 text-lg"> {GetUserById(account.user.publicMetadata.mentor).username}</div>
+                      </div>
+
+                      <div className="flex flex-col items-center">
+                        <div className="text-gray-500">{account.company}</div>
+                        <div>${account.capital}</div>
+                      </div>
+                    </>
                   )}
 
                   {account.status === "Requested" && (

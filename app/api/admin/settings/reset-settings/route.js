@@ -12,9 +12,7 @@ export async function POST(req) {
     if (!doc) {
       return NextResponse.json({ error: "Settings document not found" }, { status: 404 });
     }
-    console.log("Data: ", data);
     await doc.ResetSchedule(data);
-    console.log(doc);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.log("Error from /api/admin/settings/reset-settings", error);

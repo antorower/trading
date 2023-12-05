@@ -43,7 +43,6 @@ const TeamWalletSettings = () => {
         },
         body: JSON.stringify({ wallet: wallet }),
       });
-      console.log(response);
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.error);

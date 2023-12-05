@@ -1,74 +1,24 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { toast } from "react-toastify";
-import Link from "next/link";
-import TableWrapper from "@/components/TableWrapper";
+import React from "react";
 import Title from "@/components/Title";
-import TableRow from "@/components/TableRow";
-import { useUserContext } from "@/context/UserContext";
-import FirmsCheckbox from "@/components/FirmsCheckbox";
+import RequestedTable from "@/components/Accounts/Requested/RequestedTable";
 
 const Accounts = () => {
-  const { activeAccounts, UpdateActiveAccounts } = useUserContext();
-  console.log("From Page", activeAccounts);
-  const [requestedCompany, setRequestedCompany] = useState("Funding Pips");
-  const [requestedAccountsPanelExpanded, setRequestedAccountsPanelExpanded] = useState(true);
-  const [newUsersPanelExpanded, setNewUsersPanelExpanded] = useState(true);
-
-  const successNotification = (message) => toast.success(message);
-  const errorNotification = (message) => toast.warn(message);
-
-  const RequestNewAccount = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/request-new-account`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ company: requestedCompany }),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error);
-      }
-      successNotification("Your request for a new account is now being processed. Funds will be transferred to your wallet at the earliest convenience.");
-      await UpdateActiveAccounts();
-    } catch (error) {
-      errorNotification(error.message);
-    }
-  };
-
-  const DeleteRequestedAccount = async (event, accountId) => {
-    try {
-      event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/delete-requested-account/${accountId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error);
-      }
-
-      successNotification("Account successfully deleted");
-      await UpdateActiveAccounts();
-    } catch (error) {
-      errorNotification(error.message);
-    }
-  };
-
   return (
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="Account Control Center" subtitle="Manage your accounts" />
+      <RequestedTable />
+    </div>
+  );
+};
 
-      <TableWrapper title="Action Required" refresh={true} refreshFunction={() => console.log("shit")} panelExpanded={newUsersPanelExpanded} setPanelExpanded={setNewUsersPanelExpanded}></TableWrapper>
+export default Accounts;
 
-      <TableWrapper title="Requested Accounts" refresh={true} refreshFunction={UpdateActiveAccounts} panelExpanded={requestedAccountsPanelExpanded} setPanelExpanded={setRequestedAccountsPanelExpanded}>
+/*
+
+
+
+<TableWrapper title="Requested Accounts" refresh={true} refreshFunction={UpdateActiveAccounts} panelExpanded={requestedAccountsPanelExpanded} setPanelExpanded={setRequestedAccountsPanelExpanded}>
         <div className="flex justify-between items-center px-2">
           <FirmsCheckbox propFirm="Funding Pips" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={false} />
           <FirmsCheckbox propFirm="Funded Next" selectedPropFirm={requestedCompany} selectPropFirm={setRequestedCompany} disabled={true} />
@@ -117,8 +67,5 @@ const Accounts = () => {
           </div>
         )}
       </TableWrapper>
-    </div>
-  );
-};
 
-export default Accounts;
+      */

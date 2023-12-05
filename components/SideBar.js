@@ -3,13 +3,13 @@ import React from "react";
 import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-import { useInterfaceContext } from "@/context/InterfaceContext";
 import MenuItem from "./MenuItem";
+import { useUserContext } from "@/context/UserContext";
 
 const SideBar = () => {
   const router = useRouter();
   const { user } = useUser();
-  const { expandedLeftSidebar, setExpandedLeftSidebar } = useInterfaceContext();
+  const { expandedLeftSidebar, setExpandedLeftSidebar } = useUserContext();
 
   return (
     <div onMouseEnter={() => setExpandedLeftSidebar(true)} onMouseLeave={() => setExpandedLeftSidebar(false)} className={`bg-light font-nova font-weight-500 ${expandedLeftSidebar && "px-6"} overflow-x-hidden overflow-y-auto transition-all duration-500 ease-in-out ${expandedLeftSidebar ? "w-60" : "w-20"} flex flex-col gap-8 h-full scrollable`}>

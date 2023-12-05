@@ -17,10 +17,7 @@ export async function POST(req) {
     }
 
     const requestedAccount = {
-      user: user.id,
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
+      userId: user.id,
       company: company,
       activity: [],
     };

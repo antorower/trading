@@ -1,13 +1,21 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { AdminContextProvider } from "@/context/AdminContext";
 import UserBar from "@/components/UserBar";
 
 export default function AdminLayout({ children }) {
-  const [users, setUsers] = useState([]);
+  return (
+    <div className="flex h-full">
+      <div className="h-full flex-1">{children}</div>
+      <div className="h-full">
+        <UserBar />
+      </div>
+    </div>
+  );
+}
 
-  const errorNotification = (message) => toast.warn(message);
-  const GetUsers = async () => {
+/*
+
+ const GetUsers = async () => {
     let status = 0;
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users/get-users`);
@@ -27,18 +35,4 @@ export default function AdminLayout({ children }) {
     }
   };
 
-  useEffect(() => {
-    GetUsers();
-  }, []);
-
-  return (
-    <AdminContextProvider>
-      <div className="flex h-full">
-        <div className="h-full flex-1">{children}</div>
-        <div className="h-full">
-          <UserBar users={users} />
-        </div>
-      </div>
-    </AdminContextProvider>
-  );
-}
+  */

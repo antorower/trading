@@ -6,11 +6,11 @@ import Account from "@/models/Account";
 
 export async function DELETE(req, context) {
   const user = await currentUser();
-
   try {
     await dbConnect();
-    console.log(context);
-    const accountId = context.params.accountId;
+
+    const { accountId } = context.params;
+
     if (!accountId) {
       const error = new Error("Account is required");
       error.status = 400;
@@ -23,13 +23,13 @@ export async function DELETE(req, context) {
       throw error;
     }
 
-    if (account.username != user.username) {
+    if (account.userId != user.id) {
       const error = new Error("You do not have the required permissions");
       error.status = 400;
       throw error;
     }
 
-    if (account.status !== "Requested") {
+    if (account.status !== "Requested" && account.status !== "Rejected") {
       const error = new Error("Account cannot be deleted");
       error.status = 403;
       throw error;
@@ -38,7 +38,7 @@ export async function DELETE(req, context) {
     await Account.deleteOne({ _id: accountId });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log(`Error from /api/user/delete-requested-account/accountId`, error);
+    console.log("Error from /api/user/delete-requested-account/account._id", error);
     const response = await ErrorHandler(user, error, "Something went wrong while processing your request to delete an account.", `/api/user/delete-requested-account/${context.params.accountId}`);
     return NextResponse.json({ error: response.message }, { status: response.status });
   }

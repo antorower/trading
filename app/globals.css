@@ -55,7 +55,7 @@ html {
 }
 
 .btn-primary {
-  @apply bg-violet-700 hover:bg-violet-800 px-4 py-3 rounded transition-all duration-500 font-weight-500;
+  @apply px-6 p-2 bg-violet-700 rounded hover:bg-violet-800 transition-all duration-500 font-weight-500;
 }
 
 .btn-accept {
@@ -76,4 +76,12 @@ html {
 
 .text-input {
   @apply bg-theme2 text-white rounded-lg p-2 outline-none px-4;
+}
+
+.select {
+  @apply appearance-none px-6 p-2 bg-theme1 transition-all duration-500 font-weight-500 outline-none rounded;
+}
+
+.number-input {
+  @apply appearance-none w-24 bg-theme1 border border-gray-500 px-4 py-2 outline-none;
 }

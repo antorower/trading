@@ -1,5 +1,4 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { InterfaceContextProvider } from "@/context/InterfaceContext";
 import { UserContextProvider } from "@/context/UserContext";
 import { ToastContainer } from "react-toastify";
 import { dark } from "@clerk/themes";
@@ -15,25 +14,12 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider appearance={dark}>
       <html className="bg-theme1" lang="en">
-        <InterfaceContextProvider>
-          <UserContextProvider>
-            <body className="h-screen w-screen overflow-x-hidden">
-              {children}
-              <ToastContainer
-                position="bottom-right"
-                autoClose={8000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="dark"
-              />
-            </body>
-          </UserContextProvider>
-        </InterfaceContextProvider>
+        <UserContextProvider>
+          <body className="h-screen w-screen overflow-x-hidden">
+            {children}
+            <ToastContainer position="bottom-right" autoClose={8000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
+          </body>
+        </UserContextProvider>
       </html>
     </ClerkProvider>
   );

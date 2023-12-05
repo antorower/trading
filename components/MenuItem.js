@@ -1,12 +1,12 @@
 import React from "react";
 import Image from "next/image";
-import { useInterfaceContext } from "@/context/InterfaceContext";
 import { useRouter } from "next/navigation";
+import { useUserContext } from "@/context/UserContext";
 
 const MenuItem = (props) => {
   const router = useRouter();
   const { menu, icon, destination } = props;
-  const { expandedLeftSidebar, activeMenu, setActiveMenu } = useInterfaceContext();
+  const { expandedLeftSidebar, activeMenu, setActiveMenu } = useUserContext();
   const clickHandler = () => {
     setActiveMenu(menu);
     router.push(destination);

@@ -7,7 +7,6 @@ import Link from "next/link";
 import TableWrapper from "../TableWrapper";
 import TableRow from "../TableRow";
 import ScheduleDay from "./ScheduleDay";
-import { useAdminContext } from "@/context/AdminContext";
 
 const Schedule = () => {
   const [schedulePanelExpanded, setSchedulePanelExpanded] = useState(false);
@@ -15,7 +14,6 @@ const Schedule = () => {
   const [endDay, setEndDay] = useState("");
   const [startMonth, setStartMonth] = useState("");
   const [endMonth, setEndMonth] = useState("");
-  const { settings, UpdateSettings } = useAdminContext();
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
