@@ -24,8 +24,8 @@ export async function POST(req) {
     });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/user/update-wallet", error);
-    const response = await ErrorHandler(user, error, "Something went wrong. Please try again.", "/api/user/update-wallet");
+    console.log("Error from /api/update-wallet", error);
+    const response = await ErrorHandler(user, error, "Something went wrong. Please try again.", "/api/update-wallet");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }
