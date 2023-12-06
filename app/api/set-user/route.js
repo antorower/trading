@@ -48,6 +48,7 @@ export async function POST(req) {
         registered: true,
         mentor: mentor,
         banned: false,
+        kyc: [],
       },
     });
     return NextResponse.json({ success: true });

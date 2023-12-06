@@ -5,20 +5,21 @@ import TableRow from "../../TableRow";
 import { useUserContext } from "@/context/UserContext";
 import { toast } from "react-toastify";
 
-const RejectedRow = ({ account }) => {
+const LostRow = ({ account }) => {
   const { UpdateAccounts } = useUserContext();
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
 
-  const DeleteRejectedAccount = async (event) => {
+  const HideLostedAccount = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-account/${account._id}`, {
-        method: "DELETE",
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/account-lost`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({ accountId: account._id }),
       });
       if (!response.ok) {
         const data = await response.json();
@@ -39,19 +40,18 @@ const RejectedRow = ({ account }) => {
         </div>
         <div className="flex flex-col">
           <div className="font-weight-500 text-lg">{account.company}</div>
-          <div className="text-gray-500 text-sm">{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div className="text-gray-500 text-sm">{new Date(account.dates.lostDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
       <div className="flex flex-col items-center">
-        <div className="text-gray-500">Rejected</div>
+        <div className="text-gray-500">Lost</div>
         <div>{account.comment}</div>
       </div>
-      <button onClick={(e) => DeleteRejectedAccount(e)} className="flex items-center btn-decline gap-2">
-        <Image src="/reject-white.svg" width={18} height={18} alt="spinner" sizes="32x32" />
-        <div>Delete</div>
+      <button onClick={(e) => HideLostedAccount(e)} className="flex items-center btn-decline gap-2">
+        Lost
       </button>
     </TableRow>
   );
 };
 
-export default RejectedRow;
+export default LostRow;

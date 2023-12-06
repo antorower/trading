@@ -38,8 +38,8 @@ export async function DELETE(req, context) {
     await Account.deleteOne({ _id: accountId });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/user/delete-requested-account/account._id", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while processing your request to delete an account.", `/api/user/delete-requested-account/${context.params.accountId}`);
+    console.log("Error from /api/user/delete-account/account._id", error);
+    const response = await ErrorHandler(user, error, "Something went wrong while processing your request to delete an account.", `/api/user/delete-account/${context.params.accountId}`);
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }

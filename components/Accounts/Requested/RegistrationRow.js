@@ -46,7 +46,7 @@ const RegistrationRow = ({ account }) => {
       </div>
       <div className="flex flex-col items-center w-[550px]">
         <div className="text-gray-500">Action Required</div>
-        <div className="text-center">{account.action}</div>
+        <div className="text-center">{account.comment}</div>
       </div>
       <div className="flex items-center gap-4">
         <input placeholder="Account Number" onChange={(e) => setAccountNumber(e.target.value)} value={accountNumber} type="text" className="text-input" />

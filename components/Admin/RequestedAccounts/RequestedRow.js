@@ -71,6 +71,7 @@ const RequestedRow = ({ account }) => {
           <div className="text-gray-500 text-sm">{account.user.username}</div>
         </div>
       </div>
+      <div className="text-gray-500">{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
       <div className="flex gap-8 items-center">
         <select onChange={(e) => setCompany(e.target.value)} className="select border border-gray-500">
           <option value="Funding Pips">Funding Pips</option>

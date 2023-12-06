@@ -81,7 +81,7 @@ const RequestedAccountsTable = () => {
 
                   <div className="flex flex-col justify-between items-center">
                     <div className="text-gray-500 text-sm">{account.status === "Requested" ? "Requested Date" : "Money Transfered Date"}</div>
-                    <div className="font-weight-700">{new Date(account.createdDate).toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}</div>
+                    <div className="font-weight-700">{new Date(account.dates.createdDate).toLocaleDateString("en-US", { weekday: "short", day: "numeric", month: "short", year: "numeric" })}</div>
                   </div>
 
                   {account.status === "Registration" && (

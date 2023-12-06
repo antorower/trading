@@ -20,6 +20,10 @@ const RequestedTable = () => {
     setRegistrationAccounts(registration);
   }, [adminAccounts]);
 
+  if ((!requestedAccounts || requestedAccounts?.length === 0) && (!registrationAccounts || registrationAccounts?.length === 0)) {
+    return null;
+  }
+
   return (
     <TableWrapper title="Requested Accounts" refresh={true} refreshFunction={UpdateAccounts} panelExpanded={requestedAccountsPanelExpanded} setPanelExpanded={setRequestedAccountsPanelExpanded}>
       {requestedAccounts && requestedAccounts.length > 0 && requestedAccounts.map((account) => <RequestedRow key={account._id} account={account} />)}

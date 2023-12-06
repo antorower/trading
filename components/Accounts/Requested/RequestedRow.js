@@ -14,7 +14,7 @@ const RequestedRow = ({ account }) => {
   const DeleteRequestedAccount = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-requested-account/${account._id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/delete-account/${account._id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -39,7 +39,7 @@ const RequestedRow = ({ account }) => {
         </div>
         <div className="flex flex-col">
           <div className="font-weight-500 text-lg">{account.company}</div>
-          <div className="text-gray-500 text-sm">{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div className="text-gray-500 text-sm">{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
       <div className="flex flex-col items-center">
@@ -59,5 +59,3 @@ const RequestedRow = ({ account }) => {
 };
 
 export default RequestedRow;
-
-/*{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}*/

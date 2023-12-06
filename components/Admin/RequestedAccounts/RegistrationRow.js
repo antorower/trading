@@ -60,7 +60,7 @@ const RegistrationRow = ({ account }) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Date</div>
-          <div>{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div>{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Amount</div>

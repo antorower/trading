@@ -11,8 +11,9 @@ export async function GET() {
     const user = await currentUser();
     const users = await clerkClient.users.getUserList();
 
-    // Fetch all accounts with status not "Lost" from the database
-    let allAccounts = await Account.find({ deletedFromUser: { $ne: true } });
+    let allAccounts = await Account.find({
+      $nor: [{ status: "Lost", deletedFromUser: true }],
+    });
 
     // Augment each account with the corresponding user details
     const augmentedAccounts = await Promise.all(
