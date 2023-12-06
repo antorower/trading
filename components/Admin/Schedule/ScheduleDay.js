@@ -1,10 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { toast } from "react-toastify";
-import { SaveError } from "@/library/functions";
-import Link from "next/link";
-import TableRow from "../TableRow";
+import TableRow from "@/components/TableRow";
 
 const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
   const [activePairs, setActivePairs] = useState(null);
@@ -58,7 +55,6 @@ const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
       await UpdateSettings();
     } catch (error) {
       errorNotification(error.message);
-      await SaveError(error.message, "File: file | Function: function", status);
     }
   };
 

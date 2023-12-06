@@ -1,14 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import { toast } from "react-toastify";
-import { SaveError } from "@/library/functions";
-import Link from "next/link";
-import TableWrapper from "../TableWrapper";
-import TableRow from "../TableRow";
+import TableWrapper from "@/components/TableWrapper";
+import TableRow from "@/components/TableRow";
 import ScheduleDay from "./ScheduleDay";
+import { useUserContext } from "@/context/UserContext";
 
 const Schedule = () => {
+  const { settings, UpdateSettings } = useUserContext();
   const [schedulePanelExpanded, setSchedulePanelExpanded] = useState(false);
   const [startDay, setStartDay] = useState("");
   const [endDay, setEndDay] = useState("");
