@@ -7,6 +7,7 @@ export async function GET() {
     await dbConnect();
     const user = await currentUser();
     const users = await clerkClient.users.getUserList();
+    console.log(users);
 
     if (user?.publicMetadata?.role === "admin") {
       return NextResponse.json(users);
@@ -15,7 +16,6 @@ export async function GET() {
       const mentoredUsers = users.filter((user) => user.publicMetadata.mentor === user.id);
       return NextResponse.json(mentoredUsers);
     }
-
     return NextResponse.json([]);
   } catch (error) {
     console.log("Error from /api/admin/users/get-users", error);

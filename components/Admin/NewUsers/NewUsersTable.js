@@ -47,20 +47,10 @@ const NewUsersTable = () => {
     setNewUsers(users.filter((user) => user.publicMetadata.registered && !user.publicMetadata.active && !user.publicMetadata.banned));
   }, [users]);
 
-  const RefreshUsers = async () => {
-    const response = await UpdateUsers();
-    if (response) {
-      successNotification("Users successfully updated.");
-    }
-    if (!response) {
-      errorNotification("Failed to update users. Please try again.");
-    }
-  };
-
   if (!newUsers || newUsers.length === 0) return null;
 
   return (
-    <TableWrapper title="New Users" refresh={true} refreshFunction={RefreshUsers} panelExpanded={newUsersPanelExpanded} setPanelExpanded={setNewUsersPanelExpanded}>
+    <TableWrapper title="New Users" refresh={true} refreshFunction={UpdateUsers} panelExpanded={newUsersPanelExpanded} setPanelExpanded={setNewUsersPanelExpanded}>
       {newUsersPanelExpanded &&
         newUsers.map((user) => (
           <TableRow key={user.id}>

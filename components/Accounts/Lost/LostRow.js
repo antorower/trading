@@ -25,8 +25,8 @@ const LostRow = ({ account }) => {
         const data = await response.json();
         throw new Error(data.error);
       }
-      successNotification("Account successfully deleted");
       await UpdateAccounts();
+      successNotification("Account successfully deleted");
     } catch (error) {
       errorNotification(error.message);
     }

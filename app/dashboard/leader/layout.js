@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import UserBar from "@/components/UserBar";
+import UserBar from "@/components/UserBar/UserBar";
 
 export default function AdminLayout({ children }) {
   const [users, setUsers] = useState([]);

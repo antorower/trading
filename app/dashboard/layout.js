@@ -1,6 +1,6 @@
 "use client";
-import TopBar from "@/components/TopBar";
-import SideBar from "@/components/SideBar";
+import TopBar from "@/components/Menus/TopBar";
+import SideBar from "@/components/Menus/SideBar";
 
 export default function DashboardLayout({ children }) {
   return (
