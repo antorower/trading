@@ -55,7 +55,11 @@ const NewUsersTable = () => {
         newUsers.map((user) => (
           <TableRow key={user.id}>
             <div className="flex flex-wrap items-center gap-4">
-              <div className="w-[50px] h-[50px] text-lg font-weight-700 flex items-center relative">
+              <div class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+              </div>
+              <div className="w-[40px] h-[40px] text-lg font-weight-700 flex items-center relative">
                 <Image src={user.imageUrl} fill="true" sizes="32x32" className="rounded-full" alt="user" />
               </div>
               <div className="flex flex-col justify-between">

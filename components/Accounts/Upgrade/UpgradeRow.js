@@ -22,10 +22,17 @@ const UpgradeRow = ({ account }) => {
           {account.phase === 3 && "Funded"}
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Upgrade Date</div>
+          <div className="text-gray-500 text-sm">Action</div>
           <div>{new Date(account.dates.upgradeDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
+      {account.minimumTrades <= account.tradesExecuted && <div>Πέρασες</div>}
+      {account.minimumTrades > account.tradesExecuted && (
+        <div className="flex flex-col items-center">
+          <div className="text-gray-500 text-sm">Trading Days Left</div>
+          <div>{account.minimumTrades - account.tradesExecuted > 0 ? account.minimumTrades - account.tradesExecuted : 0}</div>
+        </div>
+      )}
     </TableRow>
   );
 };

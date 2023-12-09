@@ -7,7 +7,6 @@ export async function GET() {
     await dbConnect();
     const user = await currentUser();
     const users = await clerkClient.users.getUserList();
-    console.log(users);
 
     if (user?.publicMetadata?.role === "admin") {
       return NextResponse.json(users);

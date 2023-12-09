@@ -36,6 +36,10 @@ const RegistrationRow = ({ account }) => {
   return (
     <TableRow>
       <div className="flex justify-center items-center gap-2">
+        <div class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+        </div>
         <div className="flex w-10 h-10 justify-center items-center relative">
           <Image src={`/${account.image}.svg`} fill="true" className="rounded-full" alt="account" />
         </div>
