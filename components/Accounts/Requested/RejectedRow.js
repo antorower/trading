@@ -39,7 +39,7 @@ const RejectedRow = ({ account }) => {
         </div>
         <div className="flex flex-col">
           <div className="font-weight-500 text-lg">{account.company}</div>
-          <div className="text-gray-500 text-sm">{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div className="text-gray-500 text-sm">{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
       <div className="flex flex-col items-center">

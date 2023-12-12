@@ -16,18 +16,13 @@ export async function POST(req) {
       throw error;
     }
 
-    const requestedAccount = {
-      userId: user.id,
-      company: company,
-      phase: 1,
-      activity: [],
-    };
+    const newAccount = new Account();
+    await newAccount.RequestAccount({ userId: user.id, company: company });
 
-    await Account.create(requestedAccount);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/users/request-new-account", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while processing your request for a new account.", "/api/user/request-new-account");
+    console.log("Error from /api/progress/request-new-account", error);
+    const response = await ErrorHandler(user, error, "Something went wrong while processing your request for a new account.", "/api/progress/request-new-account");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }

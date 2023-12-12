@@ -19,7 +19,7 @@ const RequestedRow = ({ account }) => {
   const SendMoney = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/send-money-to-buy-account`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/progress/send-money-to-buy-account`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ const RequestedRow = ({ account }) => {
   const RejectAccount = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/reject-account`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/progress/reject-account`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -75,7 +75,7 @@ const RequestedRow = ({ account }) => {
           <div className="text-gray-500 text-sm">{account.user.username}</div>
         </div>
       </div>
-      <div className="text-gray-500">{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+      <div className="text-gray-500">{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
       <div className="flex gap-8 items-center">
         <select onChange={(e) => setCompany(e.target.value)} className="select border border-gray-500">
           <option value="Funding Pips">Funding Pips</option>
@@ -87,8 +87,7 @@ const RequestedRow = ({ account }) => {
       <input onChange={(e) => setDeclineComment(e.target.value)} value={declineComment} type="text" className="text-input" placeholder="Decline Comment" />
       <div className="flex justify-center items-center gap-4">
         <button onClick={(e) => RejectAccount(e)} className="btn-decline">
-          {" "}
-          Reject{" "}
+          Reject
         </button>
         <button onClick={(e) => SendMoney(e)} className="btn-accept flex gap-2 items-center">
           <Image src="/dollar2.svg" alt="money" width={25} height={25} />

@@ -1,8 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import Link from "next/link";
 import TableRow from "../../TableRow";
 import { useUserContext } from "@/context/UserContext";
 
@@ -16,7 +15,7 @@ const RegistrationRow = ({ account }) => {
   const RegisterAccount = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/register-account`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/progress/register-account`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,7 +48,7 @@ const RegistrationRow = ({ account }) => {
         </div>
       </div>
       <div className="flex flex-col items-center w-[550px]">
-        <div className="text-gray-500">Action Required</div>
+        <div className="text-gray-500">Account Registration</div>
         <div className="text-center">{account.comment}</div>
       </div>
       <div className="flex items-center gap-4">

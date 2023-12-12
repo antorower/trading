@@ -18,8 +18,8 @@ export async function POST(req) {
     await doc.FundsTransferred(data);
     return NextResponse.json({ sucess: true });
   } catch (error) {
-    console.log("Error from /api/admin/account/send-money", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while fetching active accounts. Please refresh the page.", "/api/admin/account/send-money");
+    console.log("Error from /api/progress/send-money-to-buy-account", error);
+    const response = await ErrorHandler(user, error, "Something went wrong while fetching active accounts. Please refresh the page.", "/api/progress/send-money-to-buy-account");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }

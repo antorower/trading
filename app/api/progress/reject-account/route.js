@@ -21,8 +21,8 @@ export async function POST(req) {
     await doc.RejectAccount(comment);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/admin/reject-account", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while fetching active accounts. Please refresh the page.", "/api/admin/reject-account");
+    console.log("Error from /api/progress/reject-account", error);
+    const response = await ErrorHandler(user, error, "Something went wrong while fetching active accounts. Please refresh the page.", "/api/progress/reject-account");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }

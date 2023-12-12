@@ -13,7 +13,7 @@ const RequestNewAccountBar = () => {
   const RequestNewAccount = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/request-new-account`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/progress/request-new-account`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

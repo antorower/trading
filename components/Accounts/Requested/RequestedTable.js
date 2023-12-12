@@ -13,7 +13,7 @@ const RequestedTable = () => {
   const [requestedAccounts, setRequestedAccounts] = useState(null);
   const [rejectedAccounts, setRejectedAccounts] = useState(null);
   const { userAccounts, UpdateAccounts } = useUserContext();
-
+  console.log(userAccounts);
   useEffect(() => {
     if (!userAccounts) return;
     const requested = userAccounts.filter((account) => account.status === "Requested");
