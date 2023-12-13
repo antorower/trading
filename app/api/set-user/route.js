@@ -49,6 +49,7 @@ export async function POST(req) {
         mentor: mentor,
         banned: false,
         kyc: [],
+        team: [user.id],
       },
     });
     return NextResponse.json({ success: true });

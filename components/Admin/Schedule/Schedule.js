@@ -105,7 +105,7 @@ const Schedule = () => {
             )}
             {settings && !settings.schedule.development && (
               <button onClick={(e) => ChangeDevelopmentMode(e, true)} className="btn-primary">
-                Edit Schedule
+                New Week
               </button>
             )}
           </TableRow>

@@ -320,30 +320,35 @@ SettingsSchema.methods.ResetSchedule = async function (data) {
     this.schedule.monday.lotsFactor = 1;
     this.schedule.monday.startingTradingHour = 0;
     this.schedule.monday.endingTradingHour = 0;
+    this.schedule.monday.pairs = [];
 
     this.schedule.tuesday.pairs = pairs;
     this.schedule.tuesday.activeDay = false;
     this.schedule.tuesday.lotsFactor = 1;
     this.schedule.tuesday.startingTradingHour = 0;
     this.schedule.tuesday.endingTradingHour = 0;
+    this.schedule.tuesday.pairs = [];
 
     this.schedule.wednesday.pairs = pairs;
     this.schedule.wednesday.activeDay = false;
     this.schedule.wednesday.lotsFactor = 1;
     this.schedule.wednesday.startingTradingHour = 0;
     this.schedule.wednesday.endingTradingHour = 0;
+    this.schedule.wednesday.pairs = [];
 
     this.schedule.thursday.pairs = pairs;
     this.schedule.thursday.activeDay = false;
     this.schedule.thursday.lotsFactor = 1;
     this.schedule.thursday.startingTradingHour = 0;
     this.schedule.thursday.endingTradingHour = 0;
+    this.schedule.thursday.pairs = [];
 
     this.schedule.friday.pairs = pairs;
     this.schedule.friday.activeDay = false;
     this.schedule.friday.lotsFactor = 1;
     this.schedule.friday.startingTradingHour = 0;
     this.schedule.friday.endingTradingHour = 0;
+    this.schedule.friday.pairs = [];
 
     await this.save();
   } catch (error) {
