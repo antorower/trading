@@ -24,8 +24,10 @@ const TradeSchema = new mongoose.Schema({
   closeAt: Date,
   stopLoss: Number,
   takeProfit: Number,
-  stopLossPrice: Number,
-  takeProfitPrice: Number,
+  fake: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Trade = mongoose.models.Trade || mongoose.model("Trade", TradeSchema);

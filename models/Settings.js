@@ -357,7 +357,35 @@ SettingsSchema.methods.ResetSchedule = async function (data) {
   }
 };
 
+SettingsSchema.methods.OpenTrade = async function (day, company, index, lots) {
+  console.log(day);
+  console.log(company);
+  console.log(index);
+  console.log(lots);
+
+  try {
+    const listLength = this.plan[day][company].list.length;
+    console.log("List Lenght", listLength);
+    if (index === listLength - 1) {
+      this.plan[day][company].currentId = 0;
+    } else {
+      this.plan[day][company].currentId = index + 1;
+    }
+
+    if (this.plan[day][company].list[index].lastPosition === "Buy") {
+      this.plan[day][company].list[index].lastPosition = "Sell";
+    } else {
+      this.plan[day][company].list[index].lastPosition = "Buy";
+    }
+
+    this.plan[day][company].list[index].lastLots = lots;
+    await this.save();
+  } catch (error) {
+    console.error("Error in reset schedule method:", error);
+    throw error;
+  }
+};
+
 const Settings = mongoose.models.Settings || mongoose.model("Settings", SettingsSchema);
 
 export default Settings;
-//const pairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "EURAUD", "EURNZD", "GBPJPY", "GBPCHF", "GBPCAD", "GBPAUD", "GBPNZD", "AUDJPY", "AUDCHF", "AUDCAD", "AUDNZD", "NZDJPY", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF", "CHFJPY"];

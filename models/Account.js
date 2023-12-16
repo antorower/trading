@@ -78,9 +78,7 @@ const AccountSchema = new mongoose.Schema({
     position: String,
     lots: Number,
   },
-  // Μετά το 3
   registrationDate: Date,
-  // Όταν ανοίγει το πρώτο trade
   firstTradeDate: Date,
   // Κάθε φορά που ανοίγει ένα trade
   lastTradeOpenDate: Date,
@@ -215,16 +213,70 @@ AccountSchema.methods.RejectAccount = async function (comment) {
     throw error;
   }
 };
+// Επιστρέφει το take profit
+AccountSchema.methods.GetTakeProfit = async function (lots) {
+  try {
+    const remainingProfit = this.target - this.balance;
+    const remainingPercentage = remainingProfit / this.capital;
+    if (this.phase === 1) {
+      if (remainingPercentage < 0.035) {
+        return Math.floor(remainingProfit + 7 * lots);
+      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
+        return Math.floor(this.capital * (Math.random() * (0.028 - 0.02) + 0.02));
+      } else {
+        return Math.floor(this.capital * (Math.random() * (0.04 - 0.03) + 0.03));
+      }
+    }
+
+    if (this.phase === 2) {
+      if (remainingPercentage <= 0.05) {
+        return remainingProfit + 5 * lots;
+      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
+        return this.capital * (Math.random() * (0.028 - 0.02) + 0.02);
+      } else {
+        return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
+      }
+    }
+
+    if (this.phase === 3) {
+      if (remainingPercentage <= 0.04) {
+        return remainingProfit + 5 * lots;
+      } else {
+        return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
+      }
+    }
+  } catch (error) {
+    console.error("Error in RejectAccount method:", error);
+    throw error;
+  }
+};
+// Επιστρέφει το stop loss
+AccountSchema.methods.GetStopLoss = async function () {
+  try {
+    const remainingLoss = this.balance - this.overallDrawdown;
+    const remainingPercentage = remainingLoss / this.capital;
+
+    if (remainingPercentage < 0.04) {
+      return remainingLoss + 5 * lots;
+    } else {
+      return Math.floor(this.capital * (Math.random() * (0.04 - 0.034) + 0.034));
+    }
+  } catch (error) {
+    console.error("Error in RejectAccount method:", error);
+    throw error;
+  }
+};
+
 // Ο trader ανοίγει trade
-AccountSchema.methods.OpenTrade = async function (trade, fake) {
+AccountSchema.methods.OpenTrade = async function (trade) {
   try {
     const newActivity = {
       title: "Trade Opened",
-      description: fake ? "A fake trade has been opened. Please close it" : `A ${trade.position} position has been opened for ${trade.pair}`,
+      description: trade.fake ? "A fake trade has been opened. Please close it" : `A ${trade.position} position has been opened for ${trade.pair}`,
     };
     this.activity.push(newActivity);
 
-    this.comment = fake ? "A fake trade has been opened. Please close it now." : "An open trade is currently active. Please ensure its closure before 22:00.";
+    this.comment = trade.fake ? "A fake trade has been opened. Please close it now." : "An open trade is currently active. Please ensure its closure before 22:00.";
 
     if (!this.firstTradeDate) {
       this.firstTradeDate = Date.now();
@@ -234,21 +286,20 @@ AccountSchema.methods.OpenTrade = async function (trade, fake) {
     this.tradesExecuted += 1;
 
     this.openTrade.pending = true;
-    if (fake) {
-      this.openTrade.fake = true;
-    } else {
+    this.openTrade.fake = false;
+    if (!trade.fake) {
       this.openTrade.pair = trade.pair;
       this.openTrade.position = trade.position;
       this.openTrade.lots = trade.lots;
-      this.openTrade.fake = false;
     }
 
     await this.save();
   } catch (error) {
-    console.error("Error in RejectAccount method:", error);
+    console.error("Error in OpenTrade method:", error);
     throw error;
   }
 };
+
 // Ο trader κλείνει trade
 AccountSchema.methods.CloseTrade = async function (balance) {
   try {
@@ -390,71 +441,6 @@ AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
     this.paymentedDate = null;
 
     await this.save();
-  } catch (error) {
-    console.error("Error in RejectAccount method:", error);
-    throw error;
-  }
-};
-// Επιστρέφει αν επιτρέπονται τα trades
-AccountSchema.methods.CheckIfTradeAllowed = async function () {
-  try {
-    if (this.status != "Live") return false;
-    if (this.balance >= this.target) return false;
-    return true;
-  } catch (error) {
-    console.error("Error in RejectAccount method:", error);
-    throw error;
-  }
-};
-// Επιστρέφει το take profit
-AccountSchema.methods.GetTakeProfit = async function (lots) {
-  try {
-    const remainingProfit = this.target - this.balance;
-    const remainingPercentage = remainingProfit / this.capital;
-    if (this.phase === 1) {
-      if (remainingPercentage < 0.035) {
-        return remainingProfit + 5 * lots;
-      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
-        return this.capital * Math.random() * (0.028 - 0.02) + 0.02;
-      } else {
-        return this.capital * Math.random() * (0.04 - 0.03) + 0.03;
-      }
-    }
-
-    if (this.phase === 2) {
-      if (remainingPercentage <= 0.05) {
-        return remainingProfit + 5 * lots;
-      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
-        return this.capital * Math.random() * (0.028 - 0.02) + 0.02;
-      } else {
-        return this.capital * Math.random() * (0.04 - 0.03) + 0.03;
-      }
-    }
-
-    if (this.phase === 3) {
-      if (remainingPercentage <= 0.04) {
-        return remainingProfit + 5 * lots;
-      } else {
-        return this.capital * Math.random() * (0.04 - 0.03) + 0.03;
-      }
-    }
-  } catch (error) {
-    console.error("Error in RejectAccount method:", error);
-    throw error;
-  }
-};
-
-// Επιστρέφει το stop loss
-AccountSchema.methods.GetStopLoss = async function () {
-  try {
-    const remainingLoss = this.balance - this.overallDrawdown;
-    const remainingPercentage = remainingLoss / this.capital;
-
-    if (remainingPercentage < 0.04) {
-      return remainingLoss + 5 * lots;
-    } else {
-      return this.capital * Math.random() * (0.04 - 0.034) + 0.034;
-    }
   } catch (error) {
     console.error("Error in RejectAccount method:", error);
     throw error;

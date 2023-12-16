@@ -7,11 +7,11 @@ const LiveRow = ({ account }) => {
   return (
     <TableRow>
       <div className="flex gap-8 items-center">
-        {new Date(account.dates.lastTradeOpenDate).toDateString() != new Date().toDateString() ||
-          (new Date(account.dates.lastTradeCloseDate).toDateString() != new Date().toDateString() && (
-            <div class="relative flex h-3 w-3">
-              <span class={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.dates.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
-              <span class={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.dates.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
+        {new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ||
+          (new Date(account.lastTradeCloseDate).toDateString() != new Date().toDateString() && (
+            <div className="relative flex h-3 w-3">
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
+              <span className={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
             </div>
           ))}
         <div className="flex items-center gap-2">
@@ -35,10 +35,10 @@ const LiveRow = ({ account }) => {
           <div>${account.balance}</div>
         </div>
       </div>
-      {new Date(account.dates.lastTradeOpenDate).toDateString() === new Date().toDateString() && new Date(account.dates.lastTradeCloseDate).toDateString() === new Date().toDateString() && (
-        <div class="relative flex h-3 w-3">
-          <span class={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.dates.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
-          <span class={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.dates.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
+      {new Date(account.lastTradeOpenDate).toDateString() === new Date().toDateString() && new Date(account.dates.lastTradeCloseDate).toDateString() === new Date().toDateString() && (
+        <div className="relative flex h-3 w-3">
+          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.dates.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
+          <span className={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
         </div>
       )}
     </TableRow>

@@ -8,7 +8,7 @@ const LiveRow = ({ account }) => {
     <TableRow>
       <div className="flex gap-4 items-center justify-center">
         <div className="relative w-[40px] h-[40px] flex justify-center items-center">
-          <Image src={account.user.imageUrl} alt="user-image" fill="true" className="rounded-full" />
+          <Image src={account.user.imageUrl} alt="user-image" fill="true" sizes="32x32" className="rounded-full" />
         </div>
         <div className="flex flex-col">
           <div className="">
@@ -38,20 +38,20 @@ const LiveRow = ({ account }) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Initialization</div>
-          <div>{new Date(account.dates.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div>{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Last Trade</div>
-          <div>{new Date(account.dates.lastTradeDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div>{new Date(account.lastTradeDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
       <div className="flex items-center gap-2">
-        {new Date(account.dates.lastTradeDate).toDateString === new Date().toDateString() && (
+        {new Date(account.lastTradeDate).toDateString === new Date().toDateString() && (
           <div className="relative w-4 h-4 right-0">
             <Image src="/tick.svg" fill="true" alt="tick" sizes="32x32" />
           </div>
         )}
-        {new Date(account.dates.lastTradeDate).toDateString != new Date().toDateString() && (
+        {new Date(account.lastTradeDate).toDateString != new Date().toDateString() && (
           <div className="relative w-4 h-4 right-0">
             <Image src="/reject-red.svg" fill="true" alt="tick" sizes="32x32" />
           </div>

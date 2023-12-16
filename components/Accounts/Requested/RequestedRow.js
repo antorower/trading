@@ -35,7 +35,7 @@ const RequestedRow = ({ account }) => {
     <TableRow>
       <div className="flex justify-center items-center gap-2">
         <div className="flex w-10 h-10 justify-center items-center relative">
-          <Image src={`/${account.image}.svg`} fill="true" className="rounded-full" alt="account" />
+          <Image src={`/${account.image}.svg`} fill="true" sizes="32x32" className="rounded-full" alt="account" />
         </div>
         <div className="flex flex-col">
           <div className="font-weight-500 text-lg">{account.company}</div>
