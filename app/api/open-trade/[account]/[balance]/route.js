@@ -70,6 +70,11 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "YES", message: "Account not found" }, { status: 404 });
     }
 
+    let openTrade = await Trade.findOne({ account: account, status: "Open" });
+    if (openTrade) {
+      return NextResponse.json({ error: "YES", message: "Our system has pending open trade, please try again or contact us" }, { status: 404 });
+    }
+
     if (accountObj.balance != balance) {
       const newActivity = {
         title: "Balance issue",

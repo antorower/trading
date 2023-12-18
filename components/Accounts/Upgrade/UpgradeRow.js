@@ -23,7 +23,7 @@ const UpgradeRow = ({ account }) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Action</div>
-          <div>{new Date(account.dates.upgradeDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div>{new Date(account.upgradeDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
       {account.minimumTrades <= account.tradesExecuted && <div>Πέρασες</div>}

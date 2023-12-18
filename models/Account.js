@@ -78,6 +78,10 @@ const AccountSchema = new mongoose.Schema({
     position: String,
     lots: Number,
   },
+  needTrade: {
+    type: Boolean,
+    default: true,
+  },
   registrationDate: Date,
   firstTradeDate: Date,
   // Κάθε φορά που ανοίγει ένα trade
@@ -266,7 +270,6 @@ AccountSchema.methods.GetStopLoss = async function () {
     throw error;
   }
 };
-
 // Ο trader ανοίγει trade
 AccountSchema.methods.OpenTrade = async function (trade) {
   try {
@@ -299,7 +302,6 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     throw error;
   }
 };
-
 // Ο trader κλείνει trade
 AccountSchema.methods.CloseTrade = async function (balance) {
   try {
@@ -311,7 +313,7 @@ AccountSchema.methods.CloseTrade = async function (balance) {
     this.openTrade.pending = false;
 
     if (this.balance - balance >= this.dailyDrawdown) {
-      this.comment = "Hey trader, your account has been closed. No worries! You can always request a new one.";
+      this.comment = "Hey diligent trader, your account has been closed. No worries! You can always request a new one, always for free!";
       this.lostByDailyDrawdown = true;
       this.status = "Review";
       this.lostDate = Date.now();
@@ -322,49 +324,56 @@ AccountSchema.methods.CloseTrade = async function (balance) {
       this.lostDate = Date.now();
     }
 
-    if (balance >= this.target && this.balance < this.target) {
+    // Αν το account έχει πιάσει τον στόχο
+    if (balance >= this.target) {
       if (this.company === "Funding Pips") {
-        if (this.phase === 1) {
-          const newActivity = {
-            title: "Evaluation Passed",
-            description: "Evaluation phase passed and trader is ready to upgrade the account",
-          };
-          this.activity.push(newActivity);
+        this.needTrade = false;
+        // Αν αυτό είναι το trade που έπιασε τον στόχο
+        if (this.balance < this.target) {
+          if (this.phase === 1) {
+            const newActivity = {
+              title: "Evaluation Passed",
+              description: "Evaluation phase passed and trader is ready to upgrade the account",
+            };
+            this.activity.push(newActivity);
 
-          this.comment = "Congratulations! You have pass the evaluation phase. You can now upgrade your account.";
-          this.status = "Upgrade";
-          this.targetReachedDate = Date.now();
-          this.upgradeDate = Date.now();
-        }
-        if (this.phase === 2) {
-          const newActivity = {
-            title: "Verification Passed",
-            description: "Verification phase passed and trader is ready to upgrade the account",
-          };
-          this.activity.push(newActivity);
+            this.comment = "Congratulations! You have pass the evaluation phase. You can now upgrade your account.";
+            this.status = "Upgrade";
+            this.targetReachedDate = Date.now();
+            this.upgradeDate = Date.now();
+          }
+          if (this.phase === 2) {
+            const newActivity = {
+              title: "Verification Passed",
+              description: "Verification phase passed and trader is ready to upgrade the account",
+            };
+            this.activity.push(newActivity);
 
-          this.comment = "Congratulations! You have pass the verification phase. You can now upgrade your account.";
-          this.status = "Upgrade";
-          this.targetReachedDate = Date.now();
-          this.upgradeDate = Date.now();
-        }
-        if (this.phase === 3) {
-          const newActivity = {
-            title: "Profit target reached!",
-            description: "Verification phase passed and trader is ready to upgrade the account",
-          };
-          this.activity.push(newActivity);
+            this.comment = "Congratulations! You have pass the verification phase. You can now upgrade your account.";
+            this.status = "Upgrade";
+            this.targetReachedDate = Date.now();
+            this.upgradeDate = Date.now();
+          }
+          if (this.phase === 3) {
+            const newActivity = {
+              title: "Profit target reached!",
+              description: "Verification phase passed and trader is ready to upgrade the account",
+            };
+            this.activity.push(newActivity);
 
-          this.comment = "Congratulations! You have reach the profit target.";
-          this.status = "Payment";
-          this.targetReachedDate = Date.now();
+            this.comment = "Congratulations! You have reach the profit target.";
+            this.status = "Payment";
+            this.targetReachedDate = Date.now();
 
-          // Add 4 days
-          let paymentDateTemp = new Date(this.firstTradeDate.getTime() + 345600000);
-          // Set the hour to 12 at night
-          paymentDateTemp.setHours(0, 0, 0, 0);
-          // Return the date to miliseconds format - At front end i will check the paymentDate and i will customize the comment and the action dot
-          this.paymentDate = paymentDateTemp.getTime();
+            // Add 4 days
+            let paymentDateTemp = new Date(this.firstTradeDate.getTime() + 345600000);
+            // Set the hour to 12 at night
+            paymentDateTemp.setHours(0, 0, 0, 0);
+            // Return the date to miliseconds format - At front end i will check the paymentDate and i will customize the comment and the action dot
+            this.paymentDate = paymentDateTemp.getTime();
+          }
+        } else {
+          // Αν τον στόχο τον έπιασε σε προηγούμενο trade
         }
       }
     }
@@ -374,7 +383,7 @@ AccountSchema.methods.CloseTrade = async function (balance) {
 
     await this.save();
   } catch (error) {
-    console.error("Error in RejectAccount method:", error);
+    console.error("Error in CloseTrade method:", error);
     throw error;
   }
 };
@@ -385,6 +394,8 @@ AccountSchema.methods.UpgradeAccount = async function (prevAccount, newNumber) {
       title: "Account Upgraded",
       description: `${prevAccount.company} account ${prevAccount.number} upgraded and now ${newNumber} is live at phase ${prevAccount.phase + 1}`,
     };
+    this.userId = prevAccount.userId;
+    this.number = newNumber;
     this.activity.push(newActivity);
     this.comment = `${newNumber} is now live. Upgraded from ${prevAccount.number}.`;
     this.company = prevAccount.company;
@@ -394,15 +405,17 @@ AccountSchema.methods.UpgradeAccount = async function (prevAccount, newNumber) {
     this.status = "Live";
     this.createdDate = Date.now();
     this.tradesExecuted = 0;
-    this.prevAccount = prevAccount.number;
+    this.chain.prevAccount = prevAccount.number;
+    this.openTrade.pending = false;
     this.openTrade.pending = false;
 
     await this.save();
   } catch (error) {
-    console.error("Error in RejectAccount method:", error);
+    console.error("Error in UpgradeAccount method:", error);
     throw error;
   }
 };
+
 // Ο trader κάνει payment request
 AccountSchema.methods.PaymentAccount = async function (wallet) {
   try {

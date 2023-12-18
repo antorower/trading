@@ -30,6 +30,17 @@ const TradeSchema = new mongoose.Schema({
   },
 });
 
+AccountSchema.methods.CloseTrade = async function (balance) {
+  try {
+    this.endingBalance = balance;
+    this.status = "Close";
+    await this.save();
+  } catch (error) {
+    console.error("Error in CloseTrade method:", error);
+    throw error;
+  }
+};
+
 const Trade = mongoose.models.Trade || mongoose.model("Trade", TradeSchema);
 
 export default Trade;
