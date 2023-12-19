@@ -31,6 +31,25 @@ const LiveRow = ({ account }) => {
     }
   };
 
+  const PaymentRequest = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment-request`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ accountNumber: account.number }),
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+      successNotification("You have successfully request a payout");
+    } catch (error) {
+      errorNotification(error.message);
+    }
+  };
+
   return (
     <TableRow>
       <div className="flex gap-8 items-center">
@@ -96,7 +115,11 @@ const LiveRow = ({ account }) => {
           </button>
         </div>
       )}
-      {account.status === "Payment" && <div>kalsdfj</div>}
+      {account.status === "Payment" && (
+        <button onClick={PaymentRequest} className="btn-accept">
+          Payout Request
+        </button>
+      )}
       {/* Θα φαίνονται και τα payout accounts αλλά δεν χρειάζεται να μπει κάτι επιπρόσθετο */}
     </TableRow>
   );

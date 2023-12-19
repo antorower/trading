@@ -185,8 +185,9 @@ export async function GET(req, context) {
       return NextResponse.json({ pair: planPair.pair, position: planPair.lastPosition === "Buy" ? "Sell" : "Buy", lots: newLots, stoploss: stopLoss, takeprofit: takeProfit });
     }
   } catch (error) {
-    console.error("Error finding document:", error);
-    return NextResponse.json({ error: error.message });
+    console.log("Error from /api/user/delete-account/account._id", error);
+    const response = await ErrorHandler(user, error, "Something went wrong while processing your request to delete an account.", `/api/user/delete-account/${context.params.accountId}`);
+    return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }
 

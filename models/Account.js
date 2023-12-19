@@ -427,6 +427,8 @@ AccountSchema.methods.PaymentAccount = async function (wallet) {
     this.paymentedDate = Date.now();
     this.status = "Payout";
     this.comment = "Your payment request has been submitted. Please await the completion of the payout process before executing any further trades.";
+    this.paid = true;
+    this.paymentedDate = Date.now();
 
     await this.save();
   } catch (error) {
