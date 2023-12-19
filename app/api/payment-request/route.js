@@ -3,6 +3,7 @@ import dbConnect from "@/dbConnect";
 import { currentUser } from "@clerk/nextjs";
 import { ErrorHandler } from "@/library/functions";
 import Account from "@/models/Account";
+import Payout from "@/models/Payout";
 
 export async function POST(req) {
   try {
@@ -15,8 +16,17 @@ export async function POST(req) {
     }
     if (user.id != account.userId) {
       return NextResponse.json({ error: "You have not permissions for this action" }, { status: 400 });
-    }
+    }    
     await account.PaymentAccount();
+
+      const data = {
+        owner: user.id,
+        account: accountNumber,
+        amount: account.balance - account.capital,
+      }
+    const newPendingPayout = new Payout();
+    await newPendingPayout.PaymentRequestDone(data);
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.log("Error from /api/payment-request", error);
