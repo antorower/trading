@@ -10,9 +10,6 @@ const NewUsersTable = () => {
   const { users, UpdateUsers } = useUserContext();
   const [newUsers, setNewUsers] = useState(null);
   const [newUsersPanelExpanded, setNewUsersPanelExpanded] = useState(true);
-  console.log("New Users", newUsers);
-  const successNotification = (message) => toast.success(message);
-  const errorNotification = (message) => toast.warn(message);
 
   const NewUserResponse = async (event, accepted, userId) => {
     event.preventDefault();
@@ -44,6 +41,7 @@ const NewUsersTable = () => {
 
   useEffect(() => {
     if (!users) return;
+    console.log("UUUSSERSS", users);
     setNewUsers(users.filter((user) => user.publicMetadata.registered && !user.publicMetadata.active && !user.publicMetadata.banned));
   }, [users]);
 

@@ -4,12 +4,15 @@ import Image from "next/image";
 import TableRow from "../../TableRow";
 import { toast } from "react-toastify";
 import { useUserContext } from "@/context/UserContext";
+import CopyWallet from "@/components/CopyWallet";
+import { useUser } from "@clerk/nextjs";
 
 const LiveRow = ({ account }) => {
   const [newAccount, setNewAccount] = useState("");
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
   const { UpdateAccounts } = useUserContext();
+  const { user } = useUser();
 
   const UpgradeAccount = async () => {
     try {
@@ -44,6 +47,7 @@ const LiveRow = ({ account }) => {
         const data = await response.json();
         throw new Error(data.error);
       }
+      await UpdateAccounts();
       successNotification("You have successfully request a payout");
     } catch (error) {
       errorNotification(error.message);
@@ -115,6 +119,7 @@ const LiveRow = ({ account }) => {
           </button>
         </div>
       )}
+      {account.status === "Payment" && <CopyWallet wallet={user.publicMetadata.teamWallet} />}
       {account.status === "Payment" && (
         <button onClick={PaymentRequest} className="btn-accept">
           Payout Request

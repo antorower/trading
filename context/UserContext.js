@@ -11,11 +11,13 @@ export const useUserContext = () => {
 
 export const UserContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
+
   const [users, setUsers] = useState(null);
-  const [selectedUser, setSelectedUser] = useState("");
+
   const [userAccounts, setUserAccounts] = useState(null);
   const [teamAccounts, setTeamAccounts] = useState(null);
   const [adminAccounts, setAdminAccounts] = useState(null);
+
   const [settings, setSettings] = useState(null);
   const { user } = useUser();
 
@@ -34,16 +36,28 @@ export const UserContextProvider = ({ children }) => {
     }
   }, [user]);
 
-  const UpdateAccounts = async () => {
+  const UpdateAccounts = async (selectedUser) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`);
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error);
       }
-      setUserAccounts(data.userAccounts);
-      setTeamAccounts(data.teamAccounts);
-      setAdminAccounts(data.adminAccounts);
+      if (!selectedUser) {
+        console.log("HERREEEE");
+        await UpdateUsers();
+        setUserAccounts(data.userAccounts);
+        setTeamAccounts(data.teamAccounts);
+        setAdminAccounts(data.adminAccounts);
+      } else {
+        console.log("Data", data);
+        console.log("SU", selectedUser.id);
+        const selectedAccounts = data.adminAccounts.filter((account) => account.userId === selectedUser.id);
+        setAdminAccounts(selectedAccounts);
+        setUsers([selectedUser]);
+        console.log("Selected Accounts", selectedAccounts);
+        console.log("Users", [selectedUser]);
+      }
 
       console.log("User Accounts: ", userAccounts);
       console.log("Team Accounts: ", teamAccounts);
@@ -85,7 +99,6 @@ export const UserContextProvider = ({ children }) => {
       value={{
         userData,
         users,
-        selectedUser,
         userAccounts,
         teamAccounts,
         adminAccounts,
@@ -96,7 +109,6 @@ export const UserContextProvider = ({ children }) => {
         UpdateUsers,
         UpdateAccounts,
         UpdateSettings,
-        setSelectedUser,
         setActiveMenu,
         setExpandedLeftSidebar,
         setExpandedRightSidebar,

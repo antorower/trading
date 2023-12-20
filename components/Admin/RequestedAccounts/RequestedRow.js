@@ -9,9 +9,9 @@ import CopyWallet from "@/components/CopyWallet";
 const RequestedRow = ({ account }) => {
   const { UpdateAccounts } = useUserContext();
   const [company, setCompany] = useState("Funding Pips");
-  const [capital, setCapital] = useState();
-  const [cost, setCost] = useState();
-  const [declineComment, setDeclineComment] = useState();
+  const [capital, setCapital] = useState("");
+  const [cost, setCost] = useState("");
+  const [declineComment, setDeclineComment] = useState("");
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
@@ -80,8 +80,8 @@ const RequestedRow = ({ account }) => {
         <select onChange={(e) => setCompany(e.target.value)} className="select border border-gray-500">
           <option value="Funding Pips">Funding Pips</option>
         </select>
-        <input placeholder="Capital" type="number" className="number-input" onChange={(e) => setCapital(e.target.value)} value={capital || null} />
-        <input placeholder="Cost" type="number" className="number-input" onChange={(e) => setCost(e.target.value)} value={cost || null} />
+        <input placeholder="Capital" type="number" className="number-input" onChange={(e) => setCapital(e.target.value)} value={capital} />
+        <input placeholder="Cost" type="number" className="number-input" onChange={(e) => setCost(e.target.value)} value={cost} />
         <CopyWallet wallet={account.user.publicMetadata.wallet} />
       </div>
       <input onChange={(e) => setDeclineComment(e.target.value)} value={declineComment} type="text" className="text-input" placeholder="Decline Comment" />

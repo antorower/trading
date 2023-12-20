@@ -5,9 +5,9 @@ import TableRow from "@/components/TableRow";
 
 const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
   const [activePairs, setActivePairs] = useState(null);
-  const [startingTradingHour, setStartingTradingHour] = useState(null);
-  const [endingTradingHour, setEndingTradingHour] = useState(null);
-  const [lotsFactor, setLotsFactor] = useState(null);
+  const [startingTradingHour, setStartingTradingHour] = useState("");
+  const [endingTradingHour, setEndingTradingHour] = useState("");
+  const [lotsFactor, setLotsFactor] = useState("");
   const [activeDay, setActiveDay] = useState(false);
 
   const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "EURAUD", "EURNZD", "GBPJPY", "GBPCHF", "GBPCAD", "GBPAUD", "GBPNZD", "AUDJPY", "AUDCHF", "AUDCAD", "AUDNZD", "NZDJPY", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF", "CHFJPY"];

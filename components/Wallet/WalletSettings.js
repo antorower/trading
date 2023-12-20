@@ -7,7 +7,7 @@ import { useUser } from "@clerk/nextjs";
 
 const WalletSettings = () => {
   const [walletPanelExpanded, setWalletPanelExpanded] = useState(true);
-  const [wallet, setWallet] = useState(null);
+  const [wallet, setWallet] = useState("");
   const { user } = useUser();
 
   const successNotification = (message) => toast.success(message);
@@ -35,7 +35,7 @@ const WalletSettings = () => {
   };
 
   useEffect(() => {
-    if(!user) return;
+    if (!user) return;
     setWallet(user.publicMetadata.wallet);
   }, [user]);
 
