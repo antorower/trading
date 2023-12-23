@@ -16,14 +16,14 @@ export async function POST(req) {
     }
     if (user.id != account.userId) {
       return NextResponse.json({ error: "You have not permissions for this action" }, { status: 400 });
-    }    
+    }
     await account.PaymentAccount();
 
-      const data = {
-        owner: user.id,
-        account: accountNumber,
-        amount: account.balance - account.capital,
-      }
+    const data = {
+      owner: user.id,
+      account: accountNumber,
+      amount: (account.balance - account.capital) * 0.8,
+    };
     const newPendingPayout = new Payout();
     await newPendingPayout.PaymentRequestDone(data);
 

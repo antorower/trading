@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         <UserContextProvider>
           <body className="h-screen w-screen overflow-x-hidden">
             {children}
-            <ToastContainer position="bottom-right" autoClose={8000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="dark" />
+            <ToastContainer position="bottom-right" autoClose={8000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable={false} pauseOnHover theme="dark" />
           </body>
         </UserContextProvider>
       </html>

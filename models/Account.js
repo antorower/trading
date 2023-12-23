@@ -415,7 +415,6 @@ AccountSchema.methods.UpgradeAccount = async function (prevAccount, newNumber) {
     throw error;
   }
 };
-
 // Ο trader κάνει payment request
 AccountSchema.methods.PaymentAccount = async function (wallet) {
   try {
@@ -444,16 +443,12 @@ AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
       description: `Payout process complete and the profit of ${profit} has been added to the wallet ${wallet}`,
     };
     this.activity.push(newActivity);
-    this.comment = "Your account is ready for your next trades.";
+    this.paid = false;
     this.balance = this.capital;
     this.status = "Live";
-    this.paid = true;
+    this.needTrade = true;
+    this.paymenedDate = Date.now();
     this.firstTradeDate = null;
-    this.lastTradeOpenDate = null;
-    this.lastTradeCloseDate = null;
-    this.targetReachedDate = null;
-    this.paymentDate = null;
-    this.paymentedDate = null;
 
     await this.save();
   } catch (error) {

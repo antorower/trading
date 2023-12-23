@@ -18,15 +18,6 @@ export default authMiddleware({
 
     // ++++++++++++++++++++ Αν το request είναι στο api ++++++++++++++++++++
     if (pathname.includes("api")) {
-      return;
-      if (pathname.includes("/api/user") && !user) {
-        return NextResponse.json({ error: "Unauthorized request" }, { status: 401 });
-      }
-
-      if (pathname.includes("/api/leader") && !user?.publicMetadata.role === "leader" && !user?.publicMetadata.role === "admin") {
-        return NextResponse.json({ error: "Unauthorized request" }, { status: 401 });
-      }
-
       if (pathname.includes("/api/admin") && !user?.publicMetadata.role === "admin") {
         return NextResponse.json({ error: "Unauthorized request" }, { status: 401 });
       }
@@ -36,16 +27,12 @@ export default authMiddleware({
     // ++++++++++++++++++++ Αν το request ΔΕΝ είναι στο api ++++++++++++++++++++
 
     // Αν ο user πάει να κάνει sign-up ή sign-in
-    if (pathname === "/sign-up" || pathname === "/sign-in") {
-      if (!user) {
+    if (!user) {
+      if (pathname.startsWith("/sign-up") || pathname.startsWith("/sign-in")) {
         return;
       } else {
-        return NextResponse.redirect(new URL("/dashboard", req.url));
+        return NextResponse.redirect(new URL("/sign-in", req.url));
       }
-    }
-
-    if (!user) {
-      return NextResponse.redirect(new URL("/sign-in", req.url));
     }
 
     // ++++++++++++++++++++ Από εδώ και κάτω ο user έχει κάνει login ++++++++++++++++++++

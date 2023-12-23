@@ -1,20 +1,21 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 
 const PayoutRow = ({ account }) => {
+  const [amount, setAmount] = useState("");
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
 
   const PayoutComplete = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/endpoint`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/accept-payout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ accountNumber: account.number }),
+        body: JSON.stringify({ accountNumber: account.number, amount: amount }),
       });
       if (!response.ok) {
         const data = await response.json();
@@ -57,9 +58,12 @@ const PayoutRow = ({ account }) => {
           <div>{new Date(account.paymentedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
-      <button onClick={PayoutComplete} className="btn-accept">
-        Payout Completed
-      </button>
+      <div className="flex gap-4">
+        <input value={amount} onChange={(e) => setAmount(e.target.value)} type="text" className="text-input" />
+        <button onClick={PayoutComplete} className="btn-accept">
+          Payout Completed
+        </button>
+      </div>
     </TableRow>
   );
 };

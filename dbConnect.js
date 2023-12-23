@@ -6,7 +6,8 @@ const dbConnect = async () => {
   if (mongoose.connection.readyState >= 1) {
     return;
   }
-  console.log("dbConnect: Δεν υπάρχει σύνδεση");
+
+  console.log("Database Connection: There is not open database connection");
   //Ανοίγει μια νέα σύνδεση με την βάση δεδομένων
   try {
     await mongoose.connect(process.env.DB_URI, {});

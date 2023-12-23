@@ -1,8 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import { SaveError } from "@/library/functions";
 import { useRouter } from "next/navigation";
 
 const SetUser = () => {
@@ -20,7 +19,6 @@ const SetUser = () => {
   const errorNotification = (message) => toast.warn(message);
 
   const UsernameValidation = (event) => {
-    event.preventDefault();
     const value = event.target.value;
 
     if (/^[a-zA-Z0-9]{0,12}$/.test(value) || value === "") {
@@ -29,7 +27,6 @@ const SetUser = () => {
     }
   };
   const FirstNameValidation = (event) => {
-    event.preventDefault();
     const value = event.target.value;
 
     if (/^[a-zA-Z]+$/.test(value) || value === "") {
@@ -38,7 +35,6 @@ const SetUser = () => {
     }
   };
   const LastNameValidation = (event) => {
-    event.preventDefault();
     const value = event.target.value;
 
     if (/^[a-zA-Z]+$/.test(value) || value === "") {
@@ -46,14 +42,13 @@ const SetUser = () => {
       setLastNameValidation(value.length >= 3 && value.length <= 15);
     }
   };
-
   const SaveDetails = async (event) => {
     event.preventDefault();
     if (!localStorage.getItem("mentor")) {
       errorNotification("Sorry, you don't have the necessary permissions to access our platform.");
       return;
     }
-    let status = 0;
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/set-user`, {
         method: "POST",
@@ -64,10 +59,6 @@ const SetUser = () => {
       });
 
       if (!response.ok) {
-        status = response.status;
-        if (response.status === 500) {
-          throw new Error("Apologies, an internal server error occurred. Please refresh the page and attempt your action again.");
-        }
         const data = await response.json();
         throw new Error(data.error);
       }
@@ -75,7 +66,6 @@ const SetUser = () => {
       router.push("/activation");
     } catch (error) {
       errorNotification(error.message);
-      await SaveError(error.message, "File: /set-user | Function: SaveDetails", status);
     }
   };
 

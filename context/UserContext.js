@@ -28,42 +28,42 @@ export const UserContextProvider = ({ children }) => {
   const errorNotification = (message) => toast.warn(message);
 
   useEffect(() => {
-    if (user && user.id) {
-      UpdateAccounts();
-      UpdateUsers();
-      UpdateSettings();
-      setUserData(user);
-    }
+    const LoadData = async () => {
+      if (user && user.id) {
+        await UpdateAccounts();
+        await UpdateUsers();
+        await UpdateSettings();
+        setUserData(user);
+      }
+    };
+    LoadData();
   }, [user]);
 
   const UpdateAccounts = async (selectedUser) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`);
+
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error);
       }
+
       if (!selectedUser) {
-        console.log("HERREEEE");
         await UpdateUsers();
         setUserAccounts(data.userAccounts);
         setTeamAccounts(data.teamAccounts);
         setAdminAccounts(data.adminAccounts);
       } else {
-        console.log("Data", data);
-        console.log("SU", selectedUser.id);
         const selectedAccounts = data.adminAccounts.filter((account) => account.userId === selectedUser.id);
         setAdminAccounts(selectedAccounts);
         setUsers([selectedUser]);
-        console.log("Selected Accounts", selectedAccounts);
-        console.log("Users", [selectedUser]);
       }
 
       console.log("User Accounts: ", userAccounts);
       console.log("Team Accounts: ", teamAccounts);
       console.log("Admin Accounts: ", adminAccounts);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       errorNotification(error.message);
     }
   };
