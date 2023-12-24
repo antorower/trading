@@ -8,8 +8,8 @@ const Settings = () => {
   return (
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="User Setting" subtitle="Customize your experience" />
-      <WalletSettings />
       <TeamWalletSettings />
+      <WalletSettings />
     </div>
   );
 };

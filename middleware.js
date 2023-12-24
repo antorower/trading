@@ -18,7 +18,7 @@ export default authMiddleware({
 
     // ++++++++++++++++++++ Αν το request είναι στο api ++++++++++++++++++++
     if (pathname.includes("api")) {
-      if (pathname.includes("/api/admin") && !user?.publicMetadata.role === "admin") {
+      if (pathname.includes("/api/admin") && user?.publicMetadata.role != "admin") {
         return NextResponse.json({ error: "Unauthorized request" }, { status: 401 });
       }
       return;

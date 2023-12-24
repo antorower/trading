@@ -6,7 +6,7 @@ import TableRow from "@/components/TableRow";
 import { useUser } from "@clerk/nextjs";
 
 const WalletSettings = () => {
-  const [walletPanelExpanded, setWalletPanelExpanded] = useState(true);
+  const [walletPanelExpanded, setWalletPanelExpanded] = useState(false);
   const [wallet, setWallet] = useState("");
   const { user } = useUser();
 
@@ -36,7 +36,7 @@ const WalletSettings = () => {
 
   useEffect(() => {
     if (!user) return;
-    setWallet(user.publicMetadata.wallet);
+    setWallet(user.publicMetadata.personalEthWallet);
   }, [user]);
 
   return (
@@ -53,7 +53,7 @@ const WalletSettings = () => {
           </div>
         </TableRow>
       )}
-      <div className="flex justify-end items-center text-xs">* Please ensure that the wallet address you provide is correct and supports the Ethereum blockchain and ETH token. We bear no responsibility for any losses due to an incorrect wallet address provided</div>
+      <div className="flex justify-end items-center text-xs">* Please ensure that the wallet addresses you provide is correct. We bear no responsibility for any losses due to an incorrect wallet address provided.</div>
     </TableWrapper>
   );
 };
