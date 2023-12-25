@@ -15,8 +15,7 @@ export async function POST(req) {
     doc.save();
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/admin/settings/reset-settings", error);
-    const response = await ErrorHandler("Admin", error, "Something went wrong while gettings settings. Please refresh the page.", "/api/admin/settings/reset-settings");
-    return NextResponse.json({ error: response.message }, { status: response.status });
+    const response = await ErrorHandler({}, error, "Something went wrong, please try again", "/api/admin/settings/change-development-status");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

@@ -11,9 +11,7 @@ export async function POST(req) {
     const { company } = await req.json();
 
     if (!company) {
-      const error = new Error("Company is required");
-      error.status = 400;
-      throw error;
+      return NextResponse({ error: "Company is required" }, { status: 400 });
     }
 
     const newAccount = new Account();
@@ -21,8 +19,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/progress/request-new-account", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while processing your request for a new account.", "/api/progress/request-new-account");
-    return NextResponse.json({ error: response.message }, { status: response.status });
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/request-new-account");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

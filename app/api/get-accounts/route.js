@@ -39,8 +39,7 @@ export async function GET() {
 
     return NextResponse.json({ userAccounts, teamAccounts, adminAccounts });
   } catch (error) {
-    console.log("Error from /api/get-accounts", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while fetching active accounts. Please refresh the page.", "/api/get-accounts");
-    return NextResponse.json({ error: response.message }, { status: response.status });
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/get-accounts");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

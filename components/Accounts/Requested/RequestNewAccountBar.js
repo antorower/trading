@@ -11,7 +11,6 @@ const RequestNewAccountBar = () => {
   const errorNotification = (message) => toast.warn(message);
 
   const RequestNewAccount = async (event) => {
-    event.preventDefault();
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/progress/request-new-account`, {
         method: "POST",
@@ -25,7 +24,7 @@ const RequestNewAccountBar = () => {
         throw new Error(data.error);
       }
       await UpdateAccounts();
-      successNotification("Funds will be transferred to your wallet at the earliest convenience.");
+      successNotification("Funds will be transferred to your wallet at the earliest convenience");
     } catch (error) {
       errorNotification(error.message);
     }

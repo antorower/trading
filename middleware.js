@@ -48,7 +48,7 @@ export default authMiddleware({
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // Προστασία των user paths
+    // Προστασία των paths
 
     // Προστασία των leader paths
     if (pathname.includes("/leader") && user.publicMetadata.role !== "leader" && user.publicMetadata.role !== "admin") {
