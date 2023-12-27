@@ -25,7 +25,7 @@ const RequestedRow = ({ account }) => {
         throw new Error(data.error);
       }
       await UpdateAccounts();
-      successNotification("Account successfully deleted");
+      successNotification("Account successfully canceled");
     } catch (error) {
       errorNotification(error.message);
     }
@@ -46,12 +46,12 @@ const RequestedRow = ({ account }) => {
         <div className="text-gray-500">Please wait</div>
         <div>{account.comment}</div>
       </div>
-      <div className="flex gap-8">
+      <div className="flex items-center gap-8">
         <div className="relative w-[22px] h-[22px] animate-spin">
           <Image src="/spinner.svg" fill="true" alt="spinner" sizes="32x32" />
         </div>
-        <button onClick={(e) => DeleteRequestedAccount(e)} className="flex items-center">
-          <Image src="/reject-white.svg" width={18} height={18} alt="spinner" sizes="32x32" />
+        <button onClick={(e) => DeleteRequestedAccount(e)} className="flex items-center btn-decline">
+          Cancel
         </button>
       </div>
     </TableRow>

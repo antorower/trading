@@ -26,12 +26,24 @@ const RequestedTable = () => {
     setRejectedAccounts(rejected);
   }, [userAccounts]);
 
+  if (!userAccounts || userAccounts?.length === 0) {
+    return null;
+  }
+
+  let element;
+  if ((!requestedAccounts || requestedAccounts.length === 0) && (!registrationAccounts || registrationAccounts.length === 0) && (!rejectedAccounts || rejectedAccounts.length === 0)) {
+    element = <div className="flex text-center justify-center"> There is no requested accounts at the moment </div>;
+  } else {
+    element = null;
+  }
+
   return (
     <TableWrapper title="Requested Accounts" refresh={true} refreshFunction={UpdateAccounts} panelExpanded={requestedAccountsPanelExpanded} setPanelExpanded={setRequestedAccountsPanelExpanded}>
       <RequestNewAccountBar />
       {registrationAccounts && registrationAccounts.length > 0 && registrationAccounts.map((account) => <RegistrationRow key={account._id} account={account} />)}
       {requestedAccounts && requestedAccounts.length > 0 && requestedAccounts.map((account) => <RequestedRow key={account._id} account={account} />)}
       {rejectedAccounts && rejectedAccounts.length > 0 && rejectedAccounts.map((account) => <RejectedRow key={account._id} account={account} />)}
+      {element}
     </TableWrapper>
   );
 };

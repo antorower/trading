@@ -19,13 +19,10 @@ export async function POST(req) {
       return NextResponse.json({ error: "You have no permissions on this account" }, { status: 404 });
     }
 
-    account.chain.nextAccount = newAccount;
-    account.upgradedDate = Date.now();
-    account.status = "Upgraded";
-    await account.save();
+    await account.UpgradeOldAccount(newAccount);
 
     const upgradedAccount = new Account();
-    await upgradedAccount.UpgradeAccount(account, newAccount);
+    await upgradedAccount.UpgradeNewAccount(account, newAccount);
 
     return NextResponse.json(account);
   } catch (error) {

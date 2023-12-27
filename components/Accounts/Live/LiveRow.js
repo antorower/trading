@@ -9,10 +9,10 @@ const LiveRow = ({ account }) => {
     // Αν υπάρχει ανοιχτό trade
     actionElement = (
       <div className="flex flex-col gap-2 items-center">
-        <div className="text-blue-400 text-sm">Close Trade</div>
+        <div className="text-gray-500 text-sm">Close Trade</div>
         <div className="relative flex h-3 w-3">
-          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
-          <span className={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
+          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
+          <span className={`relative inline-flex rounded-full h-3 w-3 bg-sky-500`}></span>
         </div>
       </div>
     );
@@ -35,10 +35,10 @@ const LiveRow = ({ account }) => {
       // Αν χρειάζεται trade και δεν έχει ανοίξει ακόμα
       actionElement = (
         <div className="flex flex-col gap-2 items-center">
-          <div className="text-blue-400 text-sm">Open Trade</div>
+          <div className="text-gray-500 text-sm">Open Trade</div>
           <div className="relative flex h-3 w-3">
-            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
-            <span className={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
+            <span className={`relative inline-flex rounded-full h-3 w-3 bg-sky-500`}></span>
           </div>
         </div>
       );

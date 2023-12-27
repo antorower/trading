@@ -1,18 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 import { toast } from "react-toastify";
 import { useUserContext } from "@/context/UserContext";
-import CopyWallet from "@/components/CopyWallet";
-import { useUser } from "@clerk/nextjs";
 
 const PaymentRow = ({ account }) => {
-  const [newAccount, setNewAccount] = useState("");
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
   const { UpdateAccounts } = useUserContext();
-  const { user } = useUser();
 
   const PaymentRequest = async () => {
     try {
@@ -36,62 +32,58 @@ const PaymentRow = ({ account }) => {
 
   return (
     <TableRow>
-      <div className="flex w-10 h-10 justify-center items-center relative">
-        <Image src={`/${account.image}.svg`} fill="true" sizes="32x32" className="rounded-full" alt="account" />
-      </div>
-      <div className="flex gap-8 items-center">
-        <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Account Number:</div>
-          <div>{account.number}</div>
+      <div className="flex justify-center items-center gap-2">
+        {account.status === "Payment" && (
+          <div className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+          </div>
+        )}
+        <div className="flex w-10 h-10 justify-center items-center relative">
+          <Image src={`/${account.image}.svg`} fill="true" sizes="32x32" className="rounded-full" alt="account" />
+        </div>
+        <div className="flex flex-col">
+          <div className="font-weight-500 text-lg">{account.company}</div>
+          <div className="text-gray-500 text-sm">{account.status === "Payment" ? new Date(account.targetReachedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }) : new Date(account.paymentedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
+
       <div className="flex items-center justify-center gap-16">
-        <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Company</div>
-          <div>{account.company}</div>
+        <div className="flex gap-8 items-center">
+          <div className="flex flex-col items-center">
+            <div className="text-gray-500 text-sm">Account Number:</div>
+            <div>{account.number}</div>
+          </div>
         </div>
-        <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Phase</div>
-          {account.phase === 1 && "Evaluation"}
-          {account.phase === 2 && "Verification"}
-          {account.phase === 3 && "Funded"}
-        </div>
+
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Balance</div>
           <div>${account.balance}</div>
         </div>
+
+        {account.status === "Payment" && (
+          <div className="flex flex-col items-center">
+            <div className="text-blue-400 text-sm">Payout Request</div>
+            <div>{account.paymentDate}</div>
+          </div>
+        )}
       </div>
+
       <div className="flex flex-col items-center">
         <div className="text-gray-500 text-sm w-[300px] text-center">{account.comment}</div>
       </div>
-      <div className="flex gap-14">
-        <div className="flex items-center justify-center flex-grow gap-16">
-          <div className="flex flex-col gap-2 items-center">
-            <div className="text-gray-500 text-sm">Open Trade</div>
-            {new Date(account.lastTradeOpenDate).toDateString() === new Date().toDateString() ? (
-              <Image src="/tick.svg" width={20} height={20} alt="tick" />
-            ) : (
-              <div className="relative flex h-3 w-3">
-                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
-                <span className={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
-              </div>
-            )}
-          </div>
-          {new Date(account.lastTradeOpenDate).toDateString() === new Date().toDateString() && (
-            <div className="flex flex-col gap-2 items-center">
-              <div className="text-gray-500 text-sm">Close Trade</div>
-              {new Date(account.lastTradeCloseDate).toDateString() === new Date().toDateString() ? (
-                <Image src="/tick.svg" width={20} height={20} alt="tick" />
-              ) : (
-                <div className="relative flex h-3 w-3">
-                  <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-400 opacity-75`}></span>
-                  <span className={`relative inline-flex rounded-full h-3 w-3 bg-${new Date(account.lastTradeOpenDate).toDateString() != new Date().toDateString() ? "sky" : "orange"}-500`}></span>
-                </div>
-              )}
-            </div>
-          )}
+
+      {account.status === "Payment" && (
+        <button onClick={PaymentRequest} className="btn-accept">
+          Payout Request
+        </button>
+      )}
+
+      {account.status === "Payout" && (
+        <div className="relative w-[22px] h-[22px] animate-spin">
+          <Image src="/spinner.svg" fill="true" alt="spinner" sizes="32x32" />
         </div>
-      </div>
+      )}
     </TableRow>
   );
 };

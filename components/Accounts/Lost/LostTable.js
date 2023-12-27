@@ -20,7 +20,6 @@ const LostTable = () => {
   return (
     <TableWrapper title="Lost Accounts" refresh={true} refreshFunction={UpdateAccounts} panelExpanded={lostAccountsPanelExpanded} setPanelExpanded={setLostAccountsPanelExpanded}>
       {lostAccounts && lostAccounts.length > 0 && lostAccounts.map((account) => <LostRow key={account._id} account={account} />)}
-      {lostAccounts && lostAccounts.length === 0 && <div className="flex w-full justify-center items-center">There is no losted accounts at the moment</div>}
     </TableWrapper>
   );
 };

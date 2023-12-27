@@ -48,7 +48,7 @@ const RegistrationRow = ({ account }) => {
         </div>
       </div>
       <div className="flex flex-col items-center w-[550px]">
-        <div className="text-gray-500">Account Registration</div>
+        <div className="text-blue-400">Account Registration</div>
         <div className="text-center">{account.comment}</div>
       </div>
       <div className="flex items-center gap-4">

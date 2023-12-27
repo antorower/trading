@@ -102,10 +102,8 @@ const AccountSchema = new mongoose.Schema({
   paymentedDate: Date,
   // Όταν κλείνει ένα trade και έχει πέσει κάτω από το overall dd τότε αποθηκεύει εδώ την ημερομηνία
   lostDate: Date,
-  lostByDailyDrawdown: {
-    type: Boolean,
-    default: false,
-  },
+  rejectedDate: Date,
+  lostByDailyDrawdown: Boolean,
   // Όταν γίνει ένα upgrade ένα account κάνω update και το παλιό και το νέο με το next και previous
   chain: {
     previousAccount: String,
@@ -131,25 +129,34 @@ AccountSchema.pre("save", function (next) {
     this.target = economicRules.target;
     this.dailyDrawdown = economicRules.dailyDrawdown;
     this.overallDrawdown = economicRules.overallDrawdown;
-  }
 
+    if (this.company === "Funding Pips") {
+      this.minimumTradingDays = 0;
+      if (this.phase === 1 || this.phase === 2) {
+        this.waitingDays = 0;
+      } else if (this.phase === 3) {
+        this.waitingDays = 5;
+      }
+    }
+    // #NewCompany
+  }
   next();
 });
 // Ο trader ζήτησε account
 AccountSchema.methods.RequestAccount = async function ({ userId, company }) {
   try {
     this.userId = userId;
+    this.number = GenerateRandomString(30);
+    this.comment = "Please wait for the funds to be transferred to your wallet";
+    this.company = company;
+    this.phase = 1;
+    this.status = "Requested";
     const newActivity = {
       title: "Account Requested",
       description: `The user request an account`,
     };
     this.activity.push(newActivity);
-    this.number = GenerateRandomString(30);
-    this.comment = "Please await the transfer of funds to your wallet";
-    this.phase = 1;
-    this.status = "Requested";
     this.moneyTransferDetails.transferred = false;
-    this.company = company;
 
     await this.save();
   } catch (error) {
@@ -160,13 +167,8 @@ AccountSchema.methods.RequestAccount = async function ({ userId, company }) {
 // Εγώ έστειλα τα λεφτά
 AccountSchema.methods.FundsTransferred = async function (data) {
   try {
-    const newActivity = {
-      title: "Funds Transferred",
-      description: `The administrator has transferred $${data.amount} to ${data.wallet} for the acquisition of a ${this.company} account with a capital of $${this.capital}`,
-    };
-    this.activity.push(newActivity);
+    this.comment = `Funds of $${data.amount} sent. Proceed with ${this.company} account purchase for $${data.capital} and provide account number.`;
     this.company = data.company;
-    this.comment = `The amount of $${data.amount} have been successfully transferred to your wallet. Proceed with the account acquisition from ${this.company} with an amount of $${data.capital}, and upon completion, return to declare the account number`;
     this.capital = data.capital;
     this.balance = data.capital;
     this.status = "Registration";
@@ -176,9 +178,11 @@ AccountSchema.methods.FundsTransferred = async function (data) {
       transferWallet: data.wallet,
       transferAmount: data.amount,
     };
-    if (data.company === "Funding Pips") {
-      this.minimumTradingDays = 0;
-    }
+    const newActivity = {
+      title: "Funds Transferred",
+      description: `The administrator has transferred $${data.amount} to ${data.wallet} for the acquisition of a ${this.company} account with a capital of $${this.capital}`,
+    };
+    this.activity.push(newActivity);
 
     await this.save();
   } catch (error) {
@@ -189,16 +193,16 @@ AccountSchema.methods.FundsTransferred = async function (data) {
 // Ο trader δήλωσε τον αριθμό του account
 AccountSchema.methods.RegisterAccount = async function (number) {
   try {
+    this.number = number;
+    this.comment = "You are now ready to execute your first transaction";
+    this.status = "Live";
+    this.needTrade = true;
+    this.registrationDate = Date.now();
     const newActivity = {
       title: "Account Number Updated",
       description: `Account number has been updated to ${number}.`,
     };
     this.activity.push(newActivity);
-
-    this.number = number;
-    this.status = "Live";
-    this.comment = "You are now ready to execute your first transaction";
-    this.registrationDate = Date.now();
 
     await this.save();
   } catch (error) {
@@ -222,60 +226,97 @@ AccountSchema.methods.RejectAccount = async function (comment) {
     throw error;
   }
 };
-// Επιστρέφει το take profit
-AccountSchema.methods.GetTakeProfit = async function (lots) {
+
+// Ο trader κάνει upgrade το account (αυτό είναι για το νέο account)
+AccountSchema.methods.UpgradeNewAccount = async function (prevAccount, newNumber) {
   try {
-    const remainingProfit = this.target - this.balance;
-    const remainingPercentage = remainingProfit / this.capital;
-    if (this.phase === 1) {
-      if (remainingPercentage < 0.035) {
-        return Math.floor(remainingProfit + 7 * lots);
-      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
-        return Math.floor(this.capital * (Math.random() * (0.028 - 0.02) + 0.02));
-      } else {
-        return Math.floor(this.capital * (Math.random() * (0.04 - 0.03) + 0.03));
-      }
-    }
+    this.userId = prevAccount.userId;
+    this.number = newNumber;
+    this.comment = `${newNumber} upgraded from ${prevAccount.number} and is ready for the first transaction`;
+    this.company = prevAccount.company;
+    this.capital = prevAccount.capital;
+    this.phase = prevAccount.phase + 1;
+    this.balance = prevAccount.capital;
+    this.status = "Live";
+    this.createdDate = Date.now();
+    this.tradesExecuted = 0;
+    this.chain.prevAccount = prevAccount.number;
+    this.openTrade.pending = false;
 
-    if (this.phase === 2) {
-      if (remainingPercentage <= 0.05) {
-        return remainingProfit + 5 * lots;
-      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
-        return this.capital * (Math.random() * (0.028 - 0.02) + 0.02);
-      } else {
-        return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
-      }
-    }
+    const newActivity = {
+      title: "Account Upgraded",
+      description: `${prevAccount.company} account ${prevAccount.number} upgraded and now ${newNumber} is live at phase ${prevAccount.phase + 1}`,
+    };
+    this.activity.push(newActivity);
 
-    if (this.phase === 3) {
-      if (remainingPercentage <= 0.04) {
-        return remainingProfit + 5 * lots;
-      } else {
-        return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
-      }
-    }
+    await this.save();
+  } catch (error) {
+    console.error("Error in UpgradeAccount method:", error);
+    throw error;
+  }
+};
+// Ο trader κάνει upgrade το account (αυτό είναι για το παλιό account)
+AccountSchema.methods.UpgradeOldAccount = async function (newNumber) {
+  try {
+    this.status = "Upgraded";
+    const newActivity = {
+      title: "Account Upgraded",
+      description: `Account upgraded to ${newNumber} at phase ${this.phase + 1}`,
+    };
+    this.activity.push(newActivity);
+    this.upgradedDate = Date.now();
+    this.comment = `${this.number} upgraded to ${newNumber}`;
+    this.chain.nextAccount = newNumber;
+
+    await this.save();
+  } catch (error) {
+    console.error("Error in UpgradeAccount method:", error);
+    throw error;
+  }
+};
+// Ο trader κάνει payment request -------------------
+AccountSchema.methods.PaymentAccount = async function (wallet) {
+  try {
+    const newActivity = {
+      title: "Payment Request Done",
+      description: `Payment request done with profits ${this.balance - this.capital} at wallet ${wallet}`,
+    };
+    this.activity.push(newActivity);
+    this.paymentedDate = Date.now();
+    this.status = "Payout";
+    this.comment = "Your payment request has been submitted. Please await the completion of the payout process before executing any further trades.";
+    this.paid = true;
+    this.paymentedDate = Date.now();
+
+    await this.save();
   } catch (error) {
     console.error("Error in RejectAccount method:", error);
     throw error;
   }
 };
-// Επιστρέφει το stop loss
-AccountSchema.methods.GetStopLoss = async function () {
+// Φτάνουν τα χρήματα στο wallet της ομάδας ------------
+AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
   try {
-    const remainingLoss = this.balance - this.overallDrawdown;
-    const remainingPercentage = remainingLoss / this.capital;
+    const newActivity = {
+      title: "Payout Complete",
+      description: `Payout process complete and the profit of ${profit} has been added to the wallet ${wallet}`,
+    };
+    this.activity.push(newActivity);
+    this.paid = false;
+    this.balance = this.capital;
+    this.status = "Live";
+    this.needTrade = true;
+    this.paymenedDate = Date.now();
+    this.firstTradeDate = null;
 
-    if (remainingPercentage < 0.04) {
-      return remainingLoss + 5 * lots;
-    } else {
-      return Math.floor(this.capital * (Math.random() * (0.04 - 0.034) + 0.034));
-    }
+    await this.save();
   } catch (error) {
     console.error("Error in RejectAccount method:", error);
     throw error;
   }
 };
-// Ο trader ανοίγει trade
+
+// Ο trader ανοίγει trade --------------
 AccountSchema.methods.OpenTrade = async function (trade) {
   try {
     const newActivity = {
@@ -306,7 +347,7 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     throw error;
   }
 };
-// Ο trader κλείνει trade
+// Ο trader κλείνει trade -------------
 AccountSchema.methods.CloseTrade = async function (balance) {
   try {
     const newActivity = {
@@ -391,74 +432,55 @@ AccountSchema.methods.CloseTrade = async function (balance) {
     throw error;
   }
 };
-// Ο trader κάνει upgrade το account
-AccountSchema.methods.UpgradeAccount = async function (prevAccount, newNumber) {
-  try {
-    const newActivity = {
-      title: "Account Upgraded",
-      description: `${prevAccount.company} account ${prevAccount.number} upgraded and now ${newNumber} is live at phase ${prevAccount.phase + 1}`,
-    };
-    this.userId = prevAccount.userId;
-    this.number = newNumber;
-    this.activity.push(newActivity);
-    this.comment = `${newNumber} is now live. Upgraded from ${prevAccount.number}.`;
-    this.company = prevAccount.company;
-    this.capital = prevAccount.capital;
-    this.phase = prevAccount.phase + 1;
-    this.balance = prevAccount.capital;
-    this.status = "Live";
-    this.createdDate = Date.now();
-    this.tradesExecuted = 0;
-    this.chain.prevAccount = prevAccount.number;
-    this.openTrade.pending = false;
-    this.openTrade.pending = false;
 
-    if (this.company === "Funding Pips") {
-      this.minimumTradingDays = 0;
+// Επιστρέφει το take profit
+AccountSchema.methods.GetTakeProfit = async function (lots) {
+  try {
+    const remainingProfit = this.target - this.balance;
+    const remainingPercentage = remainingProfit / this.capital;
+
+    if (this.phase === 1) {
+      if (remainingPercentage < 0.035) {
+        return Math.floor(remainingProfit + 5 * lots);
+      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
+        return Math.floor(this.capital * (Math.random() * (0.028 - 0.02) + 0.02));
+      } else {
+        return Math.floor(this.capital * (Math.random() * (0.04 - 0.03) + 0.03));
+      }
     }
 
-    await this.save();
-  } catch (error) {
-    console.error("Error in UpgradeAccount method:", error);
-    throw error;
-  }
-};
-// Ο trader κάνει payment request
-AccountSchema.methods.PaymentAccount = async function (wallet) {
-  try {
-    const newActivity = {
-      title: "Payment Request Done",
-      description: `Payment request done with profits ${this.balance - this.capital} at wallet ${wallet}`,
-    };
-    this.activity.push(newActivity);
-    this.paymentedDate = Date.now();
-    this.status = "Payout";
-    this.comment = "Your payment request has been submitted. Please await the completion of the payout process before executing any further trades.";
-    this.paid = true;
-    this.paymentedDate = Date.now();
+    if (this.phase === 2) {
+      if (remainingPercentage <= 0.05) {
+        return remainingProfit + 5 * lots;
+      } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
+        return this.capital * (Math.random() * (0.028 - 0.02) + 0.02);
+      } else {
+        return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
+      }
+    }
 
-    await this.save();
+    if (this.phase === 3) {
+      if (remainingPercentage <= 0.04) {
+        return remainingProfit + 5 * lots;
+      } else {
+        return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
+      }
+    }
   } catch (error) {
     console.error("Error in RejectAccount method:", error);
     throw error;
   }
 };
-// Φτάνουν τα χρήματα στο wallet της ομάδας
-AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
+// Επιστρέφει το stop loss
+AccountSchema.methods.GetStopLoss = async function (lots) {
   try {
-    const newActivity = {
-      title: "Payout Complete",
-      description: `Payout process complete and the profit of ${profit} has been added to the wallet ${wallet}`,
-    };
-    this.activity.push(newActivity);
-    this.paid = false;
-    this.balance = this.capital;
-    this.status = "Live";
-    this.needTrade = true;
-    this.paymenedDate = Date.now();
-    this.firstTradeDate = null;
+    const remainingLoss = this.balance - this.overallDrawdown;
 
-    await this.save();
+    if (remainingLoss < this.dailyDrawdown) {
+      return remainingLoss + 7 * lots;
+    } else {
+      return Math.floor(this.dailyDrawdown * (0.85 + Math.random() * 0.15));
+    }
   } catch (error) {
     console.error("Error in RejectAccount method:", error);
     throw error;
@@ -468,9 +490,11 @@ AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
 function GetImage(company) {
   if (company === "Funding Pips") {
     return "fundingpips";
-  } else {
-    return "placeholder";
   }
+  // #NewCompany
+
+  // #TASK -> Να αποθηκεύσω μια εικόνα σαν placeholder.svg
+  return "placeholder";
 }
 
 function GetEconomicRules(account) {
@@ -478,22 +502,23 @@ function GetEconomicRules(account) {
   let dailyDrawdown;
   let overallDrawdown;
 
-  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   if (account.company === "Funding Pips") {
     if (account.phase === 1) {
       target = account.capital * 1.08;
     }
+
     if (account.phase === 2) {
       target = account.capital * 1.05;
     }
-    dailyDrawdown = account.capital * 0.05;
+
+    if (account.phase === 3) {
+      target = account.capital * 1.03;
+    }
+
+    dailyDrawdown = account.capital * 0.04;
     overallDrawdown = account.capital * 0.9;
   }
-  // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  if (account.phase === 3) {
-    target = account.capital * 1.03;
-  }
+  // #NewCompany
 
   return { target, dailyDrawdown, overallDrawdown };
 }
