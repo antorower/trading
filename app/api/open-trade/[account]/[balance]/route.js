@@ -129,6 +129,7 @@ export async function GET(req, context) {
           }
         }
       }
+      // #NewCompany
     } else {
       //Εδώ βρίσκουμε τον user του account
       const user = await clerkClient.users.getUser(accountObj.userId);
@@ -181,7 +182,7 @@ export async function GET(req, context) {
       const trade = new Trade(newTrade);
       await trade.save();
       await accountObj.OpenTrade(newTrade);
-      return NextResponse.json({ pair: planPair.pair, position: planPair.lastPosition === "Buy" ? "Sell" : "Buy", lots: newLots, stoploss: stopLoss, takeprofit: takeProfit });
+      return NextResponse.json({ error: "NO", pair: planPair.pair, position: planPair.lastPosition === "Buy" ? "Sell" : "Buy", lots: newLots, stoploss: stopLoss, takeprofit: takeProfit });
     }
   } catch (error) {
     const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/open-trade");

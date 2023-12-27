@@ -32,8 +32,8 @@ export async function GET(req, context) {
 
     return NextResponse.json({ error: "NO", message: "Your account details updated successfully" });
   } catch (error) {
-    console.error("Error finding document:", error);
-    return NextResponse.json({ error: error.message });
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/close-trade");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }
 
