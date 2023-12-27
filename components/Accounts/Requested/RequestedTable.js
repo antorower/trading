@@ -13,7 +13,7 @@ const RequestedTable = () => {
   const [requestedAccounts, setRequestedAccounts] = useState(null);
   const [rejectedAccounts, setRejectedAccounts] = useState(null);
   const { userAccounts, UpdateAccounts } = useUserContext();
-  console.log(userAccounts);
+
   useEffect(() => {
     if (!userAccounts) return;
     const requested = userAccounts.filter((account) => account.status === "Requested");
@@ -31,7 +31,6 @@ const RequestedTable = () => {
       <RequestNewAccountBar />
       {registrationAccounts && registrationAccounts.length > 0 && registrationAccounts.map((account) => <RegistrationRow key={account._id} account={account} />)}
       {requestedAccounts && requestedAccounts.length > 0 && requestedAccounts.map((account) => <RequestedRow key={account._id} account={account} />)}
-      {requestedAccounts && requestedAccounts.length === 0 && registrationAccounts && registrationAccounts.length === 0 && <div className="flex w-full justify-center items-center">There is no requested accounts at the moment</div>}
       {rejectedAccounts && rejectedAccounts.length > 0 && rejectedAccounts.map((account) => <RejectedRow key={account._id} account={account} />)}
     </TableWrapper>
   );

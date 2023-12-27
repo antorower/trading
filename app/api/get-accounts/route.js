@@ -12,7 +12,10 @@ export async function GET() {
     const users = await clerkClient.users.getUserList();
 
     let allAccounts = await Account.find({
-      $nor: [{ status: "Lost", deletedFromUser: true }],
+      $nor: [
+        { status: "Lost", deletedFromUser: true },
+        { status: "Upgraded", deletedFromUser: true },
+      ],
     });
 
     // Augment each account with the corresponding user details

@@ -48,7 +48,7 @@ const RejectedRow = ({ account }) => {
       </div>
       <button onClick={(e) => DeleteRejectedAccount(e)} className="flex items-center btn-decline gap-2">
         <Image src="/reject-white.svg" width={18} height={18} alt="spinner" sizes="32x32" />
-        <div>Delete</div>
+        <div>Remove</div>
       </button>
     </TableRow>
   );

@@ -1,14 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
+import { toast } from "react-toastify";
+
 const TableWrapper = ({ children, title, refresh, refreshFunction, panelExpanded, setPanelExpanded }) => {
+  const successNotification = (message) => toast.success(message);
+
+  const RefreshFunction = async () => {
+    refreshFunction();
+    successNotification("Revalidation complete");
+  };
+
   return (
     <div className={`flex flex-col bg-light rounded-${panelExpanded ? "xl" : "full"} px-8 ${panelExpanded && "pb-8"} gap-4`}>
       <div className="flex justify-between items-center border-b border-gray-800 py-4 px-2">
         <div className="font-roboto font-weight-500 text-lg">{title}</div>
         <div className="flex gap-8">
           {panelExpanded && refresh && (
-            <button onClick={refreshFunction} className="w-[14px] h-[14px] relative">
+            <button onClick={RefreshFunction} className="w-[14px] h-[14px] relative">
               <Image src="/refresh.svg" fill="true" alt="refresh-icon" sizes="32x32" />
             </button>
           )}

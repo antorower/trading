@@ -11,7 +11,7 @@ const LiveTable = () => {
 
   useEffect(() => {
     if (!adminAccounts) return;
-    const live = adminAccounts.filter((account) => account.status === "Live" || account.status === "Upgrade" || account.status === "Payout" || account.status === "Payment");
+    const live = adminAccounts.filter((account) => account.status === "Live");
     setLiveAccounts(live);
   }, [adminAccounts]);
 

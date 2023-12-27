@@ -6,7 +6,7 @@ import { useUserContext } from "@/context/UserContext";
 
 const UserBar = () => {
   const { users, UpdateAccounts } = useUserContext();
-  const [searchedUsers, setSearchedUsers] = useState(users || []);
+  const [searchedUsers, setSearchedUsers] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const { expandedRightSidebar, setExpandedRightSidebar, DeselectUser } = useUserContext();
 
@@ -34,6 +34,7 @@ const UserBar = () => {
       </div>
       <div className={`flex flex-col justify-start items-center h-full gap-4 overflow-y-auto overflow-x-hidden scrollable`}>
         {searchedUsers &&
+          searchedUsers.length > 0 &&
           searchedUsers.map((user) => (
             <div key={user.id}>
               <UserButton user={user} isExpaned={expandedRightSidebar} />

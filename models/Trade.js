@@ -30,7 +30,7 @@ const TradeSchema = new mongoose.Schema({
   },
 });
 
-AccountSchema.methods.CloseTrade = async function (balance) {
+TradeSchema.methods.CloseTrade = async function (balance) {
   try {
     this.endingBalance = balance;
     this.status = "Close";

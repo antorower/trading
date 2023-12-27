@@ -251,6 +251,18 @@ const SettingsSchema = new mongoose.Schema({
       },
     },
   },
+  economic: {
+    dates: {
+      startDate: Date,
+      endDate: Date,
+    },
+    shares: {
+      fundingPips: {
+        leader: Number,
+        traders: Number,
+      },
+    },
+  },
 });
 
 SettingsSchema.pre("save", function (next) {

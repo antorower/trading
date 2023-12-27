@@ -11,7 +11,7 @@ const UpgradeTable = () => {
 
   useEffect(() => {
     if (!adminAccounts) return;
-    const upgrade = adminAccounts.filter((account) => account.status === "Upgrade" || account.status === "Upgraded");
+    const upgrade = adminAccounts.filter((account) => account.status === "Upgrade");
     setUpgradeAccounts(upgrade);
   }, [adminAccounts]);
 

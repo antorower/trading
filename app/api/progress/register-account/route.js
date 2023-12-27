@@ -5,9 +5,9 @@ import { ErrorHandler } from "@/library/functions";
 import Account from "@/models/Account";
 
 export async function POST(req) {
+  const user = await currentUser();
   try {
     await dbConnect();
-    const user = await currentUser();
     const { accountId, accountNumber } = await req.json();
 
     let accountWithSameNumber = await Account.findOne({ number: accountNumber });
@@ -28,8 +28,7 @@ export async function POST(req) {
     await doc.RegisterAccount(accountNumber);
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.log("Error from /api/register-account", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while account registering. Please refresh the page.", "/api/register-account");
-    return NextResponse.json({ error: response.message }, { status: response.status });
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/register-account");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

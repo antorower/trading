@@ -18,7 +18,6 @@ export async function GET(req, context) {
     function SetCurrentDay() {
       const today = new Date();
       const dayOfWeek = today.getDay();
-      return "friday";
       switch (dayOfWeek) {
         case 0:
           return "sunday";
@@ -185,9 +184,8 @@ export async function GET(req, context) {
       return NextResponse.json({ pair: planPair.pair, position: planPair.lastPosition === "Buy" ? "Sell" : "Buy", lots: newLots, stoploss: stopLoss, takeprofit: takeProfit });
     }
   } catch (error) {
-    console.log("Error from /api/user/delete-account/account._id", error);
-    const response = await ErrorHandler(user, error, "Something went wrong while processing your request to delete an account.", `/api/user/delete-account/${context.params.accountId}`);
-    return NextResponse.json({ error: response.message }, { status: response.status });
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/open-trade");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }
 

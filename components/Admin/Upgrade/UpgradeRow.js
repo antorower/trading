@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 
-const LiveRow = ({ account }) => {
+const UpgradeRow = ({ account }) => {
   return (
     <TableRow>
       <div className="flex gap-4 items-center justify-center">
@@ -37,30 +37,17 @@ const LiveRow = ({ account }) => {
           <div>${account.balance}</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Initialization</div>
+          <div className="text-gray-500 text-sm">Trading Days Left</div>
+          <div>{account.minimumTrades - account.tradesExecuted > 0 ? account.minimumTrades - account.tradesExecuted : 0}</div>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="text-gray-500 text-sm">Upgrade Date</div>
           {account.phase === 1 && <div>{new Date(account.moneyTransferDetails.transferDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>}
           {(account.phase === 2 || account.phase === 3) && <div>{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>}
         </div>
-        <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Last Trade</div>
-          {account.lastTradeOpenDate ? <div>{new Date(account.lastTradeOpenDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div> : "-"}
-        </div>
-      </div>
-      <div className="flex items-center gap-2">
-        {new Date(account.lastTradeDate).toDateString === new Date().toDateString() && (
-          <div className="relative w-4 h-4 right-0">
-            <Image src="/tick.svg" fill="true" alt="tick" sizes="32x32" />
-          </div>
-        )}
-        {new Date(account.lastTradeDate).toDateString != new Date().toDateString() && (
-          <div className="relative w-4 h-4 right-0">
-            <Image src="/reject-red.svg" fill="true" alt="tick" sizes="32x32" />
-          </div>
-        )}
-        <div className="text-gray-500 text-sm">Trade Execution Today</div>
       </div>
     </TableRow>
   );
 };
 
-export default LiveRow;
+export default UpgradeRow;

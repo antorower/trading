@@ -40,8 +40,7 @@ const NewUsersTable = () => {
   };
 
   useEffect(() => {
-    if (!users) return;
-    console.log("UUUSSERSS", users);
+    if (!users || users.length === 0) return;
     setNewUsers(users.filter((user) => user.publicMetadata.registered && !user.publicMetadata.active && !user.publicMetadata.banned));
   }, [users]);
 

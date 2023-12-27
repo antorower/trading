@@ -44,6 +44,8 @@ const AccountSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  minimumTradingDays: Number,
+  waitingDays: Number,
   deletedFromUser: {
     type: Boolean,
     default: false,
@@ -174,6 +176,9 @@ AccountSchema.methods.FundsTransferred = async function (data) {
       transferWallet: data.wallet,
       transferAmount: data.amount,
     };
+    if (data.company === "Funding Pips") {
+      this.minimumTradingDays = 0;
+    }
 
     await this.save();
   } catch (error) {
@@ -284,7 +289,6 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     if (!this.firstTradeDate) {
       this.firstTradeDate = Date.now();
     }
-
     this.lastTradeOpenDate = Date.now();
     this.tradesExecuted += 1;
 
@@ -408,6 +412,10 @@ AccountSchema.methods.UpgradeAccount = async function (prevAccount, newNumber) {
     this.chain.prevAccount = prevAccount.number;
     this.openTrade.pending = false;
     this.openTrade.pending = false;
+
+    if (this.company === "Funding Pips") {
+      this.minimumTradingDays = 0;
+    }
 
     await this.save();
   } catch (error) {
