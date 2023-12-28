@@ -52,6 +52,23 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "YES", message: "Inputs are wrong" }, { status: 400 });
     }
 
+    // Τραβάω το account. Αν δεν βρεθεί account επιστρέφει error.
+    let accountObj = await Account.findOne({ number: account });
+    if (!accountObj) {
+      return NextResponse.json({ error: "YES", message: "Account not found" }, { status: 404 });
+    }
+
+    // Αν το balance δεν είναι ενημερωμένο τότε το ενημερώνει
+    if (accountObj.balance != balance) {
+      const newActivity = {
+        title: "Balance issue",
+        description: `Balance updated at open account phase. The old balance was ${accountObj.balance} and become ${balance}`,
+      };
+      accountObj.activity.push(newActivity);
+      accountObj.balance = balance;
+      await accountObj.save();
+    }
+
     // Τραβάω τα settings. Αν δεν βρεθούν επιστρέφω error.
     const settingsObj = await Settings.findOne();
     if (!settingsObj) {
@@ -63,25 +80,10 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "YES", message: "Today is not active day" }, { status: 400 });
     }
 
-    // Τραβάω το account. Αν δεν βρεθεί account επιστρέφει error.
-    let accountObj = await Account.findOne({ number: account });
-    if (!accountObj) {
-      return NextResponse.json({ error: "YES", message: "Account not found" }, { status: 404 });
-    }
-
+    // Αν υπάρχει ανοιχτό trade επιστρέφω το error
     let openTrade = await Trade.findOne({ account: account, status: "Open" });
     if (openTrade) {
       return NextResponse.json({ error: "YES", message: "Our system has pending open trade, please try again or contact us" }, { status: 404 });
-    }
-
-    if (accountObj.balance != balance) {
-      const newActivity = {
-        title: "Balance issue",
-        description: `Balance updated at open account phase. The old balance was ${accountObj.balance} and become ${balance}`,
-      };
-      accountObj.activity.push(newActivity);
-      accountObj.balance = balance;
-      await accountObj.save();
     }
 
     if (accountObj.status != "Live") {

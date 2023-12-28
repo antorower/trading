@@ -349,11 +349,19 @@ AccountSchema.methods.OpenTrade = async function (trade) {
 // Ο trader κλείνει trade -------------
 AccountSchema.methods.CloseTrade = async function (balance) {
   try {
+    const startingDate = this.firstTradeDate;
+    startingDate.setHours(0, 0, 0, 0);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const difference = currentDate - startingDate;
+    const daysPassed = Math.floor(difference / (1000 * 60 * 60 * 24)) + 1;
+
     const newActivity = {
       title: "Trade Closed",
       description: this.openTrade.fake ? `Fake trade has been closed with balance ${balance}` : `A ${this.openTrade.position} position on ${this.openTrade.pair} has been closed with balance ${balance}`,
     };
     this.activity.push(newActivity);
+    this.lastTradeCloseDate = Date.now();
     this.openTrade.pending = false;
 
     if (this.balance - balance >= this.dailyDrawdown) {
@@ -361,11 +369,23 @@ AccountSchema.methods.CloseTrade = async function (balance) {
       this.lostByDailyDrawdown = true;
       this.status = "Review";
       this.lostDate = Date.now();
+      const newActivity = {
+        title: "Account lost",
+        description: "Account lost by daily drawdown",
+      };
+      this.activity.push(newActivity);
+      this.needTrade = false;
     } else if (balance <= this.overallDrawdown) {
       this.comment = "Hey trader, your account has been closed. No worries! You can always request a new one.";
       this.lostByDailyDrawdown = false;
       this.status = "Review";
       this.lostDate = Date.now();
+      const newActivity = {
+        title: "Account lost",
+        description: "Account lost by overall drawdown",
+      };
+      this.activity.push(newActivity);
+      this.needTrade = false;
     }
 
     // Αν το account έχει πιάσει τον στόχο
@@ -425,52 +445,63 @@ AccountSchema.methods.CloseTrade = async function (balance) {
     // Αν το account έχει πιάσει τον στόχο
     if (balance >= this.target) {
       // Αν πρώτη φορά σε αυτό το trade έπιασε τον στόχο κάνω update το targetReachDate
-      if (this.balance < this.target && balance > this.target) {
+      if (this.balance < this.target) {
         const newActivity = {
           title: "Target Reached",
           description: `Target reached with balance ${balance}`,
         };
         this.activity.push(newActivity);
-
         this.targetReachedDate = Date.now();
       }
 
+      this.comment = "Target reached, please keep open trades";
+
+      // Αν έχει βάλει όλα τα trades
       if (this.tradesExecuted >= this.minimumTradingDays) {
-        // Αν για πρώτη φορά πιάνει τον στόχο
-        if (this.balance < this.target && balance >= this.target) {
-          this.needTrade = false;
+        this.needTrade = false;
+        if (this.phase === 1 || this.phase === 2) {
+          this.status = "Upgrade";
 
-          if (this.phase === 1 || this.phase === 2) {
-            this.status = "Upgrade";
-          } else if (this.phase === 3) {
-            this.status === "Payment";
+          if (daysPassed >= this.minimumWaitingDays) {
+            if (this.phase === 1 || this.phase === 2) {
+              this.comment = `You reach the target and you can upgrade your account now`;
+              this.upgradeDate = Date.now();
+            } else if (this.phase === 3) {
+              this.comment = `You reach the target and you can now make payment request`;
+              this.paymentDate = Date.now();
+            }
+          } else {
+            const remainingDays = this.minimumWaitingDays - daysPassed;
+            const actionDate = new Date();
+            actionDate.setHours(0, 0, 0, 0);
+            actionDate.setDate(currentDate.getDate() + remainingDays);
+            if (this.phase === 1 || this.phase === 2) {
+              this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+            } else if (this.phase === 3) {
+              this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+            }
           }
-        }
+        } else if (this.phase === 3) {
+          this.status === "Payment";
 
-        const startingDate = this.firstTradeDate;
-        startingDate.setHours(0, 0, 0, 0);
-        const currentDate = new Date();
-        currentDate.setHours(0, 0, 0, 0);
-        const difference = currentDate - startingDate;
-        const daysPassed = Math.floor(difference / (1000 * 60 * 60 * 24)) + 1;
-
-        if (daysPassed >= this.minimumWaitingDays) {
-          if (this.phase === 1 || this.phase === 2) {
-            this.comment = `You reach the target and you can upgrade your account now`;
-            this.upgradeDate = Date.now();
-          } else if (this.phase === 3) {
-            this.comment = `You reach the target and you can now make payment request`;
-            this.paymentDate = Date.now();
-          }
-        } else {
-          const remainingDays = this.minimumWaitingDays - daysPassed;
-          const actionDate = new Date();
-          actionDate.setHours(0, 0, 0, 0);
-          actionDate.setDate(currentDate.getDate() + remainingDays);
-          if (this.phase === 1 || this.phase === 2) {
-            this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
-          } else if (this.phase === 3) {
-            this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+          if (daysPassed >= this.minimumWaitingDays) {
+            if (this.phase === 1 || this.phase === 2) {
+              this.comment = `You reach the target and you can upgrade your account now`;
+              this.upgradeDate = Date.now();
+            } else if (this.phase === 3) {
+              this.comment = `You reach the target and you can now make payment request`;
+              this.paymentDate = Date.now();
+            }
+          } else {
+            const remainingDays = this.minimumWaitingDays - daysPassed;
+            const actionDate = new Date();
+            actionDate.setHours(0, 0, 0, 0);
+            actionDate.setDate(currentDate.getDate() + remainingDays);
+            if (this.phase === 1 || this.phase === 2) {
+              this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+            } else if (this.phase === 3) {
+              this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+            }
           }
         }
       } else {
@@ -528,7 +559,6 @@ AccountSchema.methods.CloseTrade = async function (balance) {
     }
 
     this.balance = balance;
-    this.lastTradeCloseDate = Date.now();
 
     await this.save();
   } catch (error) {
