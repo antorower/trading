@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 import { toast } from "react-toastify";
@@ -8,6 +8,7 @@ import { useUserContext } from "@/context/UserContext";
 const PaymentRow = ({ account }) => {
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
+  const [wallet, setWallet] = useState("");
   const { UpdateAccounts } = useUserContext();
 
   const PaymentRequest = async () => {
@@ -17,7 +18,7 @@ const PaymentRow = ({ account }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ accountNumber: account.number }),
+        body: JSON.stringify({ accountNumber: account.number, wallet }),
       });
       if (!response.ok) {
         const data = await response.json();
@@ -70,8 +71,10 @@ const PaymentRow = ({ account }) => {
       </div>
 
       <div className="flex flex-col items-center">
-        <div className="text-gray-500 text-sm w-[300px] text-center">{account.comment}</div>
+        <div className="text-gray-500 text-sm w-[400px] text-center">{account.comment}</div>
       </div>
+
+      {account.status === "Payment" && <input type="text" className="text-input" placeholder="Wallet" value={wallet} onChange={(e) => setWallet(e.target.value)} />}
 
       {account.status === "Payment" && (
         <button onClick={PaymentRequest} className="btn-accept">

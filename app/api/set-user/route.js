@@ -63,6 +63,8 @@ export async function POST(req) {
           wallet: "",
           secretPhrase: "",
         },
+        payroll: false,
+        payday: Date.now(),
       },
     });
 

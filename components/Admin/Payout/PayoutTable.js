@@ -11,7 +11,7 @@ const PayoutTable = () => {
 
   useEffect(() => {
     if (!adminAccounts) return;
-    const payout = adminAccounts.filter((account) => account.status === "Payout");
+    const payout = adminAccounts.filter((account) => account.status === "Payout" || account.status === "Payment");
     setPayoutAccounts(payout);
   }, [adminAccounts]);
 

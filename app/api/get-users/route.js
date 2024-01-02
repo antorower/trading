@@ -3,9 +3,9 @@ import dbConnect from "@/dbConnect";
 import { clerkClient, currentUser } from "@clerk/nextjs";
 
 export async function GET() {
+  const user = await currentUser();
   try {
     await dbConnect();
-    const user = await currentUser();
     if (!user) {
       return NextResponse.json({ error: "Permissions required" }, { status: 400 });
     }

@@ -18,6 +18,8 @@ export const UserContextProvider = ({ children }) => {
   const [teamAccounts, setTeamAccounts] = useState(null);
   const [adminAccounts, setAdminAccounts] = useState(null);
 
+  const [payouts, setPayouts] = useState(null);
+
   const [settings, setSettings] = useState(null);
   const { user } = useUser();
 
@@ -38,6 +40,13 @@ export const UserContextProvider = ({ children }) => {
     };
     LoadData();
   }, [user]);
+
+  useEffect(() => {
+    if (!settings) return;
+    const GetPayouts = async () => {
+      // Εδω θα παρω τα payouts ολα των τελευταιων δυο μηνων
+    };
+  }, [settings]);
 
   const UpdateAccounts = async (selectedUser) => {
     try {

@@ -36,7 +36,7 @@ const WalletSettings = () => {
 
   useEffect(() => {
     if (!user) return;
-    setWallet(user.publicMetadata.personalEthWallet);
+    setWallet(user.publicMetadata.personalEthereumWallet);
   }, [user]);
 
   return (

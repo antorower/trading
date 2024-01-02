@@ -14,7 +14,7 @@ export async function POST(req) {
     return NextResponse.json({ sucess: true });
   } catch (error) {
     console.log("Error from /api/admin/users/user/ban-user", error);
-    const response = await ErrorHandler(user, error, "Something went wrong. Please try again.", "/api/admin/users/user/ban-user");
+    const response = await ErrorHandler({}, error, "Something went wrong. Please try again.", "/api/admin/users/user/ban-user");
     return NextResponse.json({ error: response.message }, { status: response.status });
   }
 }

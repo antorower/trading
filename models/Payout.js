@@ -17,14 +17,14 @@ const PayoutSchema = new mongoose.Schema({
   wallet: String,
 });
 
-PayoutSchema.methods.PaymentRequestDone = async function (data, wallet) {
+PayoutSchema.methods.PaymentRequestDone = async function (data) {
   try {
     this.owner = data.owner;
     this.account = data.account;
     this.amount = data.amount;
     this.status = "Pending";
     this.createdDate = Date.now();
-    this.wallet = wallet;
+    this.wallet = data.wallet;
 
     await this.save();
   } catch (error) {
@@ -38,6 +38,18 @@ PayoutSchema.methods.PayoutDone = async function (amount) {
     this.acceptedDate = Date.now();
     this.amount = amount;
     this.status = "Accepted";
+
+    await this.save();
+  } catch (error) {
+    console.error("Error in PaymentRequestDone method:", error);
+    throw error;
+  }
+};
+
+PayoutSchema.methods.RejectPayout = async function () {
+  try {
+    this.acceptedDate = Date.now();
+    this.status = "Rejected";
 
     await this.save();
   } catch (error) {

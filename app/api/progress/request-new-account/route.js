@@ -19,7 +19,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/request-new-account");
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/progress/request-new-account");
     return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

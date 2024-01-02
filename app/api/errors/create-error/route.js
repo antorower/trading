@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/dbConnect";
+import { currentUser } from "@clerk/nextjs";
 import AppError from "@/models/AppError";
 
 export async function POST(req) {
-  await dbConnect();
-
-  const { user, errorMessage, errorsObject, file, location, statusCode } = await req.json();
+  const user = await currentUser();
   try {
+    await dbConnect();
+
+    const { user, errorMessage, errorsObject, file, location, statusCode } = await req.json();
     const doc = new AppError({ user: user, errorMessage: errorMessage, errorsObject: errorsObject, file: file, location: location, statusCode: statusCode });
     await doc.save();
     return NextResponse.json(doc);
   } catch (error) {
-    console.log("Error from /api/errors/create-error", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/errors/create-error");
+    return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

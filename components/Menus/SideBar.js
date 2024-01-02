@@ -2,12 +2,10 @@
 import React from "react";
 import { UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import MenuItem from "./MenuItem";
 import { useUserContext } from "@/context/UserContext";
 
 const SideBar = () => {
-  const router = useRouter();
   const { user } = useUser();
   const { expandedLeftSidebar, setExpandedLeftSidebar } = useUserContext();
 
@@ -24,7 +22,6 @@ const SideBar = () => {
           {user?.publicMetadata.role === "admin" && <MenuItem menu="Admin" icon="admin" destination="/dashboard/admin" />}
           {user?.publicMetadata.role === "leader" || (user?.publicMetadata.role === "admin" && <MenuItem menu="Team" icon="admin" destination="/dashboard/admin" />)}
           <MenuItem menu="Accounts" icon="accounts" destination="/dashboard/accounts" />
-          <MenuItem menu="Wallet" icon="dollar" destination="/dashboard/admin" />
           <MenuItem menu="Calendar" icon="calendar" destination="/dashboard/calendar" />
           <MenuItem menu="Settings" icon="settings" destination="/dashboard/settings" />
         </div>

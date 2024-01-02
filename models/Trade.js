@@ -34,6 +34,7 @@ TradeSchema.methods.CloseTrade = async function (balance) {
   try {
     this.endingBalance = balance;
     this.status = "Close";
+    this.closeAt = Date.now();
     await this.save();
   } catch (error) {
     console.error("Error in CloseTrade method:", error);

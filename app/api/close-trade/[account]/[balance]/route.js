@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/dbConnect";
-import { clerkClient } from "@clerk/nextjs";
+import { ErrorHandler } from "@/library/functions";
 
 import Account from "@/models/Account";
 import Trade from "@/models/Trade";
@@ -8,7 +8,6 @@ import Trade from "@/models/Trade";
 export async function GET(req, context) {
   try {
     await dbConnect();
-
     const account = context.params.account;
     const balance = Number(context.params.balance);
 
@@ -24,15 +23,14 @@ export async function GET(req, context) {
     }
     let trade = await Trade.findOne({ account: account, status: "Open" });
     if (!trade) {
-      return NextResponse.json({ error: "YES", message: "Something went wrong while closing your trade, please try again or contact us" }, { status: 404 });
+      return NextResponse.json({ error: "YES", message: "Seems like there is no open trade in our databases, please contact us" }, { status: 404 });
     }
-
-    await accountObj.CloseTrade(balance);
     await trade.CloseTrade();
+    await accountObj.CloseTrade(balance);
 
     return NextResponse.json({ error: "NO", message: "Your account details updated successfully" });
   } catch (error) {
-    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/close-trade");
+    const response = await ErrorHandler({}, error, "Something went wrong, please try again", "/api/close-trade");
     return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

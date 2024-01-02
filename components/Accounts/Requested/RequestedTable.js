@@ -26,10 +26,6 @@ const RequestedTable = () => {
     setRejectedAccounts(rejected);
   }, [userAccounts]);
 
-  if (!userAccounts || userAccounts?.length === 0) {
-    return null;
-  }
-
   let element;
   if ((!requestedAccounts || requestedAccounts.length === 0) && (!registrationAccounts || registrationAccounts.length === 0) && (!rejectedAccounts || rejectedAccounts.length === 0)) {
     element = <div className="flex text-center justify-center"> There is no requested accounts at the moment </div>;

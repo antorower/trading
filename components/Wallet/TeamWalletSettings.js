@@ -11,15 +11,15 @@ const TeamWalletSettings = () => {
   const [walletPanelExpanded, setWalletPanelExpanded] = useState(true);
 
   return (
-    <TableWrapper title="Payout Wallets" refresh={false} refreshFuntion={() => {}} panelExpanded={walletPanelExpanded} setPanelExpanded={setWalletPanelExpanded}>
+    <TableWrapper title="Payout Wallet" refresh={false} refreshFuntion={() => {}} panelExpanded={walletPanelExpanded} setPanelExpanded={setWalletPanelExpanded}>
       {walletPanelExpanded && (
         <>
           <TableRow>
             <div className="flex w-full justify-between items-center">
               <div className="font-weight-500 text-lg"> Ethereum Wallet: </div>
-              {user && user.publicMetadata.teamEthWallet.wallet && user.publicMetadata.teamEthWallet.wallet}
-              {user && !user.publicMetadata.teamEthWallet.wallet && <div>There is no wallet yet</div>}
-              {user && user.publicMetadata.teamEthWallet.wallet && <CopyWallet wallet={user?.publicMetadata.teamEthWallet.wallet} />}
+              {user && user.publicMetadata.teamEthereumWallet.wallet && user.publicMetadata.teamEthereumWallet.wallet}
+              {user && !user.publicMetadata.teamEthereumWallet.wallet && <div>There is no wallet yet</div>}
+              {user && user.publicMetadata.teamEthereumWallet.wallet && <CopyWallet wallet={user?.publicMetadata.teamEthereumWallet.wallet} />}
               <div className="text-sm font-weight-500">This wallet is exclusively designed for executing Ethereum payout transactions</div>
             </div>
           </TableRow>

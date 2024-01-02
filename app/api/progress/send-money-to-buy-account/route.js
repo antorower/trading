@@ -5,9 +5,9 @@ import { ErrorHandler } from "@/library/functions";
 import Account from "@/models/Account";
 
 export async function POST(req) {
+  const user = await currentUser();
   try {
     await dbConnect();
-    const user = await currentUser();
     const { accountId, company, capital, wallet, amount } = await req.json();
 
     let doc = await Account.findById(accountId);
@@ -18,7 +18,7 @@ export async function POST(req) {
     await doc.FundsTransferred(data);
     return NextResponse.json({ sucess: true });
   } catch (error) {
-    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/send-money-to-buy-account");
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/progress/send-money-to-buy-account");
     return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

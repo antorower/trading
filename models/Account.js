@@ -21,11 +21,19 @@ const AccountSchema = new mongoose.Schema({
   dailyDrawdown: Number,
   overallDrawdown: Number,
   phase: Number,
-  paid: {
+  paidTimes: {
+    type: Number,
+    default: 0,
+  },
+  balance: Number,
+  balanceMismatch: {
     type: Boolean,
     default: false,
   },
-  balance: Number,
+  needTrade: {
+    type: Boolean,
+    default: true,
+  },
   status: {
     type: String,
     enum: ["Live", "Lost", "Review", "Upgrade", "Upgraded", "Payout", "Payment", "Requested", "Registration", "Rejected"],
@@ -79,10 +87,6 @@ const AccountSchema = new mongoose.Schema({
     pair: String,
     position: String,
     lots: Number,
-  },
-  needTrade: {
-    type: Boolean,
-    default: true,
   },
   registrationDate: Date,
   firstTradeDate: Date,
@@ -196,7 +200,6 @@ AccountSchema.methods.RegisterAccount = async function (number) {
     this.number = number;
     this.comment = "You are now ready to execute your first transaction";
     this.status = "Live";
-    this.needTrade = true;
     this.registrationDate = Date.now();
     const newActivity = {
       title: "Account Number Updated",
@@ -274,7 +277,7 @@ AccountSchema.methods.UpgradeOldAccount = async function (newNumber) {
     throw error;
   }
 };
-// Ο trader κάνει payment request -------------------
+// Ο trader κάνει payment request
 AccountSchema.methods.PaymentAccount = async function (wallet) {
   try {
     const newActivity = {
@@ -282,19 +285,17 @@ AccountSchema.methods.PaymentAccount = async function (wallet) {
       description: `Payment request done with profits ${this.balance - this.capital} at wallet ${wallet}`,
     };
     this.activity.push(newActivity);
+    this.comment = "Please await the completion of the payout process before executing any further trades.";
     this.paymentedDate = Date.now();
     this.status = "Payout";
-    this.comment = "Your payment request has been submitted. Please await the completion of the payout process before executing any further trades.";
-    this.paid = true;
-    this.paymentedDate = Date.now();
-
+    this.needTrade = false;
     await this.save();
   } catch (error) {
-    console.error("Error in RejectAccount method:", error);
+    console.error("Error in PaymentAccount method:", error);
     throw error;
   }
 };
-// Φτάνουν τα χρήματα στο wallet της ομάδας ------------
+// Φτάνουν τα χρήματα στο wallet της ομάδας
 AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
   try {
     const newActivity = {
@@ -302,25 +303,25 @@ AccountSchema.methods.PayoutAccount = async function (profit, wallet) {
       description: `Payout process complete and the profit of ${profit} has been added to the wallet ${wallet}`,
     };
     this.activity.push(newActivity);
-    this.paid = false;
+    this.comment = "Your account is now live ready to execute transactions";
+    this.needTrade = true;
+    this.tradesExecuted = 0;
+    this.openTrade.pending = false;
+    this.paidTimes = this.paidTimes + 1;
     this.balance = this.capital;
     this.status = "Live";
-    this.needTrade = true;
-    this.paymenedDate = Date.now();
     this.firstTradeDate = null;
-
     await this.save();
   } catch (error) {
-    console.error("Error in RejectAccount method:", error);
+    console.error("Error in PayoutAccount method:", error);
     throw error;
   }
 };
 
-// Ο trader ανοίγει trade --------------
+// Ο trader ανοίγει trade
 AccountSchema.methods.OpenTrade = async function (trade) {
   try {
     this.comment = trade.fake ? "A fake trade has been opened. Please close it now." : "An open trade is currently active. Please ensure its closure before 22:00.";
-    this.tradesExecuted += 1;
     const newActivity = {
       title: "Trade Opened",
       description: trade.fake ? "A fake trade has been opened. Please close it" : `A ${trade.position} position has been opened for ${trade.pair}`,
@@ -328,7 +329,7 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     this.activity.push(newActivity);
 
     this.openTrade.pending = true;
-    this.openTrade.fake = false;
+    this.openTrade.fake = trade.fake;
     if (!trade.fake) {
       this.openTrade.pair = trade.pair;
       this.openTrade.position = trade.position;
@@ -346,7 +347,7 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     throw error;
   }
 };
-// Ο trader κλείνει trade -------------
+// Ο trader κλείνει trade
 AccountSchema.methods.CloseTrade = async function (balance) {
   try {
     const startingDate = this.firstTradeDate;
@@ -363,6 +364,7 @@ AccountSchema.methods.CloseTrade = async function (balance) {
     this.activity.push(newActivity);
     this.lastTradeCloseDate = Date.now();
     this.openTrade.pending = false;
+    this.tradesExecuted = this.tradesExecuted + 1;
 
     if (this.balance - balance >= this.dailyDrawdown) {
       this.comment = "Hey diligent trader, your account has been closed. No worries! You can always request a new one, always for free!";
@@ -374,7 +376,6 @@ AccountSchema.methods.CloseTrade = async function (balance) {
         description: "Account lost by daily drawdown",
       };
       this.activity.push(newActivity);
-      this.needTrade = false;
     } else if (balance <= this.overallDrawdown) {
       this.comment = "Hey trader, your account has been closed. No worries! You can always request a new one.";
       this.lostByDailyDrawdown = false;
@@ -385,61 +386,6 @@ AccountSchema.methods.CloseTrade = async function (balance) {
         description: "Account lost by overall drawdown",
       };
       this.activity.push(newActivity);
-      this.needTrade = false;
-    }
-
-    // Αν το account έχει πιάσει τον στόχο
-    if (balance >= this.target) {
-      if (this.company === "Funding Pips") {
-        this.needTrade = false;
-        // Αν αυτό είναι το trade που έπιασε τον στόχο
-        if (this.balance < this.target) {
-          if (this.phase === 1) {
-            const newActivity = {
-              title: "Evaluation Passed",
-              description: "Evaluation phase passed and trader is ready to upgrade the account",
-            };
-            this.activity.push(newActivity);
-
-            this.comment = "Congratulations! You have pass the evaluation phase. You can now upgrade your account.";
-            this.status = "Upgrade";
-            this.targetReachedDate = Date.now();
-            this.upgradeDate = Date.now();
-          }
-          if (this.phase === 2) {
-            const newActivity = {
-              title: "Verification Passed",
-              description: "Verification phase passed and trader is ready to upgrade the account",
-            };
-            this.activity.push(newActivity);
-
-            this.comment = "Congratulations! You have pass the verification phase. You can now upgrade your account.";
-            this.status = "Upgrade";
-            this.targetReachedDate = Date.now();
-            this.upgradeDate = Date.now();
-          }
-          if (this.phase === 3) {
-            const newActivity = {
-              title: "Profit target reached!",
-              description: "Verification phase passed and trader is ready to upgrade the account",
-            };
-            this.activity.push(newActivity);
-
-            this.comment = "Congratulations! You have reach the profit target.";
-            this.status = "Payment";
-            this.targetReachedDate = Date.now();
-
-            // Add 4 days
-            let paymentDateTemp = new Date(this.firstTradeDate.getTime() + 345600000);
-            // Set the hour to 12 at night
-            paymentDateTemp.setHours(0, 0, 0, 0);
-            // Return the date to miliseconds format - At front end i will check the paymentDate and i will customize the comment and the action dot
-            this.paymentDate = paymentDateTemp.getTime();
-          }
-        } else {
-          // Αν τον στόχο τον έπιασε σε προηγούμενο trade
-        }
-      }
     }
 
     // Αν το account έχει πιάσει τον στόχο
@@ -454,112 +400,46 @@ AccountSchema.methods.CloseTrade = async function (balance) {
         this.targetReachedDate = Date.now();
       }
 
-      this.comment = "Target reached, please keep open trades";
-
       // Αν έχει βάλει όλα τα trades
       if (this.tradesExecuted >= this.minimumTradingDays) {
         this.needTrade = false;
         if (this.phase === 1 || this.phase === 2) {
           this.status = "Upgrade";
-
           if (daysPassed >= this.minimumWaitingDays) {
-            if (this.phase === 1 || this.phase === 2) {
-              this.comment = `You reach the target and you can upgrade your account now`;
-              this.upgradeDate = Date.now();
-            } else if (this.phase === 3) {
-              this.comment = `You reach the target and you can now make payment request`;
-              this.paymentDate = Date.now();
-            }
+            this.comment = `You reach the target and you can now upgrade your account`;
+            this.upgradeDate = Date.now();
           } else {
             const remainingDays = this.minimumWaitingDays - daysPassed;
             const actionDate = new Date();
             actionDate.setHours(0, 0, 0, 0);
             actionDate.setDate(currentDate.getDate() + remainingDays);
-            if (this.phase === 1 || this.phase === 2) {
-              this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
-            } else if (this.phase === 3) {
-              this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
-            }
+            this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
           }
         } else if (this.phase === 3) {
           this.status === "Payment";
-
           if (daysPassed >= this.minimumWaitingDays) {
-            if (this.phase === 1 || this.phase === 2) {
-              this.comment = `You reach the target and you can upgrade your account now`;
-              this.upgradeDate = Date.now();
-            } else if (this.phase === 3) {
-              this.comment = `You reach the target and you can now make payment request`;
-              this.paymentDate = Date.now();
-            }
+            this.comment = `You reach the target and you can now make payment request`;
+            this.paymentDate = Date.now();
           } else {
             const remainingDays = this.minimumWaitingDays - daysPassed;
             const actionDate = new Date();
             actionDate.setHours(0, 0, 0, 0);
             actionDate.setDate(currentDate.getDate() + remainingDays);
-            if (this.phase === 1 || this.phase === 2) {
-              this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
-            } else if (this.phase === 3) {
-              this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
-            }
+            this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
           }
         }
       } else {
+        this.needTrade = true;
         const remainingTrades = this.minimumTradingDays - tradesExecuted;
         this.comment = `Congrats! You reach the target, ${remainingTrades} fake trade${remainingTrades > 1 ? "s" : null} remaining`;
       }
-      this.needTrade = false;
-      // Αν αυτό είναι το trade που έπιασε τον στόχο
-      if (this.balance < this.target) {
-        if (this.phase === 1) {
-          const newActivity = {
-            title: "Evaluation Passed",
-            description: "Evaluation phase passed and trader is ready to upgrade the account",
-          };
-          this.activity.push(newActivity);
-
-          this.comment = "Congratulations! You have pass the evaluation phase. You can now upgrade your account.";
-          this.status = "Upgrade";
-          this.targetReachedDate = Date.now();
-          this.upgradeDate = Date.now();
-        }
-        if (this.phase === 2) {
-          const newActivity = {
-            title: "Verification Passed",
-            description: "Verification phase passed and trader is ready to upgrade the account",
-          };
-          this.activity.push(newActivity);
-
-          this.comment = "Congratulations! You have pass the verification phase. You can now upgrade your account.";
-          this.status = "Upgrade";
-          this.targetReachedDate = Date.now();
-          this.upgradeDate = Date.now();
-        }
-        if (this.phase === 3) {
-          const newActivity = {
-            title: "Profit target reached!",
-            description: "Verification phase passed and trader is ready to upgrade the account",
-          };
-          this.activity.push(newActivity);
-
-          this.comment = "Congratulations! You have reach the profit target.";
-          this.status = "Payment";
-          this.targetReachedDate = Date.now();
-
-          // Add 4 days
-          let paymentDateTemp = new Date(this.firstTradeDate.getTime() + 345600000);
-          // Set the hour to 12 at night
-          paymentDateTemp.setHours(0, 0, 0, 0);
-          // Return the date to miliseconds format - At front end i will check the paymentDate and i will customize the comment and the action dot
-          this.paymentDate = paymentDateTemp.getTime();
-        }
-      } else {
-        // Αν τον στόχο τον έπιασε σε προηγούμενο trade
+    } else {
+      if (this.status === "Live") {
+        this.needTrade = true;
+        this.comment = "Your account is live";
       }
     }
-
     this.balance = balance;
-
     await this.save();
   } catch (error) {
     console.error("Error in CloseTrade method:", error);
@@ -668,3 +548,103 @@ function GenerateRandomString(stringLength) {
 }
 
 export default mongoose.models.Account || mongoose.model("Account", AccountSchema);
+
+/*
+if (this.phase === 1 || this.phase === 2) {
+  this.status = "Upgrade";
+
+  if (daysPassed >= this.minimumWaitingDays) {
+    if (this.phase === 1 || this.phase === 2) {
+      this.comment = `You reach the target and you can upgrade your account now`;
+      this.upgradeDate = Date.now();
+    } else if (this.phase === 3) {
+      this.comment = `You reach the target and you can now make payment request`;
+      this.paymentDate = Date.now();
+    }
+  } else {
+    const remainingDays = this.minimumWaitingDays - daysPassed;
+    const actionDate = new Date();
+    actionDate.setHours(0, 0, 0, 0);
+    actionDate.setDate(currentDate.getDate() + remainingDays);
+    if (this.phase === 1 || this.phase === 2) {
+      this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+    } else if (this.phase === 3) {
+      this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+    }
+  }
+} else if (this.phase === 3) {
+  this.status === "Payment";
+
+  if (daysPassed >= this.minimumWaitingDays) {
+    if (this.phase === 1 || this.phase === 2) {
+      this.comment = `You reach the target and you can upgrade your account now`;
+      this.upgradeDate = Date.now();
+    } else if (this.phase === 3) {
+      this.comment = `You reach the target and you can now make payment request`;
+      this.paymentDate = Date.now();
+    }
+  } else {
+    const remainingDays = this.minimumWaitingDays - daysPassed;
+    const actionDate = new Date();
+    actionDate.setHours(0, 0, 0, 0);
+    actionDate.setDate(currentDate.getDate() + remainingDays);
+    if (this.phase === 1 || this.phase === 2) {
+      this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+    } else if (this.phase === 3) {
+      this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
+    }
+  }
+}
+
+
+
+      // Αν αυτό είναι το trade που έπιασε τον στόχο
+      if (this.balance < this.target) {
+        if (this.phase === 1) {
+          const newActivity = {
+            title: "Evaluation Passed",
+            description: "Evaluation phase passed and trader is ready to upgrade the account",
+          };
+          this.activity.push(newActivity);
+
+          this.comment = "Congratulations! You have pass the evaluation phase. You can now upgrade your account.";
+          this.status = "Upgrade";
+          this.targetReachedDate = Date.now();
+          this.upgradeDate = Date.now();
+        }
+        if (this.phase === 2) {
+          const newActivity = {
+            title: "Verification Passed",
+            description: "Verification phase passed and trader is ready to upgrade the account",
+          };
+          this.activity.push(newActivity);
+
+          this.comment = "Congratulations! You have pass the verification phase. You can now upgrade your account.";
+          this.status = "Upgrade";
+          this.targetReachedDate = Date.now();
+          this.upgradeDate = Date.now();
+        }
+        if (this.phase === 3) {
+          const newActivity = {
+            title: "Profit target reached!",
+            description: "Verification phase passed and trader is ready to upgrade the account",
+          };
+          this.activity.push(newActivity);
+
+          this.comment = "Congratulations! You have reach the profit target.";
+          this.status = "Payment";
+          this.targetReachedDate = Date.now();
+
+          // Add 4 days
+          let paymentDateTemp = new Date(this.firstTradeDate.getTime() + 345600000);
+          // Set the hour to 12 at night
+          paymentDateTemp.setHours(0, 0, 0, 0);
+          // Return the date to miliseconds format - At front end i will check the paymentDate and i will customize the comment and the action dot
+          this.paymentDate = paymentDateTemp.getTime();
+        }
+      } else {
+        // Αν τον στόχο τον έπιασε σε προηγούμενο trade
+}
+      
+
+*/

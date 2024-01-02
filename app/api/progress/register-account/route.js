@@ -28,7 +28,7 @@ export async function POST(req) {
     await doc.RegisterAccount(accountNumber);
     return NextResponse.json({ success: true });
   } catch (error) {
-    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/register-account");
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/progress/register-account");
     return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

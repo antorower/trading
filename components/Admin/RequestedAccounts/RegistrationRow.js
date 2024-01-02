@@ -17,7 +17,7 @@ const RegistrationRow = ({ account }) => {
           <div className="text-gray-500 text-sm">{account.user.username}</div>
         </div>
       </div>
-      <div className="flex items-center justify-center flex-grow gap-16">
+      <div className="flex items-center justify-center gap-16">
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Company</div>
           <div>{account.company}</div>
@@ -28,13 +28,14 @@ const RegistrationRow = ({ account }) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Date</div>
-          <div>{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
+          <div>{new Date(account.moneyTransferDetails.transferDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Amount</div>
           <div>${account.moneyTransferDetails.transferAmount}</div>
         </div>
       </div>
+      <div className="w-[400px] text-center">{account.comment}</div>
       <div className="relative w-[22px] h-[22px] animate-spin">
         <Image src="/spinner.svg" fill="true" alt="spinner" sizes="32x32" />
       </div>

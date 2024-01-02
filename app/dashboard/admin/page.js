@@ -8,6 +8,7 @@ import Schedule from "@/components/Admin/Schedule/Schedule";
 import LiveTable from "@/components/Admin/Live/LiveTable";
 import PayoutTable from "@/components/Admin/Payout/PayoutTable";
 import UpgradeTable from "@/components/Admin/Upgrade/UpgradeTable";
+import PayrollTable from "@/components/Admin/Payroll/PayrollTable";
 
 const Admin = () => {
   return (
@@ -20,6 +21,7 @@ const Admin = () => {
       <LiveTable />
       <LostTable />
       <Schedule />
+      <PayrollTable />
     </div>
   );
 };

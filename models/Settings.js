@@ -251,18 +251,6 @@ const SettingsSchema = new mongoose.Schema({
       },
     },
   },
-  economic: {
-    dates: {
-      startDate: Date,
-      endDate: Date,
-    },
-    shares: {
-      fundingPips: {
-        leader: Number,
-        traders: Number,
-      },
-    },
-  },
 });
 
 SettingsSchema.pre("save", function (next) {
@@ -292,6 +280,34 @@ SettingsSchema.pre("save", function (next) {
   }
   next();
 });
+
+SettingsSchema.methods.AddTraderToPayroll = async function (userId) {
+  try {
+    this.economic.payrollTraders.push(userId);
+    this.markModified("economic.payrollTraders");
+    this.save();
+  } catch (error) {
+    console.error("Error in add trader to payroll method:", error);
+    throw error;
+  }
+};
+
+SettingsSchema.methods.RemoveTraderFromPayroll = async function (userId) {
+  try {
+    const index = this.economic.payrollTraders.indexOf(userId);
+    if (index > -1) {
+      this.economic.payrollTraders.splice(index, 1);
+      this.markModified("economic.payrollTraders");
+      await this.save();
+    } else {
+      console.log("Trader not found in payroll");
+      throw new Error("Trader not found in payroll");
+    }
+  } catch (error) {
+    console.error("Error in remove trader from payroll method:", error);
+    throw error;
+  }
+};
 
 function UpdatePlan(settings, day, startingIndex) {
   try {
@@ -370,30 +386,28 @@ SettingsSchema.methods.ResetSchedule = async function (data) {
 };
 
 SettingsSchema.methods.OpenTrade = async function (day, company, index, lots) {
-  console.log(day);
-  console.log(company);
-  console.log(index);
-  console.log(lots);
-
   try {
     const listLength = this.plan[day][company].list.length;
-    console.log("List Lenght", listLength);
+
     if (index === listLength - 1) {
       this.plan[day][company].currentId = 0;
     } else {
       this.plan[day][company].currentId = index + 1;
     }
 
+    console.log(this.plan[day][company].list[index]);
     if (this.plan[day][company].list[index].lastPosition === "Buy") {
       this.plan[day][company].list[index].lastPosition = "Sell";
     } else {
       this.plan[day][company].list[index].lastPosition = "Buy";
     }
+    console.log(this.plan[day][company].list[index]);
 
     this.plan[day][company].list[index].lastLots = lots;
+    this.markModified("plan");
     await this.save();
   } catch (error) {
-    console.error("Error in reset schedule method:", error);
+    console.error("Error at OpenTrade method in Settings model:", error);
     throw error;
   }
 };

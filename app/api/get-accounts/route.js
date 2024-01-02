@@ -6,9 +6,9 @@ import { ErrorHandler } from "@/library/functions";
 import { clerkClient } from "@clerk/nextjs";
 
 export async function GET() {
+  const user = await currentUser();
   try {
     await dbConnect();
-    const user = await currentUser();
     const users = await clerkClient.users.getUserList();
 
     let allAccounts = await Account.find({

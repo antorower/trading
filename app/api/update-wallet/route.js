@@ -22,7 +22,7 @@ export async function POST(req) {
     // Κάνει update το προσωπικό wallet του ethereum
     await clerkClient.users.updateUserMetadata(user.id, {
       publicMetadata: {
-        personalEthWallet: wallet,
+        personalEthereumWallet: wallet,
       },
     });
 

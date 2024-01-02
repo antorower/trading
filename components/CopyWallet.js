@@ -1,9 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import { SaveError } from "@/library/functions";
-import Link from "next/link";
 
 const CopyWallet = ({ wallet }) => {
   const [copyState, setCopyState] = useState(false);

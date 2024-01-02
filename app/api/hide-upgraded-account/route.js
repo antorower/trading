@@ -35,7 +35,7 @@ export async function POST(req, context) {
     await account.save();
     return NextResponse.json({ success: true });
   } catch (error) {
-    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/hide-lost-account");
+    const response = await ErrorHandler(user, error, "Something went wrong, please try again", "/api/hide-upgraded-account");
     return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }

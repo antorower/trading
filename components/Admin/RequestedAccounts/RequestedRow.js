@@ -82,7 +82,7 @@ const RequestedRow = ({ account }) => {
         </select>
         <input placeholder="Capital" type="number" className="number-input" onChange={(e) => setCapital(e.target.value)} value={capital} />
         <input placeholder="Cost" type="number" className="number-input" onChange={(e) => setCost(e.target.value)} value={cost} />
-        <CopyWallet wallet={account.user.publicMetadata.personalEthWallet} />
+        <CopyWallet wallet={account.user.publicMetadata.personalEthereumWallet} />
       </div>
       <input onChange={(e) => setDeclineComment(e.target.value)} value={declineComment} type="text" className="text-input" placeholder="Decline Comment" />
       <div className="flex justify-center items-center gap-4">

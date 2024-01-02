@@ -5,12 +5,12 @@ import Payout from "@/models/Payout";
 import Account from "@/models/Account";
 
 export async function POST(req) {
+  const user = await currentUser();
   try {
     await dbConnect();
-    const user = await currentUser();
-    const { accountNumber, amount, wallet } = await req.json();
+    const { accountNumber, amount } = await req.json();
 
-    if (!user.publicMetadata.role !== "admin") {
+    if (user.publicMetadata.role !== "admin") {
       return NextResponse.json({ error: "You do not have permissions for that action" }, { status: 400 });
     }
 
@@ -24,7 +24,7 @@ export async function POST(req) {
     if (!account) {
       return NextResponse.json({ error: "Document not found" }, { status: 404 });
     }
-    await account.PayoutAccount(amount, wallet);
+    await account.PayoutAccount(amount, payout.wallet);
 
     return NextResponse.json(payout);
   } catch (error) {
