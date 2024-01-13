@@ -7,13 +7,14 @@ import UpgradeRow from "./UpgradeRow";
 const UpgradeTable = () => {
   const [upgradeAccountsPanelExpanded, setUpgradeAccountsPanelExpanded] = useState(true);
   const [upgradeAccounts, setUpgradeAccounts] = useState(null);
-  const { userAccounts, UpdateAccounts } = useUserContext();
+  const { teamAccounts, UpdateAccounts } = useUserContext();
 
   useEffect(() => {
-    if (!userAccounts) return;
-    const upgrade = userAccounts.filter((account) => account.status === "Upgrade" || account.status === "Upgraded");
+    if (!teamAccounts) return;
+    const upgrade = teamAccounts.filter((account) => account.status === "Upgrade");
     setUpgradeAccounts(upgrade);
-  }, [userAccounts]);
+    console.log("TEAM ACCOUNTS", upgrade);
+  }, [teamAccounts]);
 
   if (!upgradeAccounts || upgradeAccounts?.length === 0) {
     return null;

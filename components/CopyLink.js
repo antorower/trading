@@ -3,18 +3,18 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 
-const CopyWallet = ({ wallet }) => {
+const CopyLink = ({ link }) => {
   const [copyState, setCopyState] = useState(false);
   const [errorCopy, setErrorCopy] = useState(false);
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
 
-  const CopyWallet = () => {
+  const CopyLink = () => {
     navigator.clipboard
-      .writeText(wallet)
+      .writeText(link)
       .then(() => {
-        successNotification("Wallet address successfully copied to clipboard");
+        successNotification("Referral link successfully copied to clipboard");
         setCopyState(true);
         setTimeout(() => {
           setCopyState(false);
@@ -27,7 +27,7 @@ const CopyWallet = ({ wallet }) => {
   };
 
   return (
-    <button disabled={copyState} onClick={CopyWallet}>
+    <button disabled={copyState} onClick={CopyLink}>
       {!copyState && (
         <div className="flex gap-2">
           {!errorCopy ? (
@@ -35,11 +35,11 @@ const CopyWallet = ({ wallet }) => {
               <div className="flex justify-center items-center">
                 <Image alt="copy-image" src="/copy.svg" width={15} height={15} />
               </div>
-              <div className="font-weight-700 text-sm">COPY WALLET</div>
+              <div className="font-weight-700 text-sm">COPY REFERRAL LINK</div>
             </>
           ) : (
             <div>
-              <div>Wallet Address: {wallet}</div>
+              <div>Link: {link}</div>
             </div>
           )}
         </div>
@@ -56,4 +56,4 @@ const CopyWallet = ({ wallet }) => {
   );
 };
 
-export default CopyWallet;
+export default CopyLink;

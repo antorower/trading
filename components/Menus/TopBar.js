@@ -1,15 +1,36 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUserContext } from "@/context/UserContext";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import { toast } from "react-toastify";
 
 const TopBar = () => {
   const { expandedLeftSidebar, setExpandedLeftSidebar, setActiveMenu } = useUserContext();
   const pathname = usePathname();
   const { user } = useUser();
+  const [profit, setProfit] = useState(0);
+
+  const errorNotification = (message) => toast.warn(message);
+
+  useEffect(() => {
+    const GetProfits = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-user-profits`);
+        const data = await response.json();
+        if (!response.ok) {
+          setProfit("undefined");
+          throw new Error(data.error);
+        }
+        setProfit(data.profit);
+      } catch (error) {
+        errorNotification(error.message);
+      }
+    };
+    GetProfits();
+  }, []);
 
   return (
     <div className="flex items-center justify-between bg-light border-l-[1px] border-gray-700 px-8 relative p-4">
@@ -24,19 +45,9 @@ const TopBar = () => {
         )}
       </div>
 
-      <div className="flex gap-16 items-center justify-center">
-        <div className="text-gray-400 font-roboto text-m flex items-center">
-          Team Profit Pool: $1400 <span className="text-xs mx-2"> (+$700 pending) </span>
-        </div>
+      <div className="flex gap-16 items-center flex-grow justify-center">
+        <div className="text-gray-400 font-roboto text-m flex items-center">Profit: ${profit}</div>
       </div>
-
-      {user && (user.publicMetadata.role === "leader" || user.publicMetadata.role === "admin") && (
-        <div className="flex gap-16 items-center justify-center">
-          <div className="text-gray-400 font-roboto text-m flex items-center">
-            Leader Profits: $5200 <span className="text-xs mx-2"> (+$1900 pending) </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -20,7 +20,7 @@ const SideBar = () => {
         </div>
         <div className="flex flex-col gap-4">
           {user?.publicMetadata.role === "admin" && <MenuItem menu="Admin" icon="admin" destination="/dashboard/admin" />}
-          {user?.publicMetadata.role === "leader" || (user?.publicMetadata.role === "admin" && <MenuItem menu="Team" icon="admin" destination="/dashboard/admin" />)}
+          {(user?.publicMetadata.role === "leader" || user?.publicMetadata.role === "admin") && <MenuItem menu="Team" icon="admin" destination="/dashboard/leader" />}
           <MenuItem menu="Accounts" icon="accounts" destination="/dashboard/accounts" />
           <MenuItem menu="Calendar" icon="calendar" destination="/dashboard/calendar" />
           <MenuItem menu="Settings" icon="settings" destination="/dashboard/settings" />
@@ -29,14 +29,16 @@ const SideBar = () => {
 
       <div className={`border-b-[1px] ${expandedLeftSidebar ? "border-[#7a7979]" : "border-[#1F2128]"} transition-all duration-500`}></div>
 
-      <div className="text-gray-400 text-sm font-weight-400 flex flex-col pb-12">
-        <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} transition-all duration-500 p-1 mb-4 flex justify-start items-center gap-3 text-white`}>Support</div>
-        <div className="flex flex-col gap-4">
-          <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} hover:pl-8 transition-all duration-500 cursor-pointer hover:text-white`}>News</div>
-          <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} hover:pl-8 transition-all duration-500 cursor-pointer hover:text-white`}>Rules</div>
-          <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} hover:pl-8 transition-all duration-500 cursor-pointer hover:text-white`}>Guides</div>
+      {false && (
+        <div className="text-gray-400 text-sm font-weight-400 flex flex-col pb-12">
+          <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} transition-all duration-500 p-1 mb-4 flex justify-start items-center gap-3 text-white`}>Support</div>
+          <div className="flex flex-col gap-4">
+            <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} hover:pl-8 transition-all duration-500 cursor-pointer hover:text-white`}>News</div>
+            <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} hover:pl-8 transition-all duration-500 cursor-pointer hover:text-white`}>Rules</div>
+            <div className={`${expandedLeftSidebar ? "pl-4" : "pl-24"} hover:pl-8 transition-all duration-500 cursor-pointer hover:text-white`}>Guides</div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

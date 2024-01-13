@@ -32,7 +32,7 @@ export async function GET() {
     let adminAccounts = null;
 
     if (user.publicMetadata.role === "leader" || user.publicMetadata.role === "admin") {
-      const mentoredUserIds = users.filter((user) => user.publicMetadata.mentor === user.id).map((user) => user.id);
+      const mentoredUserIds = users.filter((searchedUser) => searchedUser.publicMetadata.mentor === user.id).map((searchedUser) => searchedUser.id);
       teamAccounts = augmentedAccounts.filter((account) => mentoredUserIds.includes(account.userId) && !["Review", "Rejected", "Lost"].includes(account.status));
     }
 

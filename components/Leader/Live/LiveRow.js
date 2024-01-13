@@ -37,11 +37,6 @@ const LiveRow = ({ account }) => {
           <div>${account.balance}</div>
         </div>
         <div className="flex flex-col items-center">
-          <div className="text-gray-500 text-sm">Initialization</div>
-          {account.phase === 1 && <div>{new Date(account.moneyTransferDetails.transferDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>}
-          {(account.phase === 2 || account.phase === 3) && <div>{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>}
-        </div>
-        <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Last Trade</div>
           {account.lastTradeOpenDate ? <div>{new Date(account.lastTradeOpenDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div> : "-"}
         </div>

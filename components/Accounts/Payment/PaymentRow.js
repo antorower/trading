@@ -65,7 +65,7 @@ const PaymentRow = ({ account }) => {
         {account.status === "Payment" && (
           <div className="flex flex-col items-center">
             <div className="text-blue-400 text-sm">Payout Request</div>
-            <div>{account.paymentDate}</div>
+            <div>{new Date(account.paymentDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
           </div>
         )}
       </div>

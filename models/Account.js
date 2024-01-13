@@ -416,7 +416,7 @@ AccountSchema.methods.CloseTrade = async function (balance) {
             this.comment = `You reach the target and you can upgrade your account at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
           }
         } else if (this.phase === 3) {
-          this.status === "Payment";
+          this.status = "Payment";
           if (daysPassed >= this.minimumWaitingDays) {
             this.comment = `You reach the target and you can now make payment request`;
             this.paymentDate = Date.now();
@@ -425,6 +425,7 @@ AccountSchema.methods.CloseTrade = async function (balance) {
             const actionDate = new Date();
             actionDate.setHours(0, 0, 0, 0);
             actionDate.setDate(currentDate.getDate() + remainingDays);
+            this.paymentDate = actionDate;
             this.comment = `You reach the target and you can make payout request at ${new Date(actionDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
           }
         }

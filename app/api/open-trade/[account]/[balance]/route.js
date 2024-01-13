@@ -43,12 +43,13 @@ export async function GET(req, context) {
     // Ελέγχω αν είναι ΣΚ
     const day = SetCurrentDay();
     if (day === "sunday" || day === "saturday") {
-      return NextResponse.json({ error: "Yes", message: "Trades are not allowed today" });
+      return NextResponse.json({ error: "Yes", message: "Trades not allowed today" });
     }
     await dbConnect();
 
     const account = context.params.account;
     const balance = Number(context.params.balance);
+    //return NextResponse.json({ error: "No", pair: "USDJPY", position: "BUY", lots: 0.5, stoploss: 110, takeprofit: 450 });
 
     // ------------------------------ Account και Balance Validation ------------------------------
     // Αν το account ή το balance δεν υπάρχουν επιστρέφω error
@@ -64,7 +65,7 @@ export async function GET(req, context) {
       return NextResponse.json({ error: "Yes", message: "Trades not allowed on this account at the moment" }, { status: 400 });
     }
     if (!accountObj.needTrade) {
-      return NextResponse.json({ error: "Yes", message: "Your account have alrady reach the target and complete the required trading days" }, { status: 400 });
+      return NextResponse.json({ error: "Yes", message: "Your account have already reach the target" }, { status: 400 });
     }
     if (accountObj.balanceMismatch) {
       return NextResponse.json({ error: "Yes", message: "Your trade could not be initiated due to a balance mismatch, please contact me" }, { status: 400 });
@@ -258,83 +259,3 @@ function GetRandomForexPair() {
   const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURAUD", "EURJPY", "EURNZD", "EURCAD", "EURCHF", "GBPJPY", "GBPAUD", "GBPCAD", "GBPCHF", "GBPNZD", "AUDJPY", "AUDCAD", "AUDCHF", "AUDNZD", "NZDJPY", "NZDCAD", "NZDCHF", "CADJPY", "CADCHF", "CHFJPY"];
   return forexPairs[Math.floor(Math.random() * forexPairs.length)];
 }
-
-/*
-
-accountObj.needTrade = false;
-        const newActivity = {
-          title: "Try open trade",
-          description: `Trader try open trade when not needed`,
-        };
-        accountObj.activity.push(newActivity);
-        
-        if (accountObj.phase === 1) {
-          accountObj.status = "Upgrade";
-          accountObj.comment = "Congrats trader";
-        }
-        if (accountObj.phase === 2) {
-          accountObj.status = "Upgrade";
-        }
-        if (accountObj.phase === 3) {
-          accountObj.status = "Payment";
-        }
-        accountObj.save();
-      }
-
-      if (accountObj.phase === 1 || accountObj.phase === 2) {
-        accountObj.status = "Upgrade";
-        accountObj.upgradeDate = Date.now();
-        return NextResponse.json({ error: "No", message: accountObj.activity });
-        await accountObj.save();
-        return NextResponse.json({ error: "Yes", message: "Your account is ready for upgrade. Upgrade it now!" }, { status: 400 });
-      } else if (accountObj.phase === 3) {
-        // Εδώ ορίζω το payment date 4 μέρες αργότερα και μετά ελέγχω την ημερομηνία για να αλλάξω τα texts ανάλογα
-        const paymentDate = new Date(accountObj.firstTradeDate);
-        paymentDate.setHours(0, 0, 0, 0);
-        paymentDate.setDate(paymentDate.getDate() + 4);
-        if (paymentDate.getTime() >= Date.now()) {
-          accountObj.comment = `Congrats trader! You can now request for payout`;
-          accountObj.paymentDate = Date.now();
-          const newActivity = {
-            title: "Target reach detection at open trade phase",
-            description: `Trader try to open trade when target was already reached with wrong reported balance. Trader can now make a payout request`,
-          };
-          accountObj.activity.push(newActivity);
-          await accountObj.save();
-          return NextResponse.json({ error: "Yes", message: "Your account is ready for payout request. You can request now!" }, { status: 400 });
-        } else {
-          accountObj.comment = `Congrats trader! You can request for payout at ${paymentDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`;
-          accountObj.paymentDate = paymentDate;
-          const newActivity = {
-            title: "Target reach detection at open trade phase",
-            description: `Trader try to open trade when target was already reached with wrong reported balance. Trader can make payout request at ${paymentDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}`,
-          };
-          accountObj.activity.push(newActivity);
-          await accountObj.save();
-          return NextResponse.json({ error: "Yes", message: `You have reach the target. You can request a payout at ${paymentDate.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}` }, { status: 400 });
-        }
-
-        */
-
-/* ΣΩΣΤΟ
-              // Εδώ φτιάχνω το newTrade
-      const planPair = settingsObj.plan[day][GetCompany(accountObj.company)].list[pairIndex];
-      const initialLots = settingsObj.lots[planPair.pair];
-      const newLots = planPair.lastLots < initialLots ? (initialLots * (1 + (Math.random() * (8 - 3) + 3) / 100)).toFixed(2) : (initialLots * (1 - (Math.random() * (12 - 3) + 3) / 100)).toFixed(2);
-      const takeProfit = await accountObj.GetTakeProfit(newLots);
-      const stopLoss = await accountObj.GetStopLoss();
-
-      const newTrade = {
-        userId: user.id,
-        account: account,
-        company: accountObj.company,
-        startingBalance: balance,
-        pair: planPair.pair,
-        lots: newLots,
-        position: planPair.lastPosition === "Buy" ? "Sell" : "Buy",
-        status: "Open",
-        stopLoss: stopLoss,
-        takeProfit: takeProfit,
-        fake: false,
-      };
-      */

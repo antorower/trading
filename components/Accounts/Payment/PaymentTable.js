@@ -7,13 +7,13 @@ import PaymentRow from "./PaymentRow";
 const PaymentTable = () => {
   const [paymentAccountsPanelExpanded, setPaymentAccountsPanelExpanded] = useState(true);
   const [paymentAccounts, setPaymentAccounts] = useState(null);
-  const { adminAccounts, UpdateAccounts } = useUserContext();
+  const { userAccounts, UpdateAccounts } = useUserContext();
 
   useEffect(() => {
-    if (!adminAccounts) return;
-    const payment = adminAccounts.filter((account) => account.status === "Payment" || account.status === "Payout");
+    if (!userAccounts) return;
+    const payment = userAccounts.filter((account) => account.status === "Payment" || account.status === "Payout");
     setPaymentAccounts(payment);
-  }, [adminAccounts]);
+  }, [userAccounts]);
 
   if (!paymentAccounts || paymentAccounts?.length === 0) {
     return null;

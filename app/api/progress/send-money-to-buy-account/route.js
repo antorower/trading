@@ -11,7 +11,8 @@ export async function POST(req) {
     const { accountId, company, capital, wallet, amount } = await req.json();
 
     let doc = await Account.findById(accountId);
-    if (!doc || user.id != doc.userId) {
+
+    if (!doc) {
       return NextResponse.json({ error: "Account not found" }, { status: 404 });
     }
     const data = { company: company, capital: capital, wallet: wallet, amount: amount };

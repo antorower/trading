@@ -5,7 +5,7 @@ import TableWrapper from "../../TableWrapper";
 import PayrollRow from "./PayrollRow";
 
 const PayrollTable = () => {
-  const [payrollAccountsPanelExpanded, setPayrollAccountsPanelExpanded] = useState(true);
+  const [payrollAccountsPanelExpanded, setPayrollAccountsPanelExpanded] = useState(false);
   const { users, UpdateUsers } = useUserContext();
   const [payrollUsers, setPayrollUsers] = useState([]);
   const [nonPayrollUsers, setNonPayrollUsers] = useState([]);
@@ -17,21 +17,18 @@ const PayrollTable = () => {
       setPayrollUsers(payrollUsersArray);
       setNonPayrollUsers(nonPayrollUsersArray);
     }
-    console.log("USERSS", users);
   }, [users]);
 
   if (!users) {
     return null;
   }
-  console.log(payrollUsers);
-  console.log("Non", nonPayrollUsers);
 
   return (
     <TableWrapper title="Payroll Users" refresh={true} refreshFunction={UpdateUsers} panelExpanded={payrollAccountsPanelExpanded} setPanelExpanded={setPayrollAccountsPanelExpanded}>
       <div>Active: {payrollUsers.length}</div>
-      {payrollUsers && payrollUsers.length > 0 && users.map((user) => <PayrollRow key={user.id} user={user} />)}
+      {payrollUsers && payrollUsers.length > 0 && payrollUsers.map((user) => <PayrollRow key={user.id} user={user} />)}
       <div>Inactive: {nonPayrollUsers.length}</div>
-      {nonPayrollUsers && nonPayrollUsers.length > 0 && users.map((user) => <PayrollRow key={user.id} user={user} />)}
+      {nonPayrollUsers && nonPayrollUsers.length > 0 && nonPayrollUsers.map((user) => <PayrollRow key={user.id} user={user} />)}
     </TableWrapper>
   );
 };

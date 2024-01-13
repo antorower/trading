@@ -78,7 +78,7 @@ const RequestedRow = ({ account }) => {
       <div className="text-gray-500">{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
       <div className="flex gap-8 items-center">
         <select onChange={(e) => setCompany(e.target.value)} className="select border border-gray-500">
-          <option value="Funding Pips">Funding Pips</option>
+          <option value={account.company}>{account.company}</option>
         </select>
         <input placeholder="Capital" type="number" className="number-input" onChange={(e) => setCapital(e.target.value)} value={capital} />
         <input placeholder="Cost" type="number" className="number-input" onChange={(e) => setCost(e.target.value)} value={cost} />

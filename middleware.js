@@ -12,6 +12,14 @@ export default authMiddleware({
       user = await clerkClient.users?.getUser(auth.userId);
     }
 
+    if (pathname === "/") {
+      if (user) {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
+      } else {
+        return NextResponse.redirect(new URL("/sign-in", req.url));
+      }
+    }
+
     if (user && user.publicMetadata.banned && pathname != "/not-allowed") {
       return NextResponse.redirect(new URL("/not-allowed", req.url));
     }

@@ -10,12 +10,12 @@ const NewUsersTable = () => {
   const { users, UpdateUsers } = useUserContext();
   const [newUsers, setNewUsers] = useState(null);
   const [newUsersPanelExpanded, setNewUsersPanelExpanded] = useState(true);
+  const [mentor, setMentor] = useState("");
 
-  const NewUserResponse = async (event, accepted, userId) => {
-    event.preventDefault();
-    const successNotification = (message) => toast.success(message);
-    const errorNotification = (message) => toast.warn(message);
-    let status = 0;
+  const successNotification = (message) => toast.success(message);
+  const errorNotification = (message) => toast.warn(message);
+
+  const NewUserResponse = async (accepted, userId) => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/${accepted ? "activate-user" : "ban-user"}`, {
         method: "POST",
@@ -25,15 +25,11 @@ const NewUsersTable = () => {
         body: JSON.stringify({ userId: userId }),
       });
       if (!response.ok) {
-        status = response.status;
-        if (response.status === 500) {
-          throw new Error("Server error. User does not updated.");
-        }
         const data = await response.json();
         throw new Error(data.error);
       }
-      successNotification(`User ${accepted ? "accepted" : "rejected"} successfully`);
       await UpdateUsers();
+      successNotification(`User ${accepted ? "accepted" : "rejected"} successfully`);
     } catch (error) {
       errorNotification(error.message);
     }
@@ -73,10 +69,10 @@ const NewUsersTable = () => {
             </div>
 
             <div className="flex gap-6 justify-end">
-              <button onClick={(e) => NewUserResponse(e, true, user.id)} className="btn-accept">
+              <button onClick={() => NewUserResponse(true, user.id)} className="btn-accept">
                 Accept
               </button>
-              <button onClick={(e) => NewUserResponse(e, false, user.id)} className="btn-decline">
+              <button onClick={() => NewUserResponse(false, user.id)} className="btn-decline">
                 Decline
               </button>
             </div>

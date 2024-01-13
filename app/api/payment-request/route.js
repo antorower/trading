@@ -22,6 +22,7 @@ export async function POST(req) {
     const data = {
       owner: user.id,
       account: accountNumber,
+      company: account.company,
       amount: (account.balance - account.capital) * 0.8,
       wallet: wallet,
     };

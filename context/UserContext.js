@@ -18,8 +18,6 @@ export const UserContextProvider = ({ children }) => {
   const [teamAccounts, setTeamAccounts] = useState(null);
   const [adminAccounts, setAdminAccounts] = useState(null);
 
-  const [payouts, setPayouts] = useState(null);
-
   const [settings, setSettings] = useState(null);
   const { user } = useUser();
 
@@ -56,7 +54,7 @@ export const UserContextProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(data.error);
       }
-
+      console.log("Accounts: ", data);
       if (!selectedUser) {
         await UpdateUsers();
         setUserAccounts(data.userAccounts);
@@ -67,10 +65,6 @@ export const UserContextProvider = ({ children }) => {
         setAdminAccounts(selectedAccounts);
         setUsers([selectedUser]);
       }
-
-      console.log("User Accounts: ", userAccounts);
-      console.log("Team Accounts: ", teamAccounts);
-      console.log("Admin Accounts: ", adminAccounts);
     } catch (error) {
       console.log(error.message);
       errorNotification(error.message);
@@ -78,6 +72,7 @@ export const UserContextProvider = ({ children }) => {
   };
 
   const UpdateSettings = async () => {
+    console.log("Set");
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-settings`);
       const data = await response.json();

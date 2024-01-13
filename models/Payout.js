@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const PayoutSchema = new mongoose.Schema({
   owner: String,
   account: String,
+  company: String,
   amount: Number,
   status: {
     type: String,
@@ -21,6 +22,7 @@ PayoutSchema.methods.PaymentRequestDone = async function (data) {
   try {
     this.owner = data.owner;
     this.account = data.account;
+    this.company = data.company;
     this.amount = data.amount;
     this.status = "Pending";
     this.createdDate = Date.now();

@@ -1,14 +1,21 @@
 "use client";
 import React from "react";
-import { useUserContext } from "@/context/UserContext";
+import Title from "@/components/Title";
+import RequestedTable from "@/components/Leader/RequestedAccounts/RequestedTable";
+import LiveTable from "@/components/Leader/Live/LiveTable";
+import PayoutTable from "@/components/Leader/Payout/PayoutTable";
+import UpgradeTable from "@/components/Leader/Upgrade/UpgradeTable";
 
-const Admin = () => {
-  const { selectedUser } = useUserContext();
+const Leader = () => {
   return (
-    <div className="text-white h-full flex flex-wrap overflow-auto scrollable p-4 justify-center">
-      <div>{selectedUser}</div>
+    <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
+      <Title title="Leader Dashboard" subtitle="Team Management" />
+      <PayoutTable />
+      <RequestedTable />
+      <UpgradeTable />
+      <LiveTable />
     </div>
   );
 };
 
-export default Admin;
+export default Leader;

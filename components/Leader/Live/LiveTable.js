@@ -7,13 +7,13 @@ import LiveRow from "./LiveRow";
 const LiveTable = () => {
   const [liveAccountsPanelExpanded, setLiveAccountsPanelExpanded] = useState(true);
   const [liveAccounts, setLiveAccounts] = useState(null);
-  const { userAccounts, UpdateAccounts } = useUserContext();
+  const { teamAccounts, UpdateAccounts } = useUserContext();
 
   useEffect(() => {
-    if (!userAccounts) return;
-    const live = userAccounts.filter((account) => account.status === "Live");
+    if (!teamAccounts) return;
+    const live = teamAccounts.filter((account) => account.status === "Live");
     setLiveAccounts(live);
-  }, [userAccounts]);
+  }, [teamAccounts]);
 
   if (!liveAccounts || liveAccounts?.length === 0) {
     return null;

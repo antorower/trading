@@ -3,6 +3,7 @@ import dbConnect from "@/dbConnect";
 import { currentUser } from "@clerk/nextjs";
 import { clerkClient } from "@clerk/nextjs";
 import { ErrorHandler } from "@/library/functions";
+import UserPayment from "@/models/UserPayment";
 
 export async function POST(req) {
   const user = await currentUser();
@@ -12,19 +13,29 @@ export async function POST(req) {
     }
 
     await dbConnect();
-    const { userId, state } = await req.json();
+    const { userId, wallet, amount } = await req.json();
 
     // Αν κάποιο δεδομένο δεν υπάρχει τότε επιστρέφει λάθος
-    if (!userId) {
-      return NextResponse.json({ error: "Not user id provided" }, { status: 400 });
+    if (!userId || !wallet || !amount) {
+      return NextResponse.json({ error: "Not all data provided" }, { status: 400 });
     }
 
     // Αποθηκεύει τα publicMetadata του user
     await clerkClient.users.updateUserMetadata(userId, {
       publicMetadata: {
-        payroll: !state,
+        payday: Date.now(),
       },
     });
+
+    // Create a new UserPayment document
+    const newPayment = new UserPayment({
+      user: userId,
+      wallet: wallet,
+      amount: amount,
+    });
+
+    // Save the new payment to the database
+    await newPayment.save();
 
     return NextResponse.json({ success: true });
   } catch (error) {
