@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/dbConnect";
 import { currentUser } from "@clerk/nextjs";
-import User from "@/models/User";
 import AppError from "@/models/AppError";
 
 export async function GET(req, context) {
