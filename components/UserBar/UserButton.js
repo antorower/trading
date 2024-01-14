@@ -28,7 +28,3 @@ const UserButton = (props) => {
 };
 
 export default UserButton;
-
-/*
-
-*/
