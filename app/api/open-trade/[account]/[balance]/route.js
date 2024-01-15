@@ -120,7 +120,7 @@ export async function GET(req, context) {
       },
     });
     if (todayTrade) {
-      return NextResponse.json({ error: "Yes", message: "You have already open a trade today" }, { status: 400 });
+      //return NextResponse.json({ error: "Yes", message: "You have already open a trade today" }, { status: 400 });
     }
     // +++++++++++++++++++++++++++++++++++++++++++++++++++++ ΕΝΕΡΓΟΠΟΙΗΣΗ +++++++++++++++++++++++++++++++++++++++++++++++++
 
