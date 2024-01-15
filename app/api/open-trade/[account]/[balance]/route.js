@@ -98,11 +98,7 @@ export async function GET(req, context) {
     const nowDate = new Date();
     const currentHour = nowDate.getHours();
 
-    console.log("Day: ", day);
-    console.log("Current Hour: ", currentHour);
-    console.log("Min Hour: ", settingsObj.schedule[day].startingTradingHour);
-    console.log("Max Hour: ", settingsObj.schedule[day].endingTradingHour);
-    if (currentHour < settingsObj.schedule[day].startingTradingHour || currentHour > settingsObj.schedule[day].endingTradingHour) {
+    if (currentHour + 2 < settingsObj.schedule[day].startingTradingHour || currentHour + 2 > settingsObj.schedule[day].endingTradingHour) {
       return NextResponse.json({ error: "Yes", message: "Trading operations are not permitted during this hour" }, { status: 400 });
     }
     // ------------------------------ Pull Settings and Active Day Validation ------------------------------
