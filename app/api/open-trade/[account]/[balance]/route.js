@@ -17,7 +17,6 @@ export async function GET(req, context) {
 
     // Ορισμός σημερινής ημέρας
     function SetCurrentDay() {
-      return "monday";
       const today = new Date();
       const dayOfWeek = today.getDay();
       switch (dayOfWeek) {
@@ -99,6 +98,10 @@ export async function GET(req, context) {
     const nowDate = new Date();
     const currentHour = nowDate.getHours();
 
+    console.log("Day: ", day);
+    console.log("Current Hour: ", currentHour);
+    console.log("Min Hour: ", settingsObj.schedule[day].startingTradingHour);
+    console.log("Max Hour: ", settingsObj.schedule[day].endingTradingHour);
     if (currentHour < settingsObj.schedule[day].startingTradingHour || currentHour > settingsObj.schedule[day].endingTradingHour) {
       return NextResponse.json({ error: "Yes", message: "Trading operations are not permitted during this hour" }, { status: 400 });
     }
