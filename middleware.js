@@ -8,6 +8,28 @@ export default authMiddleware({
     let user;
     const pathname = req.nextUrl.pathname;
 
+    if (pathname.startsWith("/api")) {
+      if (pathname.includes("/api/admin") && user?.publicMetadata.role != "admin") {
+        return NextResponse.json({ error: "Unauthorized request" }, { status: 401 });
+      }
+
+      // Create a response object with CORS headers
+      const response = NextResponse.next();
+      response.headers.set("Access-Control-Allow-Origin", "https://www.suckmypip.com");
+      response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+      // Handle OPTIONS method for CORS preflight request
+      if (req.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: response.headers });
+      }
+
+      // For non-OPTIONS requests, you might need additional logic here
+      // to handle the request and set any additional response headers or body.
+
+      return response;
+    }
+
     if (auth?.userId) {
       user = await clerkClient.users?.getUser(auth.userId);
     }
@@ -26,9 +48,6 @@ export default authMiddleware({
 
     // ++++++++++++++++++++ Αν το request είναι στο api ++++++++++++++++++++
     if (pathname.includes("api")) {
-      /*if (pathname.includes("/api/admin") && user?.publicMetadata.role != "admin") {
-        return NextResponse.json({ error: "Unauthorized request" }, { status: 401 });
-      }*/
       return;
     }
 
