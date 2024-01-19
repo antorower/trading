@@ -7,7 +7,7 @@ import { ErrorHandler } from "@/library/functions";
 export async function GET(req, context) {
   const user = await currentUser();
   if (!user) {
-    return NextResponse.json({ error: "Permissions required" }, { status: 400 });
+    return NextResponse.json({ error: "Permissions required " }, { status: 400 });
   }
 
   try {
