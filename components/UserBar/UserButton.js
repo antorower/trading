@@ -14,7 +14,7 @@ const UserButton = (props) => {
       <div className={`flex w-full h-8 rounded-t bg-violet-400`}></div>
       <div className="w-full flex justify-center absolute top-[16px]">
         <div className="relative w-8 h-8">
-          <Image src={user.imageUrl} className={`rounded-full `} fill="true" sizes="32x32" alt="user" />
+          <Image src={user.imageUrl ? user.imageUrl : "/avatar.svg"} className={`rounded-full `} fill="true" sizes="32x32" alt="user" />
         </div>
       </div>
       <div className="flex w-full flex-col justify-center items-center rounded-b bg-dark pt-6 pb-4 px-2 text-sm">

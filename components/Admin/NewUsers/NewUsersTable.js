@@ -53,7 +53,7 @@ const NewUsersTable = () => {
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
               </div>
               <div className="w-[40px] h-[40px] text-lg font-weight-700 flex items-center relative">
-                <Image src={user.imageUrl} fill="true" sizes="32x32" className="rounded-full" alt="user" />
+                <Image src={user.imageUrl ? user.imageUrl : "/avatar.svg"} fill="true" sizes="32x32" className="rounded-full" alt="user" />
               </div>
               <div className="flex flex-col justify-between">
                 <div className="font-weight-700">

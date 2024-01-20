@@ -12,7 +12,7 @@ const RegistrationRow = ({ account }) => {
           <span className="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
         </div>
         <div className="relative w-[40px] h-[40px] flex justify-center items-center">
-          <Image src={account.user.imageUrl} alt="user-image" fill="true" sizes="32x32" className="rounded-full" />
+          <Image src={account.user.imageUrl ? account.user.imageUrl : "/avatar.svg"} alt="user-image" fill="true" sizes="32x32" className="rounded-full" />
         </div>
         <div className="flex flex-col">
           <div className="">
