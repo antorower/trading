@@ -65,6 +65,7 @@ const PayrollRow = ({ user }) => {
     }
   };
 
+  console.log("PayrollRow Admin: ", user);
   return (
     <TableRow>
       <div className="flex gap-4 items-center justify-center">

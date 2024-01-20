@@ -57,7 +57,7 @@ const RequestedRow = ({ account }) => {
       errorNotification(error.message);
     }
   };
-
+  console.log("RequestedRow Admin: ", account);
   return (
     <TableRow>
       <div className="flex gap-4 items-center justify-center">

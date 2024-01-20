@@ -17,6 +17,7 @@ const UserBar = () => {
       const filteredUsers = users.filter((user) => user.username.toLowerCase().includes(searchKeyword.toLowerCase()) || user.firstName.toLowerCase().includes(searchKeyword.toLowerCase()) || user.lastName.toLowerCase().includes(searchKeyword.toLowerCase()));
       setSearchedUsers(filteredUsers);
     }
+    console.log("All ok to user bar");
   }, [searchKeyword, users]);
 
   return (

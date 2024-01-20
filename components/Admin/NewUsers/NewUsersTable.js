@@ -42,6 +42,8 @@ const NewUsersTable = () => {
 
   if (!newUsers || newUsers.length === 0) return null;
 
+  console.log("New Users Admin: ", newUsers);
+
   return (
     <TableWrapper title="New Users" refresh={true} refreshFunction={UpdateUsers} panelExpanded={newUsersPanelExpanded} setPanelExpanded={setNewUsersPanelExpanded}>
       {newUsersPanelExpanded &&

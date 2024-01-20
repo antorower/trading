@@ -30,6 +30,7 @@ const PayoutRow = ({ account }) => {
       errorNotification(error.message);
     }
   };
+  console.log("PayoutRow Admin: ", account);
 
   return (
     <TableRow>

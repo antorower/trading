@@ -4,6 +4,7 @@ import Image from "next/image";
 import TableRow from "../../TableRow";
 
 const UpgradeRow = ({ account }) => {
+  console.log("UpgradeRow Admin: ", account);
   return (
     <TableRow>
       <div className="flex gap-4 items-center justify-center">

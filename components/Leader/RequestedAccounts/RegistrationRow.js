@@ -4,6 +4,7 @@ import Image from "next/image";
 import TableRow from "../../TableRow";
 
 const RegistrationRow = ({ account }) => {
+  console.log("RegistrationRow Leader: ", account);
   return (
     <TableRow>
       <div className="flex gap-4 items-center justify-center">

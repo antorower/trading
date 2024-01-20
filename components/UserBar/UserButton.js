@@ -8,7 +8,7 @@ const UserButton = (props) => {
   // const { id, imageUrl, username, firstName, lastName } = props;
   //imageUrl={user.imageUrl} id={user.id} username={user.username} firstName={user.firstName} lastName={user.lastName}
   const { UpdateAccounts } = useUserContext();
-
+  console.log("User Button", user);
   return (
     <button onClick={() => UpdateAccounts(user)} className="flex flex-col w-[200px] rounded text-gray-400 relative shadow-md shadow-black border-t-[1px] border-gray-700">
       <div className={`flex w-full h-8 rounded-t bg-violet-400`}></div>

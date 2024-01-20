@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import CopyWallet from "@/components/CopyWallet";
 
 const RequestedRow = ({ account }) => {
+  console.log("RequestedRow Leader: ", account);
   return (
     <TableRow>
       <div className="flex gap-4 items-center justify-center">

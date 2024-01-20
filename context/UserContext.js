@@ -54,7 +54,6 @@ export const UserContextProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(data.error);
       }
-      console.log("Accounts: ", data);
       if (!selectedUser) {
         await UpdateUsers();
         setUserAccounts(data.userAccounts);
@@ -72,7 +71,6 @@ export const UserContextProvider = ({ children }) => {
   };
 
   const UpdateSettings = async () => {
-    console.log("Set");
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-settings`);
       const data = await response.json();
