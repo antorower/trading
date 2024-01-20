@@ -35,7 +35,7 @@ const PayoutRow = ({ account }) => {
     <TableRow>
       <div className="flex gap-4 items-center justify-center">
         <div className="relative w-[40px] h-[40px] flex justify-center items-center">
-          <Image src={account.user.imageUrl ? account.user.imageUrl : "/avatar.svg"} alt="user-image" fill="true" sizes="32x32" className="rounded-full" />
+          <Image src="/avatar.svg" alt="user-image" fill="true" sizes="32x32" className="rounded-full" />
         </div>
         <div className="flex flex-col">
           <div className="">
