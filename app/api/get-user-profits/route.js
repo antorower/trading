@@ -22,7 +22,7 @@ export async function GET(req, context) {
 
     if (user.publicMetadata.payroll || user.publicMetadata.role === "admin" || user.publicMetadata.role === "leader") {
       // Η λίστα με όλους τους users
-      const users = await clerkClient.users.getUserList();
+      const users = await clerkClient.users.getUserList({ limit: 400 });
       if (!users || users.length === 0) {
         return NextResponse.json({ error: "Not users found" }, { status: 404 });
       }

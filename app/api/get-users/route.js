@@ -11,7 +11,7 @@ export async function GET() {
     }
 
     // Βρίσκω του users
-    const users = await clerkClient.users.getUserList();
+    const users = await clerkClient.users.getUserList({ limit: 400 });
 
     // Αν τους ζητάει ο admin τους στέλνω όλους
     if (user?.publicMetadata?.role === "admin") {
