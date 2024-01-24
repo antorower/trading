@@ -17,11 +17,11 @@ const Admin = () => {
       <NewUsersTable />
       <PayoutTable />
       <RequestedTable />
-      <UpgradeTable />
+      {/*<UpgradeTable />
       <LiveTable />
       <LostTable />
       <Schedule />
-      <PayrollTable />
+      <PayrollTable />*/}
     </div>
   );
 };
