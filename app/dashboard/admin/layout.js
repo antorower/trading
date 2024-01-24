@@ -6,7 +6,9 @@ export default function AdminLayout({ children }) {
   return (
     <div className="flex h-full">
       <div className="h-full flex-1 ">{children}</div>
-      <div className="h-full">{/*<UserBar />*/}</div>
+      <div className="h-full">
+        <UserBar />
+      </div>
     </div>
   );
 }
