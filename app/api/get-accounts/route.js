@@ -10,6 +10,7 @@ export async function GET() {
   try {
     await dbConnect();
     const users = await clerkClient.users.getUserList();
+    console.log("API Users all: ", users);
 
     let allAccounts = await Account.find({
       $nor: [
