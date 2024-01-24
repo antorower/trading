@@ -9,9 +9,9 @@ export async function GET() {
   const user = await currentUser();
   try {
     await dbConnect();
-    const users = await clerkClient.users.getUserList();
+    const users = await clerkClient.users.getUserList({ limit: 400 });
     console.log("API Users all: ", users);
-
+    console.log("API Users coutner: ", users.length);
     let allAccounts = await Account.find({
       $nor: [
         { status: "Lost", deletedFromUser: true },
