@@ -14,7 +14,13 @@ const UserBar = () => {
     if (searchKeyword.trim() === "") {
       setSearchedUsers(users);
     } else {
-      const filteredUsers = users.filter((user) => user.username.toLowerCase().includes(searchKeyword.toLowerCase()) || user.firstName.toLowerCase().includes(searchKeyword.toLowerCase()) || user.lastName.toLowerCase().includes(searchKeyword.toLowerCase()));
+      const filteredUsers = users.filter(
+        (user) =>
+          user.username &&
+          user.firstName &&
+          user.lastName && // Check if all properties exist
+          (user.username.toLowerCase().includes(searchKeyword.toLowerCase()) || user.firstName.toLowerCase().includes(searchKeyword.toLowerCase()) || user.lastName.toLowerCase().includes(searchKeyword.toLowerCase()))
+      );
       setSearchedUsers(filteredUsers);
     }
     console.log("All ok to user bar");
