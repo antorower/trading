@@ -23,7 +23,9 @@ const RequestedTable = () => {
   if ((!requestedAccounts || requestedAccounts?.length === 0) && (!registrationAccounts || registrationAccounts?.length === 0)) {
     return null;
   }
-
+  console.log("Requested Table adminAccounts: ", adminAccounts);
+  console.log("Requested Table requested Accounts: ", requestedAccounts);
+  console.log("Requested Table registrationAccounts: ", registrationAccounts);
   return (
     <TableWrapper title="Requested Accounts" refresh={true} refreshFunction={UpdateAccounts} panelExpanded={requestedAccountsPanelExpanded} setPanelExpanded={setRequestedAccountsPanelExpanded}>
       {requestedAccounts && requestedAccounts.length > 0 && requestedAccounts.map((account) => <RequestedRow key={account._id} account={account} />)}

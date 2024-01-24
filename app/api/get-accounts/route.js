@@ -25,7 +25,7 @@ export async function GET() {
         return { ...account.toObject(), user: trader };
       })
     );
-
+    console.log("API Augmented Accounts: ", augmentedAccounts);
     // Filter accounts based on the user role
     let userAccounts = user.publicMetadata.active ? augmentedAccounts.filter((account) => account.userId === user.id && !account.deletedFromUser) : null;
     let teamAccounts = null;
@@ -39,6 +39,7 @@ export async function GET() {
     if (user.publicMetadata.role === "admin") {
       adminAccounts = augmentedAccounts.filter((account) => account.status !== "Rejected" && account.status !== "Lost");
     }
+    console.log("API Admin Accounts: ", adminAccounts);
 
     return NextResponse.json({ userAccounts, teamAccounts, adminAccounts });
   } catch (error) {

@@ -54,15 +54,18 @@ export const UserContextProvider = ({ children }) => {
       if (!response.ok) {
         throw new Error(data.error);
       }
+      console.log("Context Update Accounts", data);
       if (!selectedUser) {
         await UpdateUsers();
         setUserAccounts(data.userAccounts);
         setTeamAccounts(data.teamAccounts);
         setAdminAccounts(data.adminAccounts);
+        console.log("here context");
       } else {
         const selectedAccounts = data.adminAccounts.filter((account) => account.userId === selectedUser.id);
         setAdminAccounts(selectedAccounts);
         setUsers([selectedUser]);
+        console.log("there context");
       }
     } catch (error) {
       console.log(error.message);
