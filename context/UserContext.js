@@ -65,6 +65,7 @@ export const UserContextProvider = ({ children }) => {
       } else {
         const selectedAccounts = data.adminAccounts.filter((account) => account.userId === selectedUser.id);
         setAdminAccounts(selectedAccounts);
+        setTeamAccounts(selectedAccounts);
         setUsers([selectedUser]);
         console.log("there context");
       }
