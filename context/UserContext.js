@@ -13,6 +13,7 @@ export const UserContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
 
   const [users, setUsers] = useState(null);
+  const [teamUsers, setTeamUsers] = useState(null);
 
   const [userAccounts, setUserAccounts] = useState(null);
   const [teamAccounts, setTeamAccounts] = useState(null);
@@ -94,6 +95,10 @@ export const UserContextProvider = ({ children }) => {
         throw new Error(data.error);
       }
       setUsers(data);
+      const teamUsersArray = data.filter((currentUser) => {
+        return user.id === currentUser.publicMetadata.mentor;
+      });
+      setTeamUsers(teamUsersArray);
     } catch (error) {
       errorNotification(error.message);
     }
@@ -106,6 +111,7 @@ export const UserContextProvider = ({ children }) => {
         users,
         userAccounts,
         teamAccounts,
+        teamUsers,
         adminAccounts,
         expandedLeftSidebar,
         expandedRightSidebar,
