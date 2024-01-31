@@ -197,12 +197,12 @@ export async function GET(req, context) {
       const stopLoss = await accountObj.GetStopLoss(newLots);*/
 
       // correct
-      //const takeProfit = await accountObj.GetTakeProfit(newLots);
-      //const stopLoss = await accountObj.GetStopLoss(newLots);
+      const takeProfit = await accountObj.GetTakeProfit(newLots);
+      const stopLoss = await accountObj.GetStopLoss(newLots);
       // correct
 
-      const takeProfit = Math.floor((await accountObj.GetTakeProfit(newLots)) / 10);
-      const stopLoss = Math.floor((await accountObj.GetStopLoss(newLots)) / 10);
+      //const takeProfit = Math.floor((await accountObj.GetTakeProfit(newLots)) / 10);
+      //const stopLoss = Math.floor((await accountObj.GetStopLoss(newLots)) / 10);
 
       const newTrade = {
         userId: user.id,
