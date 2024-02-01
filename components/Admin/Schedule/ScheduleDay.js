@@ -31,6 +31,9 @@ const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
     } else if (currency === "NZD" || currency === "AUD") {
       updatedPairs = activePairs.filter((pair) => !pair.includes("AUD"));
       updatedPairs = updatedPairs.filter((pair) => !pair.includes("NZD"));
+    } else if (currency === "USD" || currency === "CAD") {
+      updatedPairs = activePairs.filter((pair) => !pair.includes("USD"));
+      updatedPairs = updatedPairs.filter((pair) => !pair.includes("CAD"));
     } else {
       updatedPairs = activePairs.filter((pair) => !pair.includes(currency));
     }
