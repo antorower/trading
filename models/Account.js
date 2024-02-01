@@ -530,7 +530,7 @@ function GetEconomicRules(account) {
       target = account.capital * 1.03;
     }
 
-    dailyDrawdown = account.capital * 0.04;
+    dailyDrawdown = account.capital * 0.05;
     overallDrawdown = account.capital * 0.9;
   }
   // #NewCompany
