@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 import { useUserContext } from "@/context/UserContext";
@@ -15,6 +15,10 @@ const RequestedRow = ({ account }) => {
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
+
+  useEffect(() => {
+    setCompany(account.company);
+  }, []);
 
   const SendMoney = async (event) => {
     try {
@@ -77,8 +81,8 @@ const RequestedRow = ({ account }) => {
       </div>
       <div className="text-gray-500">{new Date(account.createdDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
       <div className="flex gap-8 items-center">
-        <select onChange={(e) => setCompany(e.target.value)} className="select border border-gray-500">
-          <option value={account.company}>{account.company}</option>
+        <select value={company} onChange={(e) => setCompany(e.target.value)} className="select border border-gray-500">
+          <option value="Funding Pips">Funding Pips</option>
           <option value="Alpha Capital">Alpha Capital</option>
         </select>
         <input placeholder="Capital" type="number" className="number-input" onChange={(e) => setCapital(e.target.value)} value={capital} />
