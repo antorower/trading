@@ -34,7 +34,7 @@ export async function GET(req, context) {
     return NextResponse.json({ error: response.message ? response.message : "Something went wrong, please try again" }, { status: response.status ? response.status : 500 });
   }
 }
-
+/*
 const GetCompany = (company) => {
   let planCompany;
   switch (company) {
@@ -49,3 +49,4 @@ const GetCompany = (company) => {
   }
   return planCompany;
 };
+*/

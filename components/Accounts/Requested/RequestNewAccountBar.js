@@ -34,6 +34,7 @@ const RequestNewAccountBar = () => {
     <div className="flex w-full justify-end pr-0 items-center gap-4">
       <select onChange={(e) => setCompany(e.target.value)} className="select">
         <option value="Funding Pips">Funding Pips</option>
+        <option value="Alpha Capital">Alpha Capital</option>
       </select>
       <button onClick={(e) => RequestNewAccount(e)} className="btn-primary">
         New Account

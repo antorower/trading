@@ -9,7 +9,10 @@ export async function GET(req, context) {
   const user = await currentUser();
 
   const fundingPipsTradersShare = 0.15;
-  const fundingPipsLeadersShare = 0.15;
+  const fundingPipsLeadersShare = 0.0;
+
+  const alphaCapitalTradersShare = 0.15;
+  const alphaCapitalLeadersShare = 0.0;
 
   try {
     if (!user) {
@@ -56,6 +59,9 @@ export async function GET(req, context) {
           if (payout.company === "Funding Pips") {
             profit = profit + (payout.amount * fundingPipsTradersShare) / payrollUsers;
           }
+          if (payout.company === "Alpha Capital") {
+            profit = profit + (payout.amount * alphaCapitalTradersShare) / payrollUsers;
+          }
         });
       }
       console.log(profit);
@@ -73,6 +79,9 @@ export async function GET(req, context) {
         teamPayouts.forEach((payout) => {
           if (payout.company === "Funding Pips") {
             profit = profit + payout.amount * fundingPipsLeadersShare;
+          }
+          if (payout.company === "Alpha Capital") {
+            profit = profit + payout.amount * alphaCapitalLeadersShare;
           }
         });
       }

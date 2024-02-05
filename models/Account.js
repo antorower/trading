@@ -13,7 +13,7 @@ const AccountSchema = new mongoose.Schema({
   comment: String,
   company: {
     type: String,
-    enum: ["Funding Pips"],
+    enum: ["Funding Pips", "Alpha Capital"],
   },
   image: String,
   capital: Number,
@@ -140,6 +140,16 @@ AccountSchema.pre("save", function (next) {
         this.minimumWaitingDays = 0;
       } else if (this.phase === 3) {
         this.minimumWaitingDays = 5;
+      }
+    }
+
+    if (this.company === "Alpha Capital") {
+      if (this.phase === 1 || this.phase === 2) {
+        this.minimumWaitingDays = 3;
+        this.minimumTradingDays = 3;
+      } else if (this.phase === 3) {
+        this.minimumWaitingDays = 14;
+        this.minimumTradingDays = 5;
       }
     }
     // #NewCompany
@@ -506,6 +516,9 @@ function GetImage(company) {
   if (company === "Funding Pips") {
     return "fundingpips";
   }
+  if (company === "Alpha Capital") {
+    return "alphaCapital";
+  }
   // #NewCompany
 
   // #TASK -> Να αποθηκεύσω μια εικόνα σαν placeholder.svg
@@ -518,6 +531,23 @@ function GetEconomicRules(account) {
   let overallDrawdown;
 
   if (account.company === "Funding Pips") {
+    if (account.phase === 1) {
+      target = account.capital * 1.08;
+    }
+
+    if (account.phase === 2) {
+      target = account.capital * 1.05;
+    }
+
+    if (account.phase === 3) {
+      target = account.capital * 1.03;
+    }
+
+    dailyDrawdown = account.capital * 0.05;
+    overallDrawdown = account.capital * 0.9;
+  }
+
+  if (account.company === "Alpha Capital") {
     if (account.phase === 1) {
       target = account.capital * 1.08;
     }

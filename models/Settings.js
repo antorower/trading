@@ -185,6 +185,13 @@ const SettingsSchema = new mongoose.Schema({
         },
         list: [{}],
       },
+      alphaCapital: {
+        currentId: {
+          type: Number,
+          default: 0,
+        },
+        list: [{}],
+      },
     },
     tuesday: {
       fundingPips: {
@@ -195,6 +202,13 @@ const SettingsSchema = new mongoose.Schema({
         list: [{}],
       },
       ftmo: {
+        currentId: {
+          type: Number,
+          default: 0,
+        },
+        list: [{}],
+      },
+      alphaCapital: {
         currentId: {
           type: Number,
           default: 0,
@@ -217,6 +231,13 @@ const SettingsSchema = new mongoose.Schema({
         },
         list: [{}],
       },
+      alphaCapital: {
+        currentId: {
+          type: Number,
+          default: 0,
+        },
+        list: [{}],
+      },
     },
     thursday: {
       fundingPips: {
@@ -233,6 +254,13 @@ const SettingsSchema = new mongoose.Schema({
         },
         list: [{}],
       },
+      alphaCapital: {
+        currentId: {
+          type: Number,
+          default: 0,
+        },
+        list: [{}],
+      },
     },
     friday: {
       fundingPips: {
@@ -243,6 +271,13 @@ const SettingsSchema = new mongoose.Schema({
         list: [{}],
       },
       ftmo: {
+        currentId: {
+          type: Number,
+          default: 0,
+        },
+        list: [{}],
+      },
+      alphaCapital: {
         currentId: {
           type: Number,
           default: 0,
@@ -326,6 +361,14 @@ function UpdatePlan(settings, day, startingIndex) {
       lastLots: settings.lots[pair],
     }));
     settings.plan[day].ftmo.currentId = startingIndex;
+
+    settings.plan[day].alphaCapital.list = settings.schedule[day].pairs.map((pair, index) => ({
+      id: index + 1,
+      pair: pair,
+      lastPosition: settings.plan[day].fundingPips === "Buy" ? "Sell" : "Buy",
+      lastLots: settings.lots[pair],
+    }));
+    settings.plan[day].alphaCapital.currentId = startingIndex;
   } catch (error) {
     console.error("Error in reset schedule method:", error);
     throw error;

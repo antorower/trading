@@ -185,25 +185,13 @@ export async function GET(req, context) {
 
       // Εδώ φτιάχνω το newTrade
       // Για να ειναι σωστό πρέπει απλά να αφαιρέσω το Math.floor και το /100
-      // await accountObj.GetTakeProfit(newLots) <-- αυτό είναι σωστό
       const planPair = settingsObj.plan[day][GetCompany(accountObj.company)].list[pairIndex];
       const initialLots = settingsObj.lots[planPair.pair] * settingsObj.schedule[day].lotsFactor * (accountObj.capital / 10000);
-      /*const newLots = planPair.lastLots < initialLots ? (initialLots * (1 + (Math.random() * (8 - 3) + 3) / 100)).toFixed(2) : (initialLots * (1 - (Math.random() * (12 - 3) + 3) / 100)).toFixed(2);
-      const takeProfit = Math.floor((await accountObj.GetTakeProfit(newLots)) / 100);
-      const stopLoss = Math.floor((await accountObj.GetStopLoss(newLots)) / 100);*/
-
       const newLots = planPair.lastLots < initialLots ? (initialLots * (Math.random() * (1.08 - 1.03) + 1.03)).toFixed(2) : (initialLots * (Math.random() * (0.97 - 0.92) + 0.92)).toFixed(2);
-      /*const takeProfit = await accountObj.GetTakeProfit(newLots);
-      const stopLoss = await accountObj.GetStopLoss(newLots);*/
-
-      // correct
-      const takeProfit = await accountObj.GetTakeProfit(newLots);
-      const stopLoss = await accountObj.GetStopLoss(newLots);
-      // correct
-
-      //const takeProfit = Math.floor((await accountObj.GetTakeProfit(newLots)) / 10);
-      //const stopLoss = Math.floor((await accountObj.GetStopLoss(newLots)) / 10);
-
+      let takeProfit = await accountObj.GetTakeProfit(newLots);
+      let stopLoss = await accountObj.GetStopLoss(newLots);
+      takeprofit = Math.floor(takeProfit * 0.7);
+      stoploss = Math.floor(stoploss * 0.7);
       const newTrade = {
         userId: user.id,
         account: account,
@@ -240,6 +228,9 @@ const GetCompany = (company) => {
   switch (company) {
     case "Funding Pips":
       planCompany = "fundingPips";
+      break;
+    case "Alpha Capital":
+      planCompany = "alphaCapital";
       break;
     case "FTMO":
       planCompany = "ftmo";
