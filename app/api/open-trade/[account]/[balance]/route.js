@@ -72,7 +72,7 @@ export async function GET(req, context) {
     // ------------------------------ Account και Balance Validation ------------------------------
 
     // Αν το balance δεν είναι ενημερωμένο τότε το ενημερώνει και κάνει το account mismatch
-    if (accountObj.balance != balance) {
+    if (Math.abs(accountObj.balance - balance) > 10) {
       const newActivity = {
         title: "Balance discrepancy",
         description: `Balance updated at open account proccess. The old balance was ${accountObj.balance} and become ${balance}`,
