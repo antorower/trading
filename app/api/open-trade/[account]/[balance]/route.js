@@ -190,8 +190,8 @@ export async function GET(req, context) {
       const newLots = planPair.lastLots < initialLots ? (initialLots * (Math.random() * (1.08 - 1.03) + 1.03)).toFixed(2) : (initialLots * (Math.random() * (0.97 - 0.92) + 0.92)).toFixed(2);
       let takeProfit = await accountObj.GetTakeProfit(newLots);
       let stopLoss = await accountObj.GetStopLoss(newLots);
-      takeProfit = Math.floor(takeProfit * 0.7);
-      stopLoss = Math.floor(stopLoss * 0.7);
+      //takeProfit = Math.floor(takeProfit * 0.7);
+      //stopLoss = Math.floor(stopLoss * 0.7);
       const newTrade = {
         userId: user.id,
         account: account,

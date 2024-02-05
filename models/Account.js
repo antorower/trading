@@ -504,7 +504,7 @@ AccountSchema.methods.GetStopLoss = async function (lots) {
     if (remainingLoss < this.dailyDrawdown) {
       return remainingLoss + 7 * lots;
     } else {
-      return Math.floor(this.dailyDrawdown * (0.85 + Math.random() * 0.15)); // εδώ έβαλα 0.8
+      return Math.floor(this.dailyDrawdown * (0.85 + Math.random() * 0.15) * 0.8);
     }
   } catch (error) {
     console.error("Error in RejectAccount method:", error);
