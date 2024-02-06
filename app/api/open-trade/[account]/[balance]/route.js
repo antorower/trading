@@ -145,60 +145,6 @@ export async function GET(req, context) {
           fake: true,
         };
 
-        if (accountObj.capital === 5000) {
-          if (newTrade.stopLoss > 200) {
-            newTrade.stopLoss = 190;
-          }
-        }
-
-        if (accountObj.capital === 10000) {
-          if (newTrade.stopLoss > 400) {
-            newTrade.stopLoss = 380;
-          }
-        }
-
-        if (accountObj.capital === 20000) {
-          if (newTrade.stopLoss > 800) {
-            newTrade.stopLoss = 750;
-          }
-        }
-
-        if (accountObj.capital === 25000) {
-          if (newTrade.stopLoss > 1000) {
-            newTrade.stopLoss = 950;
-          }
-        }
-
-        if (accountObj.capital === 50000) {
-          if (newTrade.stopLoss > 2000) {
-            newTrade.stopLoss = 1900;
-          }
-        }
-
-        if (accountObj.capital === 100000) {
-          if (newTrade.stopLoss > 4000) {
-            newTrade.stopLoss = 3800;
-          }
-        }
-
-        if (accountObj.capital === 200000) {
-          if (newTrade.stopLoss > 8000) {
-            newTrade.stopLoss = 7500;
-          }
-        }
-
-        if (accountObj.capital === 200000) {
-          if (newTrade.stopLoss > 8000) {
-            newTrade.stopLoss = 7500;
-          }
-        }
-
-        if (accountObj.capital === 300000) {
-          if (newTrade.stopLoss > 12000) {
-            newTrade.stopLoss = 11500;
-          }
-        }
-
         // Αποθήκευση νέου trade
         const trade = new Trade(newTrade);
         await trade.save();
@@ -260,6 +206,60 @@ export async function GET(req, context) {
         takeProfit: takeProfit,
         fake: false,
       };
+
+      if (accountObj.capital === 5000) {
+        if (newTrade.stopLoss > 200) {
+          newTrade.stopLoss = 190;
+        }
+      }
+
+      if (accountObj.capital === 10000) {
+        if (newTrade.stopLoss > 400) {
+          newTrade.stopLoss = 380;
+        }
+      }
+
+      if (accountObj.capital === 20000) {
+        if (newTrade.stopLoss > 800) {
+          newTrade.stopLoss = 750;
+        }
+      }
+
+      if (accountObj.capital === 25000) {
+        if (newTrade.stopLoss > 1000) {
+          newTrade.stopLoss = 950;
+        }
+      }
+
+      if (accountObj.capital === 50000) {
+        if (newTrade.stopLoss > 2000) {
+          newTrade.stopLoss = 1900;
+        }
+      }
+
+      if (accountObj.capital === 100000) {
+        if (newTrade.stopLoss > 4000) {
+          newTrade.stopLoss = 3800;
+        }
+      }
+
+      if (accountObj.capital === 200000) {
+        if (newTrade.stopLoss > 8000) {
+          newTrade.stopLoss = 7500;
+        }
+      }
+
+      if (accountObj.capital === 200000) {
+        if (newTrade.stopLoss > 8000) {
+          newTrade.stopLoss = 7500;
+        }
+      }
+
+      if (accountObj.capital === 300000) {
+        if (newTrade.stopLoss > 12000) {
+          newTrade.stopLoss = 11500;
+        }
+      }
 
       // Αποθηκεύω τις global αλλαγές στα settings
       await settingsObj.OpenTrade(day, GetCompany(accountObj.company), pairIndex, newLots);
