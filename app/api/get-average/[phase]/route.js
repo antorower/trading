@@ -8,7 +8,7 @@ export async function GET(req, context) {
 
   // Use MongoDB's aggregation framework to calculate the average balance
   const aggregation = await Account.aggregate([
-    { $match: { phase: phase } }, // Filter accounts by phase
+    { $match: { phase: phase, status: "Live" } },
     {
       $group: {
         _id: null, // Group all documents into one for calculating the average
