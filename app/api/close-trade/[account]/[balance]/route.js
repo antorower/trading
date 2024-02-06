@@ -25,7 +25,7 @@ export async function GET(req, context) {
     if (!trade) {
       return NextResponse.json({ error: "YES", message: "Seems like there is no open trade in our databases, please contact us" }, { status: 404 });
     }
-    await trade.CloseTrade();
+    await trade.CloseTrade(balance);
     await accountObj.CloseTrade(balance);
 
     return NextResponse.json({ error: "NO", message: "Your account details updated successfully" });

@@ -215,6 +215,7 @@ export async function GET(req, context) {
 
       // Αλλαγές στο account μετά που ανοίγει το trade
       await accountObj.OpenTrade(newTrade);
+
       return NextResponse.json({ error: "No", pair: newTrade.pair, position: newTrade.position, lots: newTrade.lots, stoploss: newTrade.stopLoss, takeprofit: newTrade.takeProfit });
     }
   } catch (error) {
