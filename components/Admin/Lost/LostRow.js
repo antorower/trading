@@ -43,10 +43,9 @@ const LostRow = ({ account }) => {
           <div className="text-gray-500 text-sm">{new Date(account.lostDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}</div>
         </div>
       </div>
-      <div className="flex flex-col items-center">
-        <div className="text-gray-500">Lost</div>
-        <div>{account.comment}</div>
-      </div>
+      <div>{account.number}</div>
+      <div>{account.userId}</div>
+      <div>{account.balance}</div>
       <button onClick={(e) => HideLostedAccount(e)} className="flex items-center btn-decline gap-2">
         Lost
       </button>
