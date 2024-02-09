@@ -26,6 +26,8 @@ export const UserContextProvider = ({ children }) => {
   const [expandedRightSidebar, setExpandedRightSidebar] = useState(false);
   const [activeMenu, setActiveMenu] = useState("");
 
+  const [stats, setStats] = useState(null);
+
   const errorNotification = (message) => toast.warn(message);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ export const UserContextProvider = ({ children }) => {
         await UpdateAccounts();
         await UpdateUsers();
         await UpdateSettings();
+        await GetStats();
         setUserData(user);
       }
     };
@@ -69,6 +72,20 @@ export const UserContextProvider = ({ children }) => {
         setUsers([selectedUser]);
         console.log("there context");
       }
+    } catch (error) {
+      console.log(error.message);
+      errorNotification(error.message);
+    }
+  };
+
+  const GetStats = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/statistics`);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error);
+      }
+      setStats(data);
     } catch (error) {
       console.log(error.message);
       errorNotification(error.message);
@@ -118,6 +135,7 @@ export const UserContextProvider = ({ children }) => {
         expandedRightSidebar,
         activeMenu,
         settings,
+        stats,
         UpdateUsers,
         UpdateAccounts,
         UpdateSettings,
