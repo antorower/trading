@@ -66,6 +66,9 @@ export async function GET(req, context) {
       oneTradePayment,
       oneTradeTarget,
       oneTradeLose,
+      numberOfAccountsPhase1,
+      numberOfAccountsPhase2,
+      numberOfAccountsPhase3,
     };
 
     // Return the counts instead of the raw accounts data
