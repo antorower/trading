@@ -11,6 +11,10 @@ export async function GET(req, context) {
   let numberOfAccounts200K = 0;
   let numberOfAccounts300K = 0;
 
+  let numberOfAccountsPhase1 = 0;
+  let numberOfAccountsPhase2 = 0;
+  let numberOfAccountsPhase3 = 0;
+
   let oneTradeUpgradePhase1 = 0;
   let oneTradeUpgradePhase2 = 0;
   let oneTradePayment = 0;
@@ -38,10 +42,14 @@ export async function GET(req, context) {
 
       const remainingProfit = account.target - account.balance;
       const remainingProfitPercent = remainingProfit / capital;
-      if ((account.phase = 1 && remainingProfit <= 0.044)) oneTradeUpgradePhase1++;
-      if ((account.phase = 2 && remainingProfit <= 0.05)) oneTradeUpgradePhase2++;
-      if ((account.phase = 2 && remainingProfit <= 0.04)) oneTradePayment++;
-      if (account.overallDrawdown < account.balance - account.dailyDrawdown * 0.8) oneTradeLose++;
+      if (account.phase === 1 && remainingProfitPercent <= 0.044) oneTradeUpgradePhase1++;
+      if (account.phase === 2 && remainingProfitPercent <= 0.05) oneTradeUpgradePhase2++;
+      if (account.phase === 2 && remainingProfitPercent <= 0.04) oneTradePayment++;
+      if (account.overallDrawdown > account.balance - account.dailyDrawdown * 0.8) oneTradeLose++;
+
+      if (account.phase === 1) numberOfAccountsPhase1++;
+      if (account.phase === 2) numberOfAccountsPhase2++;
+      if (account.phase === 3) numberOfAccountsPhase3++;
     });
 
     oneTradeTarget = oneTradeUpgradePhase1 + oneTradeUpgradePhase2 + oneTradePayment;
