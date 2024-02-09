@@ -3,13 +3,13 @@ import dbConnect from "@/dbConnect";
 import Account from "@/models/Account";
 
 export async function GET(req, context) {
-  const numberOfAccounts5K = 0;
-  const numberOfAccounts10K = 0;
-  const numberOfAccounts25K = 0;
-  const numberOfAccounts50K = 0;
-  const numberOfAccounts100K = 0;
-  const numberOfAccounts200K = 0;
-  const numberOfAccounts300K = 0;
+  let numberOfAccounts5K = 0;
+  let numberOfAccounts10K = 0;
+  let numberOfAccounts25K = 0;
+  let numberOfAccounts50K = 0;
+  let numberOfAccounts100K = 0;
+  let numberOfAccounts200K = 0;
+  let numberOfAccounts300K = 0;
 
   await dbConnect();
   let accounts = await Account.find({
