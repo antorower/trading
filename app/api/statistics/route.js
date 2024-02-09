@@ -11,6 +11,12 @@ export async function GET(req, context) {
   let numberOfAccounts200K = 0;
   let numberOfAccounts300K = 0;
 
+  let oneTradeUpgradePhase1 = 0;
+  let oneTradeUpgradePhase2 = 0;
+  let oneTradePayment = 0;
+  let oneTradeTarget = 0;
+  let oneTradeLose = 0;
+
   await dbConnect();
   let accounts = await Account.find({
     status: { $in: ["Live", "Upgrade", "Payout", "Payment"] },
@@ -29,8 +35,16 @@ export async function GET(req, context) {
       else if (capital === 100000) numberOfAccounts100K++;
       else if (capital === 200000) numberOfAccounts200K++;
       else if (capital === 300000) numberOfAccounts300K++;
+
+      const remainingProfit = account.target - account.balance;
+      const remainingProfitPercent = remainingProfit / capital;
+      if ((account.phase = 1 && remainingProfit <= 0.044)) oneTradeUpgradePhase1++;
+      if ((account.phase = 2 && remainingProfit <= 0.05)) oneTradeUpgradePhase2++;
+      if ((account.phase = 2 && remainingProfit <= 0.04)) oneTradePayment++;
+      if (account.overallDrawdown < account.balance - account.dailyDrawdown * 0.8) oneTradeLose++;
     });
 
+    oneTradeTarget = oneTradeUpgradePhase1 + oneTradeUpgradePhase2 + oneTradePayment;
     // Prepare the response data with the counts
     const responseData = {
       numberOfAccounts5K,
@@ -39,6 +53,11 @@ export async function GET(req, context) {
       numberOfAccounts50K,
       numberOfAccounts100K,
       numberOfAccounts200K,
+      oneTradeUpgradePhase1,
+      oneTradeUpgradePhase2,
+      oneTradePayment,
+      oneTradeTarget,
+      oneTradeLose,
     };
 
     // Return the counts instead of the raw accounts data
