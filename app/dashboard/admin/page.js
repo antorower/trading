@@ -23,7 +23,6 @@ const Admin = () => {
       <LostTable />
       <Schedule />
       <PayrollTable />
-      <Stats />
     </div>
   );
 };
