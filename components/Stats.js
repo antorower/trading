@@ -11,6 +11,8 @@ const Stats = () => {
   const { stats } = useUserContext();
   console.log("Stats: ", stats);
 
+  if (!stats) return null;
+
   // Assume max value for progress bars, adjust based on your data needs
   const maxTradeValue = Math.max(stats.oneTradeUpgradePhase1, stats.oneTradeUpgradePhase2, stats.oneTradePayment, stats.oneTradeTarget, stats.oneTradeLose);
 
