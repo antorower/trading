@@ -9,7 +9,7 @@ const Stats = () => {
 
   return (
     <div className="flex flex-wrap gap-6 justify-center p-6">
-      <div className="flex flex-col w-[500px] p-4">
+      <div className="flex flex-col w-[500px] p-8 text-lg font-bold bg-gray-800 bg-opacity-50 rounded-lg">
         <div className="flex justify-center items-center"> Accounts: </div>
         <div className="flex justify-between">
           <div>5K Accounts:</div>
@@ -36,7 +36,8 @@ const Stats = () => {
           <div>{stats.numberOfAccounts200K}</div>
         </div>
       </div>
-      <div className="flex flex-col w-[500px] p-4">
+      <div className="flex flex-col w-[500px] p-8 text-lg font-bold bg-gray-800 bg-opacity-50 rounded-lg">
+        <div className="flex justify-center items-center"> Progress: </div>
         <div className="flex justify-between">
           <div>Phase 1 | One win upgrade:</div>
           <div>{stats.oneTradeUpgradePhase1}</div>
