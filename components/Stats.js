@@ -1,17 +1,20 @@
 import React from "react";
 import { useUserContext } from "@/context/UserContext";
 
-const ProgressBar = ({ value, max, label }) => (
-  <div className="w-full bg-gray-700 rounded-full overflow-hidden h-6 mb-4 text-xs flex bg-opacity-20">
-    <div style={{ width: `${(value / max) * 100}%` }} className={`flex justify-center items-center ${value > 0 ? "bg-green-400" : "bg-gray-600"} text-gray-800 text-sm h-6 font-bold`}>
-      {value > 0 ? `${label}: ${value}` : ""}
+const ProgressBar = ({ value, max, label }) => {
+  const width = Math.max(5, (value / max) * 100); // Ensure minimal width for visibility
+  return (
+    <div className="w-full bg-gray-700 rounded-full h-8 mb-4 text-xs">
+      <div style={{ width: `${width}%` }} className="bg-green-500 h-8 rounded-full flex items-center transition-all duration-300 ease-in-out">
+        <span className="w-full text-center text-sm font-semibold text-white">{`${label}: ${value}`}</span>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const StatsCard = ({ title, children }) => (
-  <div className="bg-gray-800 bg-opacity-50 rounded-lg p-4 md:p-6 xl:p-8 shadow-xl">
-    <h3 className="text-lg md:text-xl xl:text-2xl font-semibold text-white mb-4">{title}</h3>
+  <div className="bg-gray-800 bg-opacity-75 rounded-lg p-6 shadow-xl">
+    <h3 className="text-xl font-semibold text-white mb-4">{title}</h3>
     {children}
   </div>
 );
@@ -19,13 +22,15 @@ const StatsCard = ({ title, children }) => (
 const Stats = () => {
   const { stats } = useUserContext();
 
-  if (!stats) return null;
+  if (!stats) {
+    return <div>Loading...</div>;
+  }
 
-  // Assume max value for progress bars, adjust based on your data needs
+  // Find the max value for progress bars, assuming you have a max trade value for the calculation
   const maxTradeValue = Math.max(stats.oneTradeUpgradePhase1, stats.oneTradeUpgradePhase2, stats.oneTradePayment, stats.oneTradeTarget, stats.oneTradeLose);
 
   return (
-    <div className="flex flex-wrap gap-4 justify-center p-4 text-white">
+    <div className="flex flex-wrap gap-6 justify-center p-6">
       {/* Account Balance Stats */}
       <StatsCard title="Account Balances">
         <p>5K Accounts: {stats.numberOfAccounts5K}</p>
