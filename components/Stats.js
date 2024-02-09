@@ -34,17 +34,59 @@ const Stats = () => {
   };
 
   const tradeStats = {
-    "Upgrade Phase 1": stats.oneTradeUpgradePhase1,
-    "Upgrade Phase 2": stats.oneTradeUpgradePhase2,
-    Payment: stats.oneTradePayment,
-    "Target Achieved": stats.oneTradeTarget,
-    Losses: stats.oneTradeLose,
+    "Φάση 1, upgrade με μια νίκη": stats.oneTradeUpgradePhase1,
+    "Φάση 2, upgrade με μια νίκη": stats.oneTradeUpgradePhase2,
+    "Πληρωμή με μια νίκη": stats.oneTradePayment,
+    Σύνολο: stats.oneTradeTarget,
+    "Χάνουν με μια ήττα": stats.oneTradeLose,
   };
 
   return (
     <div className="flex flex-wrap gap-6 justify-center p-6">
-      <StatsCard title="Account Balances" stats={balanceStats} />
-      <StatsCard title="Trade Performance" stats={tradeStats} />
+      <div className="flex flex-col w-[800px] p-4">
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+      </div>
+      <div className="flex flex-col w-[800px] p-4">
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+        <div className="flex justify-between">
+          <div>context</div>
+          <div>context</div>
+        </div>
+      </div>
     </div>
   );
 };
