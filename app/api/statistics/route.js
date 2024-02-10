@@ -21,6 +21,8 @@ export async function GET(req, context) {
   let oneTradeTarget = 0;
   let oneTradeLose = 0;
 
+  let totalFundedCapital = 0;
+
   await dbConnect();
   let accounts = await Account.find({
     status: { $in: ["Live", "Upgrade", "Payout", "Payment"] },
@@ -50,6 +52,10 @@ export async function GET(req, context) {
       if (account.phase === 1 && account.status === "Live") numberOfAccountsPhase1++;
       if ((account.phase === 2 && account.status === "Live") || (account.phase === 1 && account.status === "Upgrade")) numberOfAccountsPhase2++;
       if ((account.phase === 3 && (account.status === "Live" || account.status === "Payment" || account.status === "Payout")) || (account.phase === 2 && account.status === "Upgrade")) numberOfAccountsPhase3++;
+
+      if (account.phase === 3) {
+        totalFundedCapital = totalFundedCapital + account.capital;
+      }
     });
 
     oneTradeTarget = oneTradeUpgradePhase1 + oneTradeUpgradePhase2 + oneTradePayment;
@@ -69,6 +75,7 @@ export async function GET(req, context) {
       numberOfAccountsPhase1,
       numberOfAccountsPhase2,
       numberOfAccountsPhase3,
+      totalFundedCapital,
     };
 
     // Return the counts instead of the raw accounts data
