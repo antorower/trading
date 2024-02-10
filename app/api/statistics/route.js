@@ -49,7 +49,7 @@ export async function GET(req, context) {
 
       if (account.phase === 1 && account.status === "Live") numberOfAccountsPhase1++;
       if ((account.phase === 2 && account.status === "Live") || (account.phase === 1 && account.status === "Upgrade")) numberOfAccountsPhase2++;
-      if ((account.phase === 3 && (account.status === "Live" || account.status === "Payment" || account.status === "Payout")) || (account.phase === 2 && acccount.status === "Upgrade")) numberOfAccountsPhase3++;
+      if ((account.phase === 3 && (account.status === "Live" || account.status === "Payment" || account.status === "Payout")) || (account.phase === 2 && account.status === "Upgrade")) numberOfAccountsPhase3++;
     });
 
     oneTradeTarget = oneTradeUpgradePhase1 + oneTradeUpgradePhase2 + oneTradePayment;
