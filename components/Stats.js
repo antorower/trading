@@ -52,7 +52,7 @@ const Stats = () => {
         </div>
         <div className="flex justify-between">
           <div>Funded Capital:</div>
-          <div>{stats.totalFundedCapital}</div>
+          <div>${stats.totalFundedCapital}</div>
         </div>
       </div>
       <div className="flex flex-col w-[400px] p-4 gap-5 text-lg font-bold bg-gray-800 bg-opacity-50 rounded-lg">
