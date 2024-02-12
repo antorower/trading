@@ -36,7 +36,9 @@ export const UserContextProvider = ({ children }) => {
         await UpdateAccounts();
         await UpdateUsers();
         await UpdateSettings();
+        console.log("START");
         await GetStats();
+        console.log("END");
         setUserData(user);
       }
     };
@@ -81,10 +83,12 @@ export const UserContextProvider = ({ children }) => {
   const GetStats = async () => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/statistics`);
+      console.log("REQUEST MADE");
       const data = await response.json();
       if (!response.ok) {
         throw new Error(data.error);
       }
+      console.log("OK STATS");
       setStats(data);
     } catch (error) {
       console.log(error.message);
