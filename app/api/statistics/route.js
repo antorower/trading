@@ -26,7 +26,7 @@ export async function GET(req, context) {
   await dbConnect();
   let accounts = await Account.find({
     status: { $in: ["Live", "Upgrade", "Payout", "Payment"] },
-  });
+  }).lean();
   console.log("Number of accounts", accounts.length);
   if (!accounts || !accounts.length) {
     return NextResponse.json({ error: message }, { status: 404 });
