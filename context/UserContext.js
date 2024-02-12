@@ -90,6 +90,7 @@ export const UserContextProvider = ({ children }) => {
       }
       console.log("OK STATS");
       setStats(data);
+      console.log(data);
     } catch (error) {
       console.log(error.message);
       errorNotification(error.message);
