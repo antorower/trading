@@ -80,8 +80,8 @@ export async function GET(req, context) {
       randomNumber: Math.random(),
     };
 
-    const response = NextResponse.json(responseData);
-    response.headers.set("Cache-Control", "no-store");
-    return response;
+    //const response = NextResponse.json(responseData);
+    //response.headers.set("Cache-Control", "no-store");
+    return NextResponse.json(responseData);
   }
 }

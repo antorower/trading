@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, cache } from "react";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 
@@ -54,7 +54,7 @@ export const UserContextProvider = ({ children }) => {
 
   const UpdateAccounts = async (selectedUser) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`, { cache: "no-store" });
 
       const data = await response.json();
       if (!response.ok) {
