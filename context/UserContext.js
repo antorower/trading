@@ -33,12 +33,12 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const LoadData = async () => {
       if (user && user.id) {
-        await UpdateAccounts();
-        await UpdateUsers();
-        await UpdateSettings();
         console.log("START");
         await GetStats();
         console.log("END");
+        await UpdateAccounts();
+        await UpdateUsers();
+        await UpdateSettings();
         setUserData(user);
       }
     };

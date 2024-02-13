@@ -27,7 +27,7 @@ export async function GET(req, context) {
   let accounts = await Account.find({
     status: { $in: ["Live", "Upgrade", "Payout", "Payment"] },
   }).lean();
-  console.log("Number of accounts", accounts.length);
+  console.log("Number of accounts: ", accounts.length);
   if (!accounts || !accounts.length) {
     return NextResponse.json({ error: message }, { status: 404 });
   } else {
@@ -79,7 +79,6 @@ export async function GET(req, context) {
       totalFundedCapital,
     };
 
-    // Return the counts instead of the raw accounts data
     return NextResponse.json(responseData);
   }
 }
