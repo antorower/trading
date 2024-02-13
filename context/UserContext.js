@@ -81,6 +81,7 @@ export const UserContextProvider = ({ children }) => {
   };
 
   const GetStats = async () => {
+    console.log("I AM GETING STATS");
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/statistics`);
       console.log("REQUEST MADE");

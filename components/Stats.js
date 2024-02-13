@@ -17,6 +17,7 @@ const Stats = () => {
     <div className="flex flex-wrap gap-6 justify-center p-6">
       <div className="flex flex-col w-[400px] p-4 gap-5 text-lg font-bold bg-gray-800 bg-opacity-50 rounded-lg">
         <div className="flex justify-center items-center"> Accounts: </div>
+        <button onClick={GetStats}> Refresh </button>
         <div className="flex justify-between">
           <div>5K Accounts:</div>
           <div>{stats.numberOfAccounts5K}</div>
