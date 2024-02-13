@@ -141,6 +141,7 @@ export const UserContextProvider = ({ children }) => {
         activeMenu,
         settings,
         stats,
+        GetStats,
         UpdateUsers,
         UpdateAccounts,
         UpdateSettings,

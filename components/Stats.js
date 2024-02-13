@@ -1,8 +1,14 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { useUserContext } from "@/context/UserContext";
 
 const Stats = () => {
-  const { stats } = useUserContext();
+  const { stats, GetStats } = useUserContext();
+
+  useEffect(() => {
+    console.log(stats);
+  }, [stats]);
+
   if (!stats) {
     return <div>Loading...</div>;
   }
