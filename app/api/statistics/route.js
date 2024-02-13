@@ -60,7 +60,7 @@ export async function GET(req, context) {
     });
 
     oneTradeTarget = oneTradeUpgradePhase1 + oneTradeUpgradePhase2 + oneTradePayment;
-    // Prepare the response data with the counts
+
     const responseData = {
       numberOfAccounts5K,
       numberOfAccounts10K,
@@ -79,6 +79,8 @@ export async function GET(req, context) {
       totalFundedCapital,
     };
 
-    return NextResponse.json(responseData);
+    const response = NextResponse.json(responseData);
+    response.headers.set("Cache-Control", "max-age=0, must-revalidate");
+    return response;
   }
 }
