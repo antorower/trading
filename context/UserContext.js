@@ -54,7 +54,7 @@ export const UserContextProvider = ({ children }) => {
 
   const UpdateAccounts = async (selectedUser) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stats-e0nd`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`);
 
       const data = await response.json();
       if (!response.ok) {
@@ -83,7 +83,7 @@ export const UserContextProvider = ({ children }) => {
   const GetStats = async () => {
     console.log("I AM GETING STATS");
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/statistics`, { cache: "no-store" });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stats-end`, { cache: "no-store" });
       console.log("REQUEST MADE");
       const data = await response.json();
       if (!response.ok) {
