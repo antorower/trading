@@ -3,6 +3,7 @@ import dbConnect from "@/dbConnect";
 import Account from "@/models/Account";
 
 export async function GET(req, context) {
+  console.log("STATISTICS STARTS ");
   let numberOfAccounts5K = 0;
   let numberOfAccounts10K = 0;
   let numberOfAccounts25K = 0;

@@ -54,7 +54,7 @@ export const UserContextProvider = ({ children }) => {
 
   const UpdateAccounts = async (selectedUser) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`, { cache: "no-store" });
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/get-accounts`, { next: { revalidate: 2 } });
 
       const data = await response.json();
       if (!response.ok) {
