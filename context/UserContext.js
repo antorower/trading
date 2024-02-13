@@ -26,7 +26,7 @@ export const UserContextProvider = ({ children }) => {
   const [expandedRightSidebar, setExpandedRightSidebar] = useState(false);
   const [activeMenu, setActiveMenu] = useState("");
 
-  const [stats, setStats] = useState(null);
+  const [stats, setStats] = useState({});
 
   const errorNotification = (message) => toast.warn(message);
 
