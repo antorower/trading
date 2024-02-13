@@ -3,6 +3,27 @@ import dbConnect from "@/dbConnect";
 import Account from "@/models/Account";
 
 export async function GET(req, context) {
+  const responseData = {
+    numberOfAccounts5K: Math.random(),
+    numberOfAccounts10K: Math.random(),
+    numberOfAccounts25K: Math.random(),
+    numberOfAccounts50K: Math.random(),
+    numberOfAccounts100K: Math.random(),
+    numberOfAccounts200K: Math.random(),
+    oneTradeUpgradePhase1: Math.random(),
+    oneTradeUpgradePhase2: Math.random(),
+    oneTradePayment: Math.random(),
+    oneTradeTarget: Math.random(),
+    oneTradeLose: Math.random(),
+    numberOfAccountsPhase1: Math.random(),
+    numberOfAccountsPhase2: Math.random(),
+    numberOfAccountsPhase3: Math.random(),
+    totalFundedCapital: Math.random(),
+    randomNumber: Math.random(),
+  };
+
+  return NextResponse.json(responseData);
+
   try {
     console.log("STATISTICS STARTS ");
     let numberOfAccounts5K = 0;
