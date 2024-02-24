@@ -96,13 +96,17 @@ const LiveRow = ({ account }) => {
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Open Trade</div>
           {account.openTrade.pending ? (
-            <div className="flex flex-col gap-3 justify-start">
-              <div>Pair: {account.openTrade.pair}</div>
-              <div>Lots: {account.openTrade.lots}</div>
+            <div className="flex flex-col gap-3 justify-center">
+              <div>{account.openTrade.pair}</div>
+              <div>Volume: {account.openTrade.lots}</div>
               <div className="flex gap-3 justify-center">
-                <div className="text-red-600">Stop Loss: {account.openTrade.stopLoss}</div>
+                <div className="text-red-600">
+                  Stop Loss: -{account.openTrade.stopLoss} {account.openTrade.position === "Buy" ? "(katw)" : "(panw)"}
+                </div>
                 <div>-</div>
-                <div className="text-green-400">Take Profit: {account.openTrade.takeProfit}</div>
+                <div className="text-green-400">
+                  Take Profit: {account.openTrade.takeProfit} {account.openTrade.position === "Buy" ? "(panw)" : "(katw)"}
+                </div>
               </div>
               <div>Position: {account.openTrade.position}</div>
             </div>
