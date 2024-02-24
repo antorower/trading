@@ -87,6 +87,8 @@ const AccountSchema = new mongoose.Schema({
     pair: String,
     position: String,
     lots: Number,
+    takeProfit: Number,
+    stopLoss: Number,
   },
   registrationDate: Date,
   firstTradeDate: Date,
@@ -338,6 +340,9 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     };
     this.activity.push(newActivity);
 
+    this.takeProfit = trade.takeProfit;
+    this.stopLoss = trade.stopLoss;
+
     this.openTrade.pending = true;
     this.openTrade.fake = trade.fake;
     if (!trade.fake) {
@@ -466,7 +471,7 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
 
     if (this.phase === 1) {
       if (remainingPercentage < 0.045) {
-        return Math.floor(remainingProfit + 5 * lots);
+        return Math.floor(remainingProfit + 7 * lots);
       } else {
         return Math.floor(this.capital * (Math.random() * (0.04 - 0.03) + 0.03));
       }
@@ -486,7 +491,7 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
 
     if (this.phase === 2) {
       if (remainingPercentage <= 0.05) {
-        return remainingProfit + 5 * lots;
+        return remainingProfit + 7 * lots;
       } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
         return this.capital * (Math.random() * (0.028 - 0.02) + 0.02);
       } else {
@@ -496,7 +501,7 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
 
     if (this.phase === 3) {
       if (remainingPercentage <= 0.04) {
-        return remainingProfit + 5 * lots;
+        return remainingProfit + 7 * lots;
       } else {
         return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
       }

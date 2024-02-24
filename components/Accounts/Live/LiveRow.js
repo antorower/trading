@@ -7,6 +7,7 @@ const LiveRow = ({ account }) => {
   let actionElement;
   if (account.openTrade.pending) {
     // Αν υπάρχει ανοιχτό trade
+    account.commnet = "To vradi kleise to trade kai enimerose to balance sou"; // 666: Aplo delete auti i grammi
     actionElement = (
       <div className="flex flex-col gap-2 items-center">
         <div className="text-gray-500 text-sm">Close Trade</div>
@@ -18,6 +19,7 @@ const LiveRow = ({ account }) => {
     );
   } else if (!account.needTrade) {
     // Αν δεν χρειάζεται trade
+    account.commnet = "Auto to account den xreiazetai trade simera"; // 666: Aplo delete auti i grammi
     actionElement = (
       <div className="flex flex-col gap-2 items-center">
         <Image src="/tick.svg" width={20} height={20} alt="tick" />
@@ -25,6 +27,7 @@ const LiveRow = ({ account }) => {
     );
   } else if (account.needTrade) {
     // Αν χρειάζεται trade αλλά έχει ανοίξει ήδη σήμερα
+    account.commnet = "Exeis idi anoiksei kai kleisei trade simera"; // 666: Aplo delete auti i grammi
     if (new Date(account.lastTradeOpenDate).toDateString() === new Date().toDateString()) {
       actionElement = (
         <div className="flex flex-col gap-2 items-center">
@@ -33,6 +36,7 @@ const LiveRow = ({ account }) => {
       );
     } else {
       // Αν χρειάζεται trade και δεν έχει ανοίξει ακόμα
+      account.commnet = "Anoikse trade an i mera kai i ora to epitrepei"; // 666: Aplo delete auti i grammi
       actionElement = (
         <div className="flex flex-col gap-2 items-center">
           <div className="text-gray-500 text-sm">Open Trade</div>
@@ -92,8 +96,12 @@ const LiveRow = ({ account }) => {
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Open Trade</div>
           {account.openTrade.pending ? (
-            <div>
-              {account.openTrade.pair} - {account.openTrade.position}
+            <div className="flex flex-col gap-3 justify-start">
+              <div>Pair: {account.openTrade.pair}</div>
+              <div>Lots: {account.openTrade.lots}</div>
+              <div>Stop Loss: {account.openTrade.stopLoss}</div>
+              <div>Take Profit: {account.openTrade.takeProfit}</div>
+              <div>Position: {account.openTrade.position}</div>
             </div>
           ) : (
             <div>-</div>
