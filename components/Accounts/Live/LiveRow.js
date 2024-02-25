@@ -15,7 +15,7 @@ const LiveRow = ({ account }) => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance)}`);
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error);
+        throw new Error(data.message);
       }
       successNotification("To trade sou einai etoimo");
     } catch (error) {
@@ -32,7 +32,7 @@ const LiveRow = ({ account }) => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(account.balance)}`);
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error);
+        throw new Error(data.message);
       }
       successNotification("To trade sou ekleise");
     } catch (error) {
