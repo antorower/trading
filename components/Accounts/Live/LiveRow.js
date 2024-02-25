@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 import { toast } from "react-toastify";
 
 const LiveRow = ({ account }) => {
+  const [newBalance, setNewBalance] = useState(0);
+
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
 
@@ -37,22 +39,22 @@ const LiveRow = ({ account }) => {
   let actionElement;
   if (account.openTrade.pending) {
     // Αν υπάρχει ανοιχτό trade
-    account.commnet = "To vradi kleise to trade kai enimerose to balance sou"; // 666: Aplo delete auti i grammi
+    account.comment = "To vradi kleise to trade kai enimerose to balance sou"; // 666: Aplo delete auti i grammi
     actionElement = (
-      <div className="flex gap-4">
-        <div>INPUT</div>
-        <button className="flex flex-col gap-2 items-center">
+      <div className="flex flex-col gap-4">
+        <button onClick={CloseTrade} className="flex flex-col gap-2 items-center cursor-pointer">
           <div className="text-gray-500 text-sm">Close Trade</div>
           <div className="relative flex h-3 w-3">
             <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
             <span className={`relative inline-flex rounded-full h-3 w-3 bg-sky-500`}></span>
           </div>
         </button>
+        <input placeholder="New Balance" type="number" className="number-input" onChange={(e) => setNewBalance(e.target.value)} value={newBalance} />
       </div>
     );
   } else if (!account.needTrade) {
     // Αν δεν χρειάζεται trade
-    account.commnet = "Auto to account den xreiazetai trade simera"; // 666: Aplo delete auti i grammi
+    account.comment = "Auto to account den xreiazetai trade simera"; // 666: Aplo delete auti i grammi
     actionElement = (
       <div className="flex flex-col gap-2 items-center">
         <Image src="/tick.svg" width={20} height={20} alt="tick" />
@@ -60,7 +62,7 @@ const LiveRow = ({ account }) => {
     );
   } else if (account.needTrade) {
     // Αν χρειάζεται trade αλλά έχει ανοίξει ήδη σήμερα
-    account.commnet = "Exeis idi anoiksei kai kleisei trade simera"; // 666: Aplo delete auti i grammi
+    account.comment = "Exeis idi anoiksei kai kleisei trade simera"; // 666: Aplo delete auti i grammi
     if (new Date(account.lastTradeOpenDate).toDateString() === new Date().toDateString()) {
       actionElement = (
         <div className="flex flex-col gap-2 items-center">
@@ -69,7 +71,7 @@ const LiveRow = ({ account }) => {
       );
     } else {
       // Αν χρειάζεται trade και δεν έχει ανοίξει ακόμα
-      account.commnet = "Anoikse trade an i mera kai i ora to epitrepei"; // 666: Aplo delete auti i grammi
+      account.comment = "Anoikse trade an i mera kai i ora to epitrepei"; // 666: Aplo delete auti i grammi
       actionElement = (
         <button onClick={OpenTrade} className="flex flex-col gap-2 items-center cursor-pointer">
           <div className="text-gray-500 text-sm">Open Trade</div>
