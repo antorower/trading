@@ -38,7 +38,7 @@ const LiveRow = ({ account }) => {
       // Αν χρειάζεται trade και δεν έχει ανοίξει ακόμα
       account.commnet = "Anoikse trade an i mera kai i ora to epitrepei"; // 666: Aplo delete auti i grammi
       actionElement = (
-        <div className="flex flex-col gap-2 items-center">
+        <div onClick={() => console.log("Good!")} className="flex flex-col gap-2 items-center cursor-pointer">
           <div className="text-gray-500 text-sm">Open Trade</div>
           <div className="relative flex h-3 w-3">
             <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
@@ -96,7 +96,7 @@ const LiveRow = ({ account }) => {
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Open Trade</div>
           {account.openTrade.pending ? (
-            <div className="flex flex-col gap-3 justify-center">
+            <div className="flex flex-col gap-3 items-center">
               <div>{account.openTrade.pair}</div>
               <div>Volume: {account.openTrade.lots}</div>
               <div className="flex gap-3 justify-center">
