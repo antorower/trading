@@ -24,6 +24,10 @@ const LiveRow = ({ account }) => {
   };
 
   const CloseTrade = async () => {
+    if (newBalance < 4000) {
+      errorNotification("Enimerose to neo balance sou");
+      return;
+    }
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(account.balance)}`);
       if (!response.ok) {
