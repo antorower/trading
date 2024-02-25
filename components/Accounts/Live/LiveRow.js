@@ -17,9 +17,6 @@ const LiveRow = ({ account }) => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance)}`);
       if (!response.ok) {
         const data = await response.json();
-        if (data.error === "YES") {
-          throw new Error(data.message);
-        }
         throw new Error(data.message);
       }
       await UpdateAccounts();

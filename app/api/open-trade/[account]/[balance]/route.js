@@ -42,7 +42,7 @@ export async function GET(req, context) {
     // Ελέγχω αν είναι ΣΚ
     const day = SetCurrentDay();
     if (day === "sunday" || day === "saturday") {
-      return NextResponse.json({ error: "Yes", message: "Trades not allowed today" });
+      return NextResponse.json({ error: "Yes", message: "Trades not allowed today" }, { status: 403 });
     }
     await dbConnect();
 
