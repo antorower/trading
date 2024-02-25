@@ -2,19 +2,52 @@
 import React from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
+import { toast } from "react-toastify";
 
 const LiveRow = ({ account }) => {
+  const successNotification = (message) => toast.success(message);
+  const errorNotification = (message) => toast.warn(message);
+
+  const OpenTrade = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance)}`);
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+      successNotification("To trade sou einai etoimo");
+    } catch (error) {
+      errorNotification(error.message);
+    }
+  };
+
+  const CloseTrade = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(account.balance)}`);
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error);
+      }
+      successNotification("To trade sou ekleise");
+    } catch (error) {
+      errorNotification(error.message);
+    }
+  };
+
   let actionElement;
   if (account.openTrade.pending) {
     // Αν υπάρχει ανοιχτό trade
     account.commnet = "To vradi kleise to trade kai enimerose to balance sou"; // 666: Aplo delete auti i grammi
     actionElement = (
-      <div className="flex flex-col gap-2 items-center">
-        <div className="text-gray-500 text-sm">Close Trade</div>
-        <div className="relative flex h-3 w-3">
-          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
-          <span className={`relative inline-flex rounded-full h-3 w-3 bg-sky-500`}></span>
-        </div>
+      <div className="flex gap-4">
+        <div>INPUT</div>
+        <button className="flex flex-col gap-2 items-center">
+          <div className="text-gray-500 text-sm">Close Trade</div>
+          <div className="relative flex h-3 w-3">
+            <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
+            <span className={`relative inline-flex rounded-full h-3 w-3 bg-sky-500`}></span>
+          </div>
+        </button>
       </div>
     );
   } else if (!account.needTrade) {
@@ -38,13 +71,13 @@ const LiveRow = ({ account }) => {
       // Αν χρειάζεται trade και δεν έχει ανοίξει ακόμα
       account.commnet = "Anoikse trade an i mera kai i ora to epitrepei"; // 666: Aplo delete auti i grammi
       actionElement = (
-        <div onClick={() => console.log("Good!")} className="flex flex-col gap-2 items-center cursor-pointer">
+        <button onClick={OpenTrade} className="flex flex-col gap-2 items-center cursor-pointer">
           <div className="text-gray-500 text-sm">Open Trade</div>
           <div className="relative flex h-3 w-3">
             <span className={`animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75`}></span>
             <span className={`relative inline-flex rounded-full h-3 w-3 bg-sky-500`}></span>
           </div>
-        </div>
+        </button>
       );
     }
   } else {
