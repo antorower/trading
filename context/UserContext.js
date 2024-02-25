@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useState, useEffect, cache } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { toast } from "react-toastify";
 

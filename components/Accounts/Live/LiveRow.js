@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import TableRow from "../../TableRow";
 import { toast } from "react-toastify";
+import { useUserContext } from "@/context/UserContext";
 
 const LiveRow = ({ account }) => {
   const [newBalance, setNewBalance] = useState(0);
+  const { UpdateAccounts } = useUserContext();
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
@@ -17,6 +19,7 @@ const LiveRow = ({ account }) => {
         const data = await response.json();
         throw new Error(data.message);
       }
+      await UpdateAccounts();
       successNotification("To trade sou einai etoimo");
     } catch (error) {
       errorNotification(error.message);
@@ -34,6 +37,7 @@ const LiveRow = ({ account }) => {
         const data = await response.json();
         throw new Error(data.message);
       }
+      await UpdateAccounts();
       successNotification("To trade sou ekleise");
     } catch (error) {
       errorNotification(error.message);
