@@ -13,6 +13,8 @@ const LiveRow = ({ account }) => {
   const errorNotification = (message) => toast.warn(message);
 
   const OpenTrade = async () => {
+    console.log(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance)}`);
+    return;
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance)}`);
       if (!response.ok) {
