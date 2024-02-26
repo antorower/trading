@@ -32,7 +32,8 @@ const LiveRow = ({ account }) => {
       return;
     }
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(newBalance)}`);
+      console.log(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(int(newBalance))}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(int(newBalance))}`);
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message);
