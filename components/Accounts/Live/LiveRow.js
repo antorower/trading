@@ -14,7 +14,7 @@ const LiveRow = ({ account }) => {
 
   const OpenTrade = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance).toString()}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/open-trade/${account.number}/${Math.floor(account.balance)}`);
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message);
@@ -32,7 +32,7 @@ const LiveRow = ({ account }) => {
       return;
     }
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(account.balance).toString()}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/close-trade/${account.number}/${Math.floor(newBalance)}`);
       if (!response.ok) {
         const data = await response.json();
         throw new Error(data.message);
