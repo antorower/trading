@@ -340,8 +340,8 @@ AccountSchema.methods.OpenTrade = async function (trade) {
     };
     this.activity.push(newActivity);
 
-    this.takeProfit = trade.takeProfit;
-    this.stopLoss = trade.stopLoss;
+    this.openTrade.takeProfit = trade.takeProfit;
+    this.openTrade.stopLoss = trade.stopLoss;
 
     this.openTrade.pending = true;
     this.openTrade.fake = trade.fake;
