@@ -144,13 +144,9 @@ const LiveRow = ({ account }) => {
               <div>{account.openTrade.pair}</div>
               <div>Volume: {account.openTrade.lots}</div>
               <div className="flex gap-3 justify-center">
-                <div className="text-red-600">
-                  Stop Loss: -{account.openTrade.stopLoss} {account.openTrade.position === "Buy" ? "(katw)" : "(panw)"}
-                </div>
+                <div className="text-red-600">Stop Loss: -{account.openTrade.stopLoss}</div>
                 <div>-</div>
-                <div className="text-green-400">
-                  Take Profit: {account.openTrade.takeProfit} {account.openTrade.position === "Buy" ? "(panw)" : "(katw)"}
-                </div>
+                <div className="text-green-400">Take Profit: {account.openTrade.takeProfit}</div>
               </div>
               <div>Position: {account.openTrade.position}</div>
             </div>
