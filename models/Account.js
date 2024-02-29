@@ -471,7 +471,7 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
 
     if (this.phase === 1) {
       if (remainingPercentage < 0.045) {
-        return Math.floor(remainingProfit + 7 * lots);
+        return Math.floor(remainingProfit + 10 * lots);
       } else {
         return Math.floor(this.capital * (Math.random() * (0.04 - 0.03) + 0.03));
       }
@@ -491,7 +491,7 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
 
     if (this.phase === 2) {
       if (remainingPercentage <= 0.05) {
-        return remainingProfit + 7 * lots;
+        return remainingProfit + 10 * lots;
       } else if (remainingPercentage >= 0.035 && remainingPercentage <= 0.045) {
         return this.capital * (Math.random() * (0.028 - 0.02) + 0.02);
       } else {
@@ -501,7 +501,7 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
 
     if (this.phase === 3) {
       if (remainingPercentage <= 0.04) {
-        return remainingProfit + 7 * lots;
+        return remainingProfit + 10 * lots;
       } else {
         return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
       }
