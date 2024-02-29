@@ -10,7 +10,7 @@ const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
   const [lotsFactor, setLotsFactor] = useState("");
   const [activeDay, setActiveDay] = useState(false);
 
-  const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "EURAUD", "GBPJPY", "GBPCHF", "GBPCAD", "GBPAUD", "AUDJPY", "AUDCHF", "AUDCAD", "AUDNZD", "NZDJPY", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF", "CHFJPY"];
+  const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "GBPJPY", "GBPCAD", "GBPAUD", "AUDJPY", "AUDCAD", "AUDNZD", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF"];
   //Removed Pairs: "EURNZD", "GBPNZD"
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
@@ -141,3 +141,9 @@ const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
 };
 
 export default ScheduleDay;
+
+// All
+// const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "EURAUD", "GBPJPY", "GBPCHF", "GBPCAD", "GBPAUD", "AUDJPY", "AUDCHF", "AUDCAD", "AUDNZD", "NZDJPY", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF", "CHFJPY"];
+
+// Cheap
+// const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "GBPJPY", "GBPCAD", "GBPAUD", "AUDJPY", "AUDCAD", "AUDNZD", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF"];
