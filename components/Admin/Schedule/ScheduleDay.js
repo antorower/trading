@@ -10,8 +10,8 @@ const ScheduleDay = ({ day, data, UpdateSettings, developmentMode }) => {
   const [lotsFactor, setLotsFactor] = useState("");
   const [activeDay, setActiveDay] = useState(false);
 
-  const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "GBPJPY", "GBPCAD", "GBPAUD", "AUDJPY", "AUDCAD", "AUDNZD", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF"];
-  //Removed Pairs: "EURNZD", "GBPNZD"
+  const forexPairs = ["EURUSD", "GBPUSD", "AUDUSD", "NZDUSD", "USDJPY", "USDCAD", "USDCHF", "EURGBP", "EURJPY", "EURCHF", "EURCAD", "GBPJPY", "GBPCAD", "AUDJPY", "AUDCAD", "AUDNZD", "NZDCHF", "NZDCAD", "CADJPY", "CADCHF"];
+  //Removed Pairs: "EURNZD", "GBPNZD", "GBPAUD",
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
 
