@@ -122,9 +122,9 @@ const LiveRow = ({ account }) => {
       <div className="flex items-center justify-center gap-16">
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Phase</div>
-          {account.phase === 1 && "Evaluation"}
-          {account.phase === 2 && "Verification"}
-          {account.phase === 3 && "Funded"}
+          {account.phase === 1 && "Student"}
+          {account.phase === 2 && "Practitioner"}
+          {account.phase === 3 && "Master"}
         </div>
 
         <div className="flex flex-col items-center">
