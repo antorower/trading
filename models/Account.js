@@ -500,8 +500,8 @@ AccountSchema.methods.GetTakeProfit = async function (lots) {
     }
 
     if (this.phase === 3) {
-      if (remainingPercentage <= 0.04) {
-        return remainingProfit + 10 * lots;
+      if (remainingPercentage <= 0.03) {
+        return remainingProfit;
       } else {
         return this.capital * (Math.random() * (0.04 - 0.03) + 0.03);
       }

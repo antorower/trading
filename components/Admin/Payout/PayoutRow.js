@@ -56,7 +56,7 @@ const PayoutRow = ({ account }) => {
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Profit</div>
-          <div>${(account.balance - account.target) * 0.8}</div>
+          <div>${account.balance - account.capital}</div>
         </div>
         <div className="flex flex-col items-center">
           <div className="text-gray-500 text-sm">Paid Times</div>
