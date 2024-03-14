@@ -404,7 +404,11 @@ AccountSchema.methods.CloseTrade = async function (balance) {
     }
 
     // Αν το account έχει πιάσει τον στόχο
-    if (balance >= this.target * 0.99) {
+    let finalTarget = this.target;
+    if (this.phase === 3) {
+      finalTarget = this.target * 0.99;
+    }
+    if (balance >= finalTarget) {
       // Αν πρώτη φορά σε αυτό το trade έπιασε τον στόχο κάνω update το targetReachDate
       if (this.balance < this.target) {
         const newActivity = {
