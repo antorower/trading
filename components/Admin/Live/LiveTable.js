@@ -58,13 +58,13 @@ const LiveTable = () => {
     <TableWrapper title="Live Accounts" refresh={true} refreshFunction={UpdateAccounts} panelExpanded={liveAccountsPanelExpanded} setPanelExpanded={setLiveAccountsPanelExpanded}>
       <TableRow>
         <div>
-          Phase 1 Accounts: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
+          Phase 1: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
         </div>
         <div>
-          Phase 2 Accounts: {phase2Accounts} | Good: {phase2Good} | Bad: {phase2Bad}
+          Phase 2: {phase2Accounts} | Good: {phase2Good} | Bad: {phase2Bad}
         </div>
         <div>
-          Phase 3 Accounts: {phase3Accounts} | Good: {phase3Good} | Bad: {phase3Bad}
+          Phase 3: {phase3Accounts} | Good: {phase3Good} | Bad: {phase3Bad}
         </div>
       </TableRow>
       {liveAccounts && liveAccounts.length > 0 && liveAccounts.map((account) => <LiveRow key={account._id} account={account} />)}

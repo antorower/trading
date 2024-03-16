@@ -30,8 +30,10 @@ const PayoutTable = () => {
   return (
     <TableWrapper title="Payout Accounts" refresh={true} refreshFunction={UpdateAccounts} panelExpanded={payoutAccountsPanelExpanded} setPanelExpanded={setPayoutAccountsPanelExpanded}>
       <TableRow>
-        <div> Payout Accounts: {totalPayoutAccounts}</div>
-        <div> Waiting Profits: {waitingProfits}</div>
+        <div className="flex gap-6 justify-center items-center">
+          <div> Payout Accounts: {totalPayoutAccounts}</div>
+          <div> Waiting Profits: {waitingProfits}</div>
+        </div>
       </TableRow>
       {payoutAccounts && payoutAccounts.length > 0 && payoutAccounts.map((account) => <PayoutRow key={account._id} account={account} />)}
     </TableWrapper>
