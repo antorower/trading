@@ -36,11 +36,18 @@ const LiveTable = () => {
     setPhase1Bad(phase1BadVar.length);
 
     const phase2AccountsVar = live.filter((account) => account.phase === 2);
-    const phase2GoodVar = phase2AccountsVar.filter((account) => account.balance >= account.capital * 1.036);
+    const phase2GoodVar = phase2AccountsVar.filter((account) => account.balance >= account.capital);
     const phase2BadVar = phase2AccountsVar.filter((account) => account.balance <= account.capital * 0.94);
-    setPhase1Accounts(phase2AccountsVar.length);
-    setPhase1Good(phase2GoodVar.length);
-    setPhase1Bad(phase2BadVar.length);
+    setPhase2Accounts(phase2AccountsVar.length);
+    setPhase2Good(phase2GoodVar.length);
+    setPhase2Bad(phase2BadVar.length);
+
+    const phase3AccountsVar = live.filter((account) => account.phase === 3);
+    const phase3GoodVar = phase3AccountsVar.filter((account) => account.balance >= account.capital);
+    const phase3BadVar = phase3AccountsVar.filter((account) => account.balance <= account.capital * 0.94);
+    setPhase3Accounts(phase3AccountsVar.length);
+    setPhase3Good(phase3GoodVar.length);
+    setPhase3Bad(phase3BadVar.length);
   }, [adminAccounts]);
 
   if (!liveAccounts || liveAccounts?.length === 0) {
