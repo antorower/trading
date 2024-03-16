@@ -28,7 +28,7 @@ const LiveTable = () => {
     const live = adminAccounts.filter((account) => account.status === "Live");
     setLiveAccounts(live);
 
-    const phase1AccountsVar = adminAccounts.filter((account) => account.phase === 1);
+    const phase1AccountsVar = live.filter((account) => account.phase === 1);
     const phase1GoodVar = phase1AccountsVar.filter((account) => account.balance >= account.target * 0.978);
     const phase1BadVar = phase1AccountsVar.filter((account) => account.balance <= account.capital * 0.94);
     setPhase1Accounts(phase1AccountsVar.length);
@@ -47,10 +47,10 @@ const LiveTable = () => {
           Phase 1 Accounts: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
         </div>
         <div>
-          Phase 1 Accounts: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
+          Phase 2 Accounts: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
         </div>
         <div>
-          Phase 1 Accounts: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
+          Phase 3 Accounts: {phase1Accounts} | Good: {phase1Good} | Bad: {phase1Bad}
         </div>
       </TableRow>
       {liveAccounts && liveAccounts.length > 0 && liveAccounts.map((account) => <LiveRow key={account._id} account={account} />)}
