@@ -19,8 +19,8 @@ const UpgradeTable = () => {
 
     const phase1UpgradeVar = adminAccounts.filter((account) => account.phase === 1);
     const phase2UpgradeVar = adminAccounts.filter((account) => account.phase === 2);
-    setPhase1Upgrade(phase1UpgradeVar);
-    setPhase2Upgrade(phase2UpgradeVar);
+    setPhase1Upgrade(phase1UpgradeVar.length);
+    setPhase2Upgrade(phase2UpgradeVar.length);
   }, [adminAccounts]);
 
   if (!upgradeAccounts || upgradeAccounts?.length === 0) {
