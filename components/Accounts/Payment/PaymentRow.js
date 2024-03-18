@@ -74,7 +74,7 @@ const PaymentRow = ({ account }) => {
         <div className="text-gray-500 text-sm w-[400px] text-center">{account.comment}</div>
       </div>
 
-      {account.status === "Payment" && <input type="text" className="text-input" placeholder="Wallet" value={wallet} onChange={(e) => setWallet(e.target.value)} />}
+      {/*{account.status === "Payment" && <input type="text" className="text-input" placeholder="Wallet" value={wallet} onChange={(e) => setWallet(e.target.value)} />}*/}
 
       {account.status === "Payment" && (
         <button onClick={PaymentRequest} className="btn-accept">
