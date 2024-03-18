@@ -71,14 +71,14 @@ const PaymentRow = ({ account }) => {
       </div>
 
       <div className="flex flex-col items-center">
-        <div className="text-gray-500 text-sm w-[400px] text-center">{account.comment}</div>
+        <div className="text-gray-500 text-sm w-[400px] text-center">Send profits to bybit with UID: 155315263</div>
       </div>
 
       {/*{account.status === "Payment" && <input type="text" className="text-input" placeholder="Wallet" value={wallet} onChange={(e) => setWallet(e.target.value)} />}*/}
 
       {account.status === "Payment" && (
         <button onClick={PaymentRequest} className="btn-accept">
-          Payout Request
+          I sent the profits
         </button>
       )}
 
