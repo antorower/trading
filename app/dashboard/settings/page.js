@@ -21,8 +21,8 @@ const Settings = () => {
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="User Setting" subtitle="Customize your experience" />
       {(user.publicMetadata.role === "admin" || user.publicMetadata.role === "leader") && <CopyLink link={referralLink} />}
-      <TeamWalletSettings />
-      <WalletSettings />
+      {/*<TeamWalletSettings />*/}
+      {/*<WalletSettings />*/}
     </div>
   );
 };

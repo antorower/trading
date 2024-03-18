@@ -24,7 +24,7 @@ const TopBar = () => {
           setProfit("undefined");
           throw new Error(data.error);
         }
-        setProfit(data.profit);
+        setProfit(Number(data.profit).toFixed(2));
       } catch (error) {
         errorNotification(error.message);
       }
