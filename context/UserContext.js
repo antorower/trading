@@ -33,9 +33,8 @@ export const UserContextProvider = ({ children }) => {
   useEffect(() => {
     const LoadData = async () => {
       if (user && user.id) {
-        console.log("START");
+        console.log("Role: ", user?.publicMetadata.role);
         await GetStats();
-        console.log("END");
         await UpdateAccounts();
         await UpdateUsers();
         await UpdateSettings();
