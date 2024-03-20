@@ -4,9 +4,11 @@ import Image from "next/image";
 import TableRow from "../../TableRow";
 import { useUserContext } from "@/context/UserContext";
 import { toast } from "react-toastify";
+const { user } = useUser();
 
 const LostRow = ({ account }) => {
   const { UpdateAccounts } = useUserContext();
+  const { user } = useUser();
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
@@ -14,19 +16,22 @@ const LostRow = ({ account }) => {
   const HideLostedAccount = async (event) => {
     try {
       event.preventDefault();
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/account-lost`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ accountId: account._id }),
-      });
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error);
+
+      if (user?.publicMetadata.role === "admin") {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/account-lost`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ accountId: account._id }),
+        });
+        if (!response.ok) {
+          const data = await response.json();
+          throw new Error(data.error);
+        }
+        await UpdateAccounts();
+        successNotification("Account successfully deleted");
       }
-      await UpdateAccounts();
-      successNotification("Account successfully deleted");
     } catch (error) {
       errorNotification(error.message);
     }
