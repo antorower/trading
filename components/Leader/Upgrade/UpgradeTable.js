@@ -13,7 +13,6 @@ const UpgradeTable = () => {
     if (!teamAccounts) return;
     const upgrade = teamAccounts.filter((account) => account.status === "Upgrade");
     setUpgradeAccounts(upgrade);
-    console.log("TEAM ACCOUNTS", upgrade);
   }, [teamAccounts]);
 
   if (!upgradeAccounts || upgradeAccounts?.length === 0) {

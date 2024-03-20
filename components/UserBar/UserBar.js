@@ -23,9 +23,7 @@ const UserBar = () => {
       );
       setSearchedUsers(filteredUsers);
     }
-    console.log("All ok to user bar");
   }, [searchKeyword, users]);
-  console.log("Searched Users: ", searchedUsers);
   return (
     <div onMouseEnter={() => setExpandedRightSidebar(true)} onMouseLeave={() => setExpandedRightSidebar(false)} className={`flex flex-col gap-4 h-full relative justify-center p-4 ${expandedRightSidebar ? "w-[320px]" : "w-[0px]"} transition-all duration-500 border-l border-gray-900`}>
       <div onClick={() => setExpandedRightSidebar(!expandedRightSidebar)} className="cursor-pointer absolute flex justify-center items-center text-white bg-dark  -left-[20px] rounded-full border border-gray-900 w-[40px] h-[40px]">

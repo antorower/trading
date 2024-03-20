@@ -5,6 +5,7 @@ import TableRow from "../../TableRow";
 import { useUserContext } from "@/context/UserContext";
 import { toast } from "react-toastify";
 import CopyWallet from "@/components/CopyWallet";
+import { useUser } from "@clerk/nextjs";
 
 const RequestedRow = ({ account }) => {
   const { UpdateAccounts } = useUserContext();
@@ -12,6 +13,7 @@ const RequestedRow = ({ account }) => {
   const [capital, setCapital] = useState("");
   const [cost, setCost] = useState("");
   const [declineComment, setDeclineComment] = useState("");
+  const { user } = useUser();
 
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
@@ -89,17 +91,20 @@ const RequestedRow = ({ account }) => {
         <CopyWallet wallet={account.user.publicMetadata.personalEthereumWallet} />
       </div>
       <input onChange={(e) => setDeclineComment(e.target.value)} value={declineComment} type="text" className="text-input" placeholder="Decline Comment" />
-      <div className="flex justify-center items-center gap-4">
-        <button onClick={(e) => RejectAccount(e)} className="btn-decline">
-          Reject
-        </button>
-        <button onClick={(e) => SendMoney(e)} className="btn-accept flex gap-2 items-center">
-          <Image src="/dollar2.svg" alt="money" width={25} height={25} />
-          <div>Send Money</div>
-        </button>
-      </div>
+      {user?.publicMetadata.permissions === "full" && (
+        <div className="flex justify-center items-center gap-4">
+          <button onClick={(e) => RejectAccount(e)} className="btn-decline">
+            Reject
+          </button>
+          <button onClick={(e) => SendMoney(e)} className="btn-accept flex gap-2 items-center">
+            <Image src="/dollar2.svg" alt="money" width={25} height={25} />
+            <div>Send Money</div>
+          </button>
+        </div>
+      )}
     </TableRow>
   );
 };
 
 export default RequestedRow;
+//user?.publicMetadata.permissions === "full" &&
