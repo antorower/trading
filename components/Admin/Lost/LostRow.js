@@ -4,7 +4,7 @@ import Image from "next/image";
 import TableRow from "../../TableRow";
 import { useUserContext } from "@/context/UserContext";
 import { toast } from "react-toastify";
-const { user } = useUser();
+import { useUser } from "@clerk/nextjs";
 
 const LostRow = ({ account }) => {
   const { UpdateAccounts } = useUserContext();

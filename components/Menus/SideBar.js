@@ -8,7 +8,7 @@ import { useUserContext } from "@/context/UserContext";
 const SideBar = () => {
   const { user } = useUser();
   const { expandedLeftSidebar, setExpandedLeftSidebar } = useUserContext();
-  console.log("Role: ", user?.publicMetadata.role);
+
   return (
     <div onMouseEnter={() => setExpandedLeftSidebar(true)} onMouseLeave={() => setExpandedLeftSidebar(false)} className={`bg-light font-nova font-weight-500 ${expandedLeftSidebar && "px-6"} overflow-x-hidden overflow-y-auto transition-all duration-500 ease-in-out ${expandedLeftSidebar ? "w-60" : "w-20"} flex flex-col gap-8 h-full scrollable`}>
       <div className="flex flex-col gap-8">
