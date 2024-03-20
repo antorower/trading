@@ -51,7 +51,7 @@ const LostRow = ({ account }) => {
       <div>{account.number}</div>
       <div>{account.userId}</div>
       <div>{account.balance}</div>
-      {user?.publicMetadata.permissions != "strict" && (
+      {user?.publicMetadata.permissions === "full" && (
         <button onClick={(e) => HideLostedAccount(e)} className="flex items-center btn-decline gap-2">
           Lost
         </button>
