@@ -64,7 +64,7 @@ export default authMiddleware({
     }
 
     // Προστασία των admin paths
-    if (pathname.includes("/admin") && user.publicMetadata.role !== "admin") {
+    if (pathname.includes("/admin") && user.publicMetadata.role !== "admin" && user.publicMetadata.role !== "moderator") {
       return NextResponse.redirect(new URL("/not-allowed", req.url));
     }
   },
