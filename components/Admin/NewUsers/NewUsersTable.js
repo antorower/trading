@@ -69,7 +69,6 @@ const NewUsersTable = () => {
               <div className="font-weight-700">Mentor</div>
               <div className="text-gray-500">{user.publicMetadata.mentor}</div>
             </div>
-
             <div className="flex gap-6 justify-end">
               <button onClick={() => NewUserResponse(true, user.id)} className="btn-accept">
                 Accept

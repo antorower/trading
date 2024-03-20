@@ -10,19 +10,26 @@ import PayoutTable from "@/components/Admin/Payout/PayoutTable";
 import UpgradeTable from "@/components/Admin/Upgrade/UpgradeTable";
 import PayrollTable from "@/components/Admin/Payroll/PayrollTable";
 import Stats from "@/components/Stats";
+import { useUser } from "@clerk/nextjs";
 
 const Admin = () => {
+  const { user } = useUser();
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="text-white h-full flex flex-col overflow-auto scrollable p-8 gap-8">
       <Title title="Admin Dashboard" subtitle="Team Management" />
-      <NewUsersTable />
+      {user?.publicMetadata.permissions === "full" && <NewUsersTable />}
       <PayoutTable />
       <RequestedTable />
       <UpgradeTable />
       <LiveTable />
       <LostTable />
-      <Schedule />
-      <PayrollTable />
+      {user?.publicMetadata.permissions === "full" && <Schedule />}
+      {user?.publicMetadata.permissions === "full" && <PayrollTable />}
       <div>Test Div</div>
     </div>
   );

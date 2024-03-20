@@ -4,12 +4,14 @@ import Image from "next/image";
 import TableRow from "../../TableRow";
 import { toast } from "react-toastify";
 import { useUserContext } from "@/context/UserContext";
+import { useUser } from "@clerk/nextjs";
 
 const PayoutRow = ({ account }) => {
   const [amount, setAmount] = useState("");
   const successNotification = (message) => toast.success(message);
   const errorNotification = (message) => toast.warn(message);
   const { UpdateAccounts } = useUserContext();
+  const { user } = useUser();
 
   const PayoutComplete = async () => {
     try {
@@ -73,7 +75,7 @@ const PayoutRow = ({ account }) => {
           <Image src="/spinner.svg" fill="true" alt="spinner" sizes="32x32" />
         </div>
       )}
-      {account.status === "Payout" && (
+      {account.status === "Payout" && user?.publicMetadata.permissions === "full" && (
         <div className="flex gap-4">
           <input value={amount} onChange={(e) => setAmount(e.target.value)} type="number" className="text-input" />
           <button onClick={PayoutComplete} className="btn-accept">
