@@ -19,7 +19,7 @@ const SideBar = () => {
           <div className={`transition-all duration-500 ${expandedLeftSidebar ? "text-gray-400" : "text-[#1F2128]"} flex justify-center`}>{user && user.id && user.username}</div>
         </div>
         <div className="flex flex-col gap-4">
-          {(user?.publicMetadata.role === "admin" || user?.publicMetadata.role === "moderator") && <MenuItem menu="Admin" icon="admin" destination="/dashboard/admin" />}
+          {user?.publicMetadata.role === "admin" && <MenuItem menu="Admin" icon="admin" destination="/dashboard/admin" />}
           {(user?.publicMetadata.role === "leader" || user?.publicMetadata.role === "admin") && <MenuItem menu="Team" icon="admin" destination="/dashboard/leader" />}
           <MenuItem menu="Accounts" icon="accounts" destination="/dashboard/accounts" />
           <MenuItem menu="Calendar" icon="calendar" destination="/dashboard/calendar" />
