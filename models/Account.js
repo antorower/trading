@@ -141,7 +141,7 @@ AccountSchema.pre("save", function (next) {
       if (this.phase === 1 || this.phase === 2) {
         this.minimumWaitingDays = 0;
       } else if (this.phase === 3) {
-        this.minimumWaitingDays = 5;
+        this.minimumWaitingDays = 7;
       }
     }
 
