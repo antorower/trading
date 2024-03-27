@@ -32,7 +32,7 @@ const PayoutRow = ({ account }) => {
       errorNotification(error.message);
     }
   };
-  console.log("User", user);
+  console.log("Account", account);
 
   return (
     <TableRow>
