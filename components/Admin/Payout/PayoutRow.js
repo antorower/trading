@@ -44,7 +44,7 @@ const PayoutRow = ({ account }) => {
           <div className="">
             {account.user.firstName} {account.user.lastName}
           </div>
-          <div className="text-gray-500 text-sm">{account.emailAddress}</div>
+          <div className="text-gray-500 text-sm">{account.primaryEmailAddress}</div>
         </div>
       </div>
       <div className="flex items-center justify-center flex-grow gap-16">
